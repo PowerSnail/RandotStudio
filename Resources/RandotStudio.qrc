@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/randot_studio">
+        <file>icons/add.svg</file>
+        <file>icons/minus.svg</file>
+    </qresource>
+</RCC>
