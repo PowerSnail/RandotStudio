@@ -1,79 +1,87 @@
 #include "stereoimage.h"
+
+#include <QFile>
+#include <QImage>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 #include <QPainter>
 
-int StereoImage::getWidth() { return width; }
-
-void StereoImage::setWidth(int width) { this->width = width; }
-
-void StereoImage::setHeight(int height) { this->height = height; }
-
-int StereoImage::getHeight() { return height; }
-
-QColor StereoImage::getForeground() const { return foreground; }
-
-void StereoImage::setForeground(const QColor& value) { foreground = value; }
-
-QColor StereoImage::getBackground() const { return background; }
-
-void StereoImage::setBackground(const QColor& value) { background = value; }
-
-int StereoImage::getGrainSize() const { return grainSize; }
-
-void StereoImage::setGrainSize(int value) { grainSize = value; }
-
-bool StereoImage::getCrossedParity() const { return crossedParity; }
-
-void StereoImage::setCrossedParity(bool value) { crossedParity = value; }
-
-vector<Target> StereoImage::getTargetList() const { return targetList; }
-
-void StereoImage::setTargetList(const vector<Target>& value) {
-  targetList = value;
-}
-
-vector<Shape> StereoImage::getShapeList() const { return shapeList; }
-
-void StereoImage::setShapeList(const vector<Shape>& value) {
-  shapeList = value;
-}
-
-StereoImage::StereoImage(int width, int height)
-    : width(width), height(height) {}
-
-QImage StereoImage::renderPreview() {
-  QImage canvas(this->width, this->height, QImage::Format_RGB32);
-  canvas.fill(this->background);
-
-  QPainter painter;
-  painter.begin(&canvas);
-  for (auto& target : targetList) {
-    painter.setPen(target.color);
-    Shape& shape = shapeList[static_cast<size_t>(target.shapeID)];
-    for (int x = 0; x < shape.getSize(); x++) {
-      for (int y = 0; y < shape.getSize(); y++) {
-        if (shape.isColored(x, y)) {
-          painter.drawRect(x * target.scale + target.x,
-                           y * target.scale + target.y, target.scale,
-                           target.scale);
-        }
-      }
-    }
+StereoImage::StereoImage(int width, int height) : width(width), height(height) {
+  for (auto s : kDefaultShapes) {
+    shapeList.push_back(s);
   }
-  painter.end();
-
-  return canvas;
 }
 
-QImage StereoImage::renderStereo() {
-  QImage canvas(this->width * 2, this->height, QImage::Format_RGB32);
-  // TODO: Implement renderStereo
-  canvas.fill(this->background);
+void StereoImage::loadFromFile(QString fname) {
+  QFile file(fname);
+  file.open(QFile::ReadOnly);
+  QJsonDocument d = QJsonDocument::fromJson(file.readAll());
 
-  return canvas;
+  width = d["width"].toInt();
+  height = d["height"].toInt();
+  foreground = QColor(d["foreground"].toString());
+  background = QColor(d["background"].toString());
+  grainSize = d["grainSize"].toInt();
+  crossedParity = d["crossedParity"].toBool();
+
+  shapeList.clear();
+  for (auto s : kDefaultShapes) {
+    shapeList.push_back(s);
+  }
+  for (auto s : d["shapeList"].toArray()) {
+    shapeList.push_back(s.toString());
+  }
+
+  targetList.clear();
+  for (auto t : d["targetList"].toArray()) {
+    QJsonObject targetObj = t.toObject();
+    Target target(targetObj["x"].toInt(), targetObj["y"].toInt(),
+                  targetObj["scale"].toInt(), targetObj["rotate"].toInt(),
+                  targetObj["parity"].toInt(), targetObj["shapeID"].toInt(),
+                  QColor(targetObj["color"].toString()));
+    // TODO: Deal with data error
+    targetList.push_back(target);
+  }
 }
 
-QImage StereoImage::renderRandot() {
-  QImage canvas(this->width * 2, this->height, QImage::Format_RGB32);
-  // TODO: Implement renderRandot
-  return canvas;
+void StereoImage::saveToFile(QString filename) {
+  QFile file(filename);
+  file.open(QFile::WriteOnly);
+
+  QJsonArray jsonTargetList;
+  for (auto& t : targetList) {
+    QJsonObject jsonTarget;
+    jsonTarget.insert("x", QJsonValue(t.x));
+    jsonTarget.insert("y", QJsonValue(t.y));
+    jsonTarget.insert("scale", QJsonValue(t.scale));
+    jsonTarget.insert("rotate", QJsonValue(t.rotate));
+    jsonTarget.insert("parity", QJsonValue(t.parity));
+    jsonTarget.insert("shapeID", QJsonValue(t.shapeID));
+    jsonTarget.insert("color", QJsonValue(t.color.name()));
+    jsonTargetList.append(jsonTarget);
+  }
+
+  QJsonArray jsonShapeList;
+  for (auto it = shapeList.begin() + kDefaultShapes.size();
+       it != shapeList.end(); ++it) {
+    jsonShapeList.append(QJsonValue(*it));
+  }
+
+  QJsonObject jsonMain;
+  jsonMain.insert("width", QJsonValue(width));
+  jsonMain.insert("height", QJsonValue(height));
+  jsonMain.insert("foreground", QJsonValue(foreground.name()));
+  jsonMain.insert("background", QJsonValue(background.name()));
+  jsonMain.insert("grainSize", QJsonValue(grainSize));
+  jsonMain.insert("crossedParity", QJsonValue(crossedParity));
+  jsonMain.insert("targetList", QJsonValue(jsonTargetList));
+  jsonMain.insert("shapeList", QJsonValue(jsonShapeList));
+
+  file.write(QJsonDocument(jsonMain).toJson());
 }
+
+const vector<QString> StereoImage::kDefaultShapes{
+    QString(":randot_studio/default_shapes/e.png"),
+    QString(":randot_studio/default_shapes/c.png")};

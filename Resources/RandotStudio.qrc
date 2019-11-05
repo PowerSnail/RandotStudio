@@ -2,5 +2,8 @@
     <qresource prefix="/randot_studio">
         <file>icons/add.svg</file>
         <file>icons/minus.svg</file>
+        <file>default_shapes/e.png</file>
+        <file>default_shapes/c.png</file>
+        <file>icons/information.svg</file>
     </qresource>
 </RCC>

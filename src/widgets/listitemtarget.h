@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef LISTITEMTARGET_H
 #define LISTITEMTARGET_H
 

@@ -1,4 +1,7 @@
 #include "target.h"
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 Target::Target(int x, int y, int scale, int rotate, int parity, int shapeID,
                QColor color)
