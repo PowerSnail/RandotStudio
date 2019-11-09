@@ -6,10 +6,12 @@
 #include <QIcon>
 #include <QImage>
 #include <QPixmap>
-#include <random>
+#include <deque>
+#include <functional>
 #include <optional>
+#include <random>
 
-#include "../models/stereoimage.h"
+#include "../models/canvas.h"
 #include "../models/target.h"
 
 using TRng = std::mt19937;
@@ -22,13 +24,19 @@ extern std::bernoulli_distribution kBernoulliDistribution;
 
 bool getRandomBool();
 
-QPixmap renderShapePreview(const QPixmap& shape, const QColor& foreground);
-QPixmap targetMask(const QPixmap& shape, const Target &target);
-QPixmap randotCanvas(int width, int height, int grainSize, QColor background, QColor Foreground);
+enum class StereoImageType { Regular, Randot };
 
-QPixmap renderPreview(const StereoImage& image);
-QPixmap renderStereo(const StereoImage& image);
-QPixmap renderRandot(const StereoImage& image);
+QPixmap renderShapePreview(const QPixmap& shape, const QColor& foreground);
+QPixmap targetMask(const QPixmap& shape, const Target& target);
+QPixmap fillRandot(QSize size, int grainSize, QColor background, QColor foreground);
+
+QPixmap renderStereoImage(const Canvas& canvas,
+                          const std::deque<Target>& targetList,
+                          const std::deque<QPixmap>& targetImgList,
+                          StereoImageType type);
+
+QPixmap renderTarget(const Canvas& canvas, const Target& target, const QPixmap& shape, StereoImageType type);
+
 }  // namespace imaging
 
 #endif  // IMAGING_H

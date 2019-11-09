@@ -1,21 +1,15 @@
 #pragma once
 
-#ifndef LOGGING_H
-#define LOGGING_H
-
 #include <iostream>
 #include <QString>
 
 namespace logging {
 
-const int ERROR = 0;
-const int INFO = 10;
-const int DEBUG = 50;
+constexpr int ERROR = 0;
+constexpr int INFO = 10;
+constexpr int DEBUG = 50;
 
-std::ostream& operator<<(std::ostream& stream, QString value) {
-   stream << value.toStdString();
-   return stream; 
-}
+std::ostream& operator<<(std::ostream& stream, QString value);
 
 template <typename T>
 void printList(T arg) {
@@ -41,7 +35,5 @@ void logDebug(Types... args) {
     printList(args...);
     std::cerr << std::endl;
 }
+
 }
-
-
-#endif // LOGGING_H

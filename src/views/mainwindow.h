@@ -1,12 +1,9 @@
 #pragma once
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
 #include <QMainWindow>
 #include <QLabel>
 #include <map>
-#include "../models/stereoimage.h"
+#include "../viewmodels/mainwindowvm.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,38 +15,22 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
-  MainWindow(StereoImage& image, QWidget* parent = nullptr);
+  MainWindow(MainWindowViewModel* vm, QWidget* parent = nullptr);
   ~MainWindow();
-
 
  private:
   Ui::MainWindow* ui;
-  StereoImage& image;
-  QLabel selectionSquare;
-  std::map<QString, QPixmap> loadedShapes;
-  QString prevShapeDir;
+  MainWindowViewModel* vm;
 
-  // Sentinel
-  static Target kNoTarget;
   constexpr static int kPreviewShadowSize = 20;
 
-  int getCurrentTargetId();
-  void setCurrentTargetId(int value);
-  Target& currentTarget();
-
   void loadCanvasProperties();
-  void loadShape(QString filename);
-  void refreshCurrentTarget();
+  void loadTargetProperties();
   
-  QPixmap& getShape(int id);
   Target& getTarget(int id);
-  QPixmap getTargetPreview(Target&);
-  
-  void renderPreview();
-  void showSelectionSquare();
+  QPixmap getTargetPreview(const Target&);
 
-  void resizeEvent(QResizeEvent* event);
-  void showEvent(QShowEvent *event);
+  void renderPreview();
 
  private slots:
   // Slots for target list
@@ -58,6 +39,7 @@ class MainWindow : public QMainWindow {
   void on_btnRemoveTarget_clicked();
 
   // Slots for shape list
+  void on_listWidgetShape_currentRowChanged(int currentRow);
   void on_btnAddShape_clicked();
   void on_btnRemoveShape_clicked();
 
@@ -76,7 +58,21 @@ class MainWindow : public QMainWindow {
   void on_lineEditParity_editingFinished();
   void on_comboBoxRotate_currentIndexChanged(int index);
   void on_colorChooserTarget_colorChanged(const QColor& color);
-  void on_listWidgetShape_currentRowChanged(int currentRow);
+
+  void on_previewCanvas_currentIndexChanged(int index);
+
+  // VM signals
+  void on_vm_currentTargetIDChanged(int oldID, int newID);
+  void on_vm_currentShapeIDChanged(int oldID, int newID);
+
+  void on_vm_targetCreated(int targetID);
+  void on_vm_targetUpdated(int targetID, Target::Property pname);
+  void on_vm_targetRemoved(int targetID);
+
+  void on_vm_shapeLoaded(int shapeID);
+  void on_vm_shapeRemoved(int shapeID);
+
+  void on_vm_canvasUpdated(Canvas::Property pname);
 
   // Actions
   void on_actionAbout_triggered();
@@ -84,10 +80,4 @@ class MainWindow : public QMainWindow {
   void on_actionLoad_triggered();
   void on_actionRandot_triggered();
   void on_actionStereo_PNG_triggered();
-
-//  signals:
-
-
-
 };
-#endif  // MAINWINDOW_H

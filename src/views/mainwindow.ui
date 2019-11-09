@@ -466,35 +466,13 @@
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="widgetPreviewPanel" native="true">
+     <widget class="PreviewCanvas" name="previewCanvas" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
         <horstretch>10</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <widget class="QLabel" name="labelPreview">
-       <property name="geometry">
-        <rect>
-         <x>8</x>
-         <y>8</y>
-         <width>48</width>
-         <height>58</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="margin">
-        <number>20</number>
-       </property>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -505,7 +483,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>
@@ -578,6 +556,12 @@
    <class>ColorChooser</class>
    <extends>QWidget</extends>
    <header>src/widgets/color_chooser.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PreviewCanvas</class>
+   <extends>QWidget</extends>
+   <header>src/widgets/previewcanvas.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

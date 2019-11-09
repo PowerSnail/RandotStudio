@@ -4,6 +4,10 @@
 #include <QPainter>
 #include <QPixmap>
 
+#include "../utils/logging.h"
+
+using namespace logging;
+
 std::random_device imaging::kRandomDevice{};
 
 TRng imaging::kRandomNumberGenerator(imaging::kRandomDevice());
@@ -25,6 +29,7 @@ QPixmap imaging::renderShapePreview(const QPixmap& shape,
 }
 
 QPixmap imaging::targetMask(const QPixmap& shape, const Target& target) {
+  QTransform transform;
   QPixmap mask =
       shape.transformed(QTransform().rotate(target.rotate))
           .transformed(QTransform().scale(target.scale, target.scale))
@@ -33,102 +38,83 @@ QPixmap imaging::targetMask(const QPixmap& shape, const Target& target) {
   return mask;
 }
 
-QPixmap imaging::randotCanvas(int width, int height, int grainSize,
-                              QColor background, QColor foreground) {
-  QPixmap canvas(width, height);
-  canvas.fill(background);
-
+QPixmap imaging::fillRandot(QSize size, int grainSize, QColor background,
+                            QColor foreground) {
+  QPixmap image(size);
+  image.fill(background);
   QPainter painter;
-  painter.begin(&canvas);
-
-  for (int y = 0; y < canvas.height() ; y += grainSize) {
-    for (int x = 0; x < canvas.width() ; x += grainSize) {
+  if (!painter.begin(&image)) {
+    logError("Failed to initialize painter in fillRandot");
+    throw new std::runtime_error("QPainter Initialization Error. Failed to initialize painter in fillRandot");
+  }
+  for (int y = 0; y < size.height(); y += grainSize) {
+    for (int x = 0; x < size.width(); x += grainSize) {
       if (getRandomBool()) {
         painter.fillRect(x, y, grainSize, grainSize, foreground);
       }
     }
   }
-
   painter.end();
-  return canvas;
+  return image;
 }
 
-QPixmap imaging::renderPreview(const StereoImage& image) {
-  QPixmap canvas(image.width, image.height);
-  canvas.fill(image.background);
-
+QPixmap imaging::renderStereoImage(const Canvas& canvas,
+                                   const std::deque<Target>& targetList,
+                                   const std::deque<QPixmap>& targetImgList,
+                                   StereoImageType type) {
+  QPixmap image(canvas.width * 2, canvas.height);
   QPainter painter;
-  painter.begin(&canvas);
-  for (auto& target : image.targetList) {
-    const QPixmap& shape = image.shapeList[target.shapeID];
-    QPixmap targetImg(shape.width() * target.scale,
-                      shape.height() * target.scale);
-    targetImg.fill(target.color);
-    targetImg.setMask(imaging::targetMask(shape, target));
-    painter.drawPixmap(QPoint(target.x, target.y), targetImg);
+  if (!painter.begin(&image)) {
+    logError("failed to initialize painter in renderStereoImage");
+    exit(-1);
   }
-  painter.end();
 
-  return canvas;
-}
+  if (type == StereoImageType::Randot && false) {
+    logDebug("Painting Randot");
+    QPixmap bg =
+        fillRandot(QSize(canvas.width, canvas.height), canvas.grainSize,
+                   canvas.background, canvas.foreground);
+    painter.drawPixmap(QRect(0, 0, canvas.width, canvas.height), bg);
+    painter.drawPixmap(QRect(canvas.width, 0, canvas.width, canvas.height), bg);
+  } else {
+    logDebug("Painting Regular");
+    painter.fillRect(QRect(0, 0, image.width(), image.height()),
+                     canvas.background);
+  }
 
-QPixmap imaging::renderStereo(const StereoImage& image) {
-  QPixmap canvas(image.width * 2, image.height);
-  canvas.fill(image.background);
-  int parityDirection = (image.crossedParity) ?   1 : -1;
+  int parityDirection = (canvas.crossedParity) ? 1 : -1;
 
-  QPainter painter;
-  painter.begin(&canvas);
-  for (auto& target : image.targetList) {
-    const QPixmap& shape = image.shapeList[target.shapeID];
-    QPixmap targetImg(shape.width() * target.scale,
-                      shape.height() * target.scale);
-    targetImg.fill(target.color);
-    targetImg.setMask(imaging::targetMask(shape, target));
+  logDebug("target list: ", targetList.size());
+  for (int i = 0; i < targetList.size(); ++i) {
+    auto target = targetList[i];
+    auto targetImg = targetImgList[i];
 
     int leftParity = target.parity << 1;
     int rightParity = target.parity - leftParity;
     painter.drawPixmap(
         QPoint(target.x + leftParity * parityDirection, target.y), targetImg);
     painter.drawPixmap(
-        QPoint(target.x + image.width - rightParity * parityDirection,
+        QPoint(target.x + canvas.width - rightParity * parityDirection,
                target.y),
         targetImg);
   }
   painter.end();
 
-  return canvas;
+  return image;
 }
 
-QPixmap imaging::renderRandot(const StereoImage& image) {
-  QPixmap canvas(image.width * 2, image.height);
-  QPixmap background = randotCanvas(image.width, image.height, image.grainSize,
-                                    image.background, image.foreground);
-
-  int parityDirection = (image.crossedParity) ?   1 : -1;
-
-  QPainter painter;
-  painter.begin(&canvas);
-  painter.drawPixmap(0, 0, background);
-  painter.drawPixmap(image.width, 0, background);
-
-  for (auto& target : image.targetList) {
-    const QPixmap& shape = image.shapeList[target.shapeID];
-    QPixmap targetImg = randotCanvas(shape.width() * target.scale,
-                      shape.height() * target.scale, image.grainSize, image.background, image.foreground);
-    targetImg.setMask(imaging::targetMask(shape, target));
-
-    int leftParity = target.parity << 1;
-    int rightParity = target.parity - leftParity;
-    painter.drawPixmap(
-        QPoint(target.x + leftParity * parityDirection, target.y), targetImg);
-    painter.drawPixmap(
-        QPoint(target.x + image.width - rightParity * parityDirection,
-               target.y),
-        targetImg);
+QPixmap imaging::renderTarget(const Canvas& canvas, const Target& target,
+                              const QPixmap& shape, StereoImageType type) {
+  auto mask = imaging::targetMask(shape, target);
+  QPixmap targetImg;
+  if (type == StereoImageType::Regular) {
+    targetImg = QPixmap(mask.size());
+    targetImg.fill(target.color);
+  } else {
+    targetImg = fillRandot(mask.size(), canvas.grainSize, canvas.background,
+                           canvas.foreground);
   }
-
-  painter.end();
-
-  return canvas;
+  assert(mask.size() == targetImg.size());
+  targetImg.setMask(mask);
+  return targetImg;
 }

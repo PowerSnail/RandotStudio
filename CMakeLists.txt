@@ -14,25 +14,32 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_executable(RandotStudio
-  src/main.cpp
+  Resources/RandotStudio.qrc
+  src/widgets/color_chooser.cpp
+  src/widgets/color_chooser.h
+  src/widgets/color_chooser.ui
+  src/widgets/previewcanvas.cpp
+  src/widgets/previewcanvas.h
+  src/widgets/previewcanvasitem.cpp
+  src/widgets/previewcanvasitem.h
   src/models/target.cpp
   src/models/target.h
-  src/models/stereoimage.cpp
-  src/models/stereoimage.h
+  src/models/canvas.cpp
+  src/models/canvas.h
   src/views/mainwindow.cpp
   src/views/mainwindow.h
   src/views/mainwindow.ui
   src/views/dialogabout.cpp
   src/views/dialogabout.h
   src/views/dialogabout.ui
-  src/widgets/color_chooser.cpp
-  src/widgets/color_chooser.h
-  src/widgets/color_chooser.ui
+  src/viewmodels/mainwindowvm.cpp
+  src/viewmodels/mainwindowvm.h
   src/imaging/imaging.h
   src/imaging/imaging.cpp
   src/utils/logging.h
+  src/utils/logging.cpp
   src/utils/widget_helper.h
-  Resources/RandotStudio.qrc
-  )
+  src/main.cpp
+)
 
 target_link_libraries(RandotStudio PRIVATE Qt5::Widgets)

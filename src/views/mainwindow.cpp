@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 
+#include <QBitmap>
 #include <QFileDialog>
 #include <QGraphicsDropShadowEffect>
-#include <QImage>
 #include <QPainter>
+#include <QPixmap>
 #include <optional>
 
 #include "../imaging/imaging.h"
@@ -28,102 +29,60 @@ const QString kPNSFileFilter("Stereo Image File (*.PNS)");
  * -------------------------
  */
 
-Target MainWindow::kNoTarget(0, 0, 0, 0, 0, 0, QColor(0, 0, 0));
-
 /**
  * @brief Construct a new Main Window:: Main Window object
  *
  * @param img the data object for this canvas
  * @param parent
  */
-MainWindow::MainWindow(StereoImage& img, QWidget* parent)
-    : QMainWindow(parent),
-      ui(new Ui::MainWindow),
-      image(img),
-      selectionSquare(),
-      loadedShapes(),
-      prevShapeDir("") {
-  
+MainWindow::MainWindow(MainWindowViewModel* vm, QWidget* parent)
+    : QMainWindow(parent), ui(new Ui::MainWindow), vm(vm) {
   ui->setupUi(this);
-
-  ui->widgetPreviewPanel->setBackgroundRole(QPalette::Dark);
-  ui->labelPreview->setScaledContents(true);
-  QGraphicsDropShadowEffect* shadow =
-      new QGraphicsDropShadowEffect(ui->labelPreview);
-  shadow->setBlurRadius(kPreviewShadowSize);
-  shadow->setXOffset(0);
-  shadow->setYOffset(0);
-  ui->labelPreview->setGraphicsEffect(shadow);
-
   ui->targetSettingPanel->setVisible(false);
   loadCanvasProperties();
 
-  selectionSquare.setParent(ui->labelPreview);
-  selectionSquare.setVisible(false);
-  selectionSquare.setStyleSheet("border: 1px solid blue; background-color: rgba(0,0,255,50);");
+  connect(vm, &MainWindowViewModel::currentTargetIDChanged, this,
+          &MainWindow::on_vm_currentTargetIDChanged);
+  connect(vm, &MainWindowViewModel::currentShapeIDChanged, this,
+          &MainWindow::on_vm_currentShapeIDChanged);
+  connect(vm, &MainWindowViewModel::targetCreated, this,
+          &MainWindow::on_vm_targetCreated);
+  connect(vm, &MainWindowViewModel::targetUpdated, this,
+          &MainWindow::on_vm_targetUpdated);
+  connect(vm, &MainWindowViewModel::targetRemoved, this,
+          &MainWindow::on_vm_targetRemoved);
+  connect(vm, &MainWindowViewModel::shapeLoaded, this,
+          &MainWindow::on_vm_shapeLoaded);
+  connect(vm, &MainWindowViewModel::shapeRemoved, this,
+          &MainWindow::on_vm_shapeRemoved);
+  connect(vm, &MainWindowViewModel::canvasUpdated, this,
+          &MainWindow::on_vm_canvasUpdated);
+
+  for (int i = 0; i < MainWindowViewModel::kDefaultShapeCount; ++i) {
+    on_vm_shapeLoaded(i);
+  }
 }
 
 MainWindow::~MainWindow() { delete ui; }
 
-int MainWindow::getCurrentTargetId() { return ui->listWidgetTarget->currentRow(); }
-
-void MainWindow::setCurrentTargetId(int value) {
-  ui->listWidgetTarget->setCurrentRow(value);
-}
-
-Target& MainWindow::currentTarget() {
-  int id = getCurrentTargetId();
-  if (id < 0) {
-    return kNoTarget;
-  }
-  return image.targetList[id];
-}
-
-
 void MainWindow::loadCanvasProperties() {
-  *ui->lineEditWidth << image.width;
-  *ui->lineEditHeight << image.height;
-  *ui->lineEditGrainSize << image.grainSize;
-  ui->colorChooserForeground->setColor(image.foreground);
-  ui->colorChooserBackground->setColor(image.background);
-  ui->checkBoxCrossed->setChecked(image.crossedParity);
-
-  loadedShapes.clear();
-  ui->listWidgetShape->clear();
-  for (auto shapeFile : image.shapeList) {
-    loadShape(shapeFile);
-  }
-
-  ui->listWidgetTarget->clear();
-  for (auto& target : image.targetList) {
-    insertIconItem(*ui->listWidgetTarget, getTargetPreview(target),
-                   ui->listWidgetTarget->count() - 1);
-  }
+  *ui->lineEditWidth << vm->getCanvas().width;
+  *ui->lineEditHeight << vm->getCanvas().height;
+  *ui->lineEditGrainSize << vm->getCanvas().grainSize;
+  ui->colorChooserForeground->setColor(vm->getCanvas().foreground);
+  ui->colorChooserBackground->setColor(vm->getCanvas().background);
+  ui->checkBoxCrossed->setChecked(vm->getCanvas().crossedParity);
+  ui->previewCanvas->setCanvasSize(vm->getCanvas().width,
+                                   vm->getCanvas().height);
+  ui->previewCanvas->setBackground(vm->getCanvas().background);
 }
 
-/**
- * @brief Load a shape from an image file and add to shape list
- *
- * @param filename
- */
-void MainWindow::loadShape(QString filename) {
-  if (loadedShapes.find(filename) != loadedShapes.end()) {
-    throw "filename already loaded";
-  }
-  QPixmap shape =
-      QPixmap::fromImage(QImage(filename).convertToFormat(QImage::Format_Mono));
-  loadedShapes[filename] = shape;
-
-  insertIconItem(*ui->listWidgetShape, shape, loadedShapes.size() - 1);
-}
-
-
-void MainWindow::refreshCurrentTarget() {
-  Target& target = currentTarget();
-  if (&target == &kNoTarget) {
+void MainWindow::loadTargetProperties() {
+  int targetID = vm->getCurrentTargetID();
+  if (targetID == -1) {
     return;
   }
-  ui->targetSettingPanel->setVisible(true);
+  const Target& target = vm->getTarget(targetID);
   *ui->lineEditX << target.x;
   *ui->lineEditY << target.y;
   *ui->lineEditScale << target.scale;
@@ -148,233 +107,222 @@ void MainWindow::refreshCurrentTarget() {
 
   ui->colorChooserTarget->setColor(target.color);
   ui->listWidgetShape->setCurrentRow(target.shapeID);
-  ui->listWidgetTarget->item(getCurrentTargetId())->setIcon(
-    QIcon(getTargetPreview(target).scaled(16, 16)));
 }
 
-QPixmap& MainWindow::getShape(int id) {
-  return loadedShapes[image.shapeList[id]];
+QPixmap MainWindow::getTargetPreview(const Target& target) {
+  auto mask = imaging::targetMask(vm->getShape(target.shapeID), target);
+  QPixmap targetview(mask.size());
+  targetview.fill(target.color);
+  targetview.setMask(mask);
+  return targetview;
 }
-
-Target& MainWindow::getTarget(int id) { return image.targetList[id]; }
-
-QPixmap MainWindow::getTargetPreview(Target& target) {
-  auto shape =
-      getShape(target.shapeID).transformed(QTransform().rotate(target.rotate));
-  auto preview = imaging::renderShapePreview(shape, target.color);
-  return preview;
-}
-
-void MainWindow::renderPreview() {
-  QPixmap preview = imaging::renderPreview(this->image);
-  QSize sizeConstraint = ui->widgetPreviewPanel->size() / 5 * 4;
-  QSize size = preview.size().scaled(sizeConstraint, Qt::KeepAspectRatio);
-
-  ui->labelPreview->resize(size);
-  ui->labelPreview->move(
-    (ui->widgetPreviewPanel->width() - ui->labelPreview->width()) / 2,
-    (ui->widgetPreviewPanel->height() - ui->labelPreview->height()) / 2
-  );
-  ui->labelPreview->setPixmap(preview);
-  showSelectionSquare();
-}
-
-void MainWindow::showSelectionSquare() {
-  if (getCurrentTargetId() == -1) {
-    return;
-  }
-  auto& target = currentTarget();  
-  double scaleX = (ui->labelPreview->width() - 2 * kPreviewShadowSize) * 1.0 / image.width;
-  double scaleY = (ui->labelPreview->height() - 2 * kPreviewShadowSize) * 1.0 / image.height;
-  std::cerr << "scale = " << scaleX << "," << scaleY << std::endl;
-
-  int x = kPreviewShadowSize + int(target.x * scaleX);
-  int y = kPreviewShadowSize + int(target.y * scaleY);
-  std::cerr << "poop pos = " << x << "," <<  y << std::endl;
-
-  int width = int(scaleX * target.scale * getShape(target.shapeID).width()) + 1;
-  int height = int(scaleY * target.scale * getShape(target.shapeID).height()) + 1;
-  std::cerr << "poop size = " << width << "," <<  height << std::endl;
-
-  selectionSquare.hide();
-  selectionSquare.move(x, y);
-  selectionSquare.resize(width, height);
-  selectionSquare.setVisible(true);
-  selectionSquare.show();
-}
-
-void MainWindow::resizeEvent(QResizeEvent* event) {
-  QMainWindow::resizeEvent(event);
-  renderPreview();
-}
-
-void MainWindow::showEvent(QShowEvent* event) {
-  QWidget::showEvent(event);
-  renderPreview();
-}
-
 /**
  * Slots
  */
 
 // ## Target List Slots
 void MainWindow::on_listWidgetTarget_currentRowChanged(int currentRow) {
-  if (currentRow == -1) {
-    ui->targetSettingPanel->setVisible(false);
-  }
-  refreshCurrentTarget();
-  showSelectionSquare();
+  vm->setCurrentTargetID(currentRow);
 }
 
 void MainWindow::on_btnAddTarget_clicked() {
-  Target target(0, 0, 1, 0, 0, 0, image.foreground);
-  image.targetList.push_back(target);
-  int targetId = image.targetList.size() - 1;
-  insertIconItem(*ui->listWidgetTarget, getTargetPreview(target), targetId);
-  ui->listWidgetTarget->setCurrentRow(targetId);
-  renderPreview();
+  vm->createTarget(Target(0, 0, 1, 0, 0, 0, vm->getCanvas().foreground));
 }
 
 void MainWindow::on_btnRemoveTarget_clicked() {
-  auto selectedId = listWidgetRemoveCurrentRow(*ui->listWidgetTarget);
-  if (selectedId < 0) {
-    return;
+  int currentID = vm->getCurrentTargetID();
+  if (currentID != -1) {
+    vm->removeTarget(currentID);
   }
-  image.targetList.erase(image.targetList.begin() + selectedId);
-  renderPreview();
 }
 
 // ## Shape List Slots
+void MainWindow::on_listWidgetShape_currentRowChanged(int currentRow) {
+  vm->setCurrentShapeID(currentRow);
+}
+
 void MainWindow::on_btnAddShape_clicked() {
   QStringList fileList = QFileDialog::getOpenFileNames(
-      this, tr("Choose shape images"), prevShapeDir, kImageFileFilter);
+      this, tr("Choose shape images"), vm->getPrevShapeDir(), kImageFileFilter);
   if (fileList.empty()) {
     return;
   }
-  prevShapeDir = QFileInfo(fileList[0]).dir().path();
-
+  vm->setPrevShapeDir(QFileInfo(fileList[0]).dir().path());
   for (auto& filename : fileList) {
-    image.shapeList.push_back(filename);
-    loadShape(filename);
+    vm->loadShape(filename);
   }
 }
 
 void MainWindow::on_btnRemoveShape_clicked() {
-  auto selectedShapeId = ui->listWidgetShape->currentRow();
-  if (selectedShapeId < 0) {
+  int currentID = vm->getCurrentShapeID();
+  if (currentID == -1) {
     return;
   }
-  if (selectedShapeId < 2) {
+  if (currentID < 2) {
     ui->statusbar->showMessage(tr("Cannot delete E and C shapes."));
     return;
   }
-  loadedShapes.erase(image.shapeList[selectedShapeId]);
-  image.shapeList.erase(image.shapeList.begin() + selectedShapeId);
-  for (auto& target : image.targetList) {
-    if (target.shapeID == selectedShapeId) {
-      target.shapeID = 0;
-    } else if (target.shapeID > selectedShapeId) {
-      target.shapeID -= 1;
-    }
-  }
-  loadCanvasProperties();
-  refreshCurrentTarget();
-  renderPreview();
+  vm->removeShape(currentID);
 }
 
 // Slots for canvas properties
 void MainWindow::on_lineEditWidth_editingFinished() {
-  image.width = editGetInt(*ui->lineEditWidth);
-  renderPreview();
+  vm->updateCanvas(Canvas::Property::Width, editGetInt(*ui->lineEditWidth));
 }
 
 void MainWindow::on_lineEditHeight_editingFinished() {
-  image.height = editGetInt(*ui->lineEditHeight);
-  renderPreview();
+  vm->updateCanvas(Canvas::Property::Height, editGetInt(*ui->lineEditHeight));
 }
 
 void MainWindow::on_lineEditGrainSize_editingFinished() {
-  image.grainSize = editGetInt(*ui->lineEditGrainSize);
+  vm->updateCanvas(Canvas::Property::GrainSize,
+                   editGetInt(*ui->lineEditGrainSize));
 }
 
 void MainWindow::on_colorChooserForeground_colorChanged(const QColor& color) {
-  image.foreground = ui->colorChooserForeground->getColor();
+  vm->updateCanvas(Canvas::Property::Foreground,
+                   ui->colorChooserForeground->getColor());
 }
 
 void MainWindow::on_colorChooserBackground_colorChanged(const QColor& color) {
-  image.background = ui->colorChooserBackground->getColor();
-  renderPreview();
+  vm->updateCanvas(Canvas::Property::Background,
+                   ui->colorChooserBackground->getColor());
 }
 
 void MainWindow::on_checkBoxCrossed_stateChanged(int state) {
-  image.crossedParity = state == Qt::CheckState::Checked;
+  vm->updateCanvas(Canvas::Property::CrossedParity,
+                   state == Qt::CheckState::Checked);
 }
 
 // Slots for target properties
 void MainWindow::on_lineEditX_editingFinished() {
   int value = editGetInt(*ui->lineEditX);
-  Target& target = currentTarget();
-  if (&target != &kNoTarget && value != target.x) {
-    target.x = value;
-    renderPreview();
-  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::X, value);
 }
 
 void MainWindow::on_lineEditY_editingFinished() {
   int value = editGetInt(*ui->lineEditY);
-  Target& target = currentTarget();
-  if (&target != &kNoTarget && value != target.y) {
-    target.y = value;
-    renderPreview();
-  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Y, value);
 }
 
 void MainWindow::on_lineEditScale_editingFinished() {
   int value = editGetInt(*ui->lineEditScale);
-  Target& target = currentTarget();
-  if (&target != &kNoTarget && value != target.scale) {
-    target.scale = value;
-    renderPreview();
-  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Scale, value);
 }
 
 void MainWindow::on_lineEditParity_editingFinished() {
   int value = editGetInt(*ui->lineEditParity);
-  Target& target = currentTarget();
-  if (&target != &kNoTarget && value != target.parity) {
-    target.parity = value;
-    renderPreview();
-  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Parity, value);
 }
 
 void MainWindow::on_comboBoxRotate_currentIndexChanged(int index) {
   int value = getRotateAngle(index);
-  Target& target = currentTarget();
-  if (&target != &kNoTarget && value != target.rotate) {
-    target.rotate = value;
-    ui->listWidgetTarget->item(getCurrentTargetId())
-        ->setIcon(QIcon(getTargetPreview(target).scaled(16, 16)));
-    renderPreview();
-  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Rotate, value);
 }
 
 void MainWindow::on_colorChooserTarget_colorChanged(const QColor& color) {
-  Target& target = currentTarget();
-  if (&target != &kNoTarget && color != target.color) {
-    target.color = color;
-    setImageToItem(*ui->listWidgetTarget->item(getCurrentTargetId()), getTargetPreview(target));
-    renderPreview();
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Color, color);
+}
+
+void MainWindow::on_previewCanvas_currentIndexChanged(int index) {
+  vm->setCurrentTargetID(index);
+}
+
+// VM signals
+void MainWindow::on_vm_currentTargetIDChanged(int oldID, int newID) {
+  logDebug("on_vm_currentTargetIDChanged ", oldID, ", ", newID);
+  ui->listWidgetTarget->setCurrentRow(newID);
+  ui->previewCanvas->setCurrentIndex(newID);
+  if (newID == -1) {
+    ui->targetSettingPanel->setVisible(false);
+  } else {
+    ui->targetSettingPanel->setVisible(true);
+    loadTargetProperties();
   }
 }
 
-void MainWindow::on_listWidgetShape_currentRowChanged(int currentRow) {
-  Target& target = currentTarget();
-  if (&target == &kNoTarget || target.shapeID == currentRow) {
+void MainWindow::on_vm_currentShapeIDChanged(int oldID, int newID) {
+  if (vm->getCurrentTargetID() == -1) {
     return;
   }
-  target.shapeID = currentRow;
-  refreshCurrentTarget();
-  renderPreview();
+  ui->listWidgetShape->setCurrentRow(newID);
+}
+
+void MainWindow::on_vm_targetCreated(int targetID) {
+  auto target = vm->getTarget(targetID);
+  auto targetIcon = getTargetPreview(target);
+  insertIconItem(*ui->listWidgetTarget, targetIcon, targetID);
+
+  ui->previewCanvas->insertPixmap(targetID, target.x, target.y, targetIcon);
+  vm->setCurrentTargetID(targetID);
+}
+
+void MainWindow::on_vm_targetUpdated(int targetID, Target::Property pname) {
+  auto target = vm->getTarget(targetID);
+  if (targetID == vm->getCurrentTargetID()) {
+    loadTargetProperties();
+  }
+  QPixmap preview;
+  switch (pname) {
+    case Target::Property::X:
+    case Target::Property::Y:
+      ui->previewCanvas->movePixmap(targetID, target.x, target.y);
+      break;
+    case Target::Property::Color:
+    case Target::Property::Scale:
+    case Target::Property::ShapeID:
+    case Target::Property::Rotate:
+      preview = getTargetPreview(target);
+      setImageToItem(*ui->listWidgetTarget->item(targetID), preview);
+      ui->previewCanvas->replacePixmap(targetID, preview);
+      break;
+    case Target::Property::Parity:
+      logDebug("Parity does not affect list nor preview.");
+      break;
+    default:
+      logError("Exhaustive Match should not reach here.");
+      exit(-1);
+  };
+}
+
+void MainWindow::on_vm_targetRemoved(int targetID) {
+  logDebug("on_vm_targetRemoved", targetID);
+
+  ui->listWidgetTarget->removeItemWidget(ui->listWidgetTarget->item(targetID));
+  delete ui->listWidgetTarget->takeItem(targetID);
+  ui->listWidgetTarget->update();
+  ui->previewCanvas->removePixmap(targetID);
+}
+
+void MainWindow::on_vm_shapeLoaded(int shapeID) {
+  insertIconItem(*ui->listWidgetShape, vm->getShape(shapeID), shapeID);
+  vm->setCurrentShapeID(shapeID);
+}
+
+void MainWindow::on_vm_shapeRemoved(int shapeID) {
+  ui->listWidgetShape->removeItemWidget(ui->listWidgetShape->item(shapeID));
+}
+
+void MainWindow::on_vm_canvasUpdated(Canvas::Property pname) {
+  loadCanvasProperties();
+  switch (pname) {
+    case Canvas::Property::Width:
+    case Canvas::Property::Height:
+      ui->previewCanvas->setCanvasSize(vm->getCanvas().width,
+                                       vm->getCanvas().height);
+      break;
+    case Canvas::Property::Background:
+      ui->previewCanvas->setBackground(vm->getCanvas().background);
+      break;
+    case Canvas::Property::Foreground:
+    case Canvas::Property::CrossedParity:
+    case Canvas::Property::GrainSize:
+      // Not affecting preview
+      break;
+    default:
+      logError("Exhaustive Match should not reach here. ");
+      exit(-1);
+  }
 }
 
 void MainWindow::on_actionAbout_triggered() {
@@ -384,34 +332,24 @@ void MainWindow::on_actionAbout_triggered() {
 
 void MainWindow::on_actionSave_triggered() {
   QString filename = QFileDialog::getSaveFileName(
-      this, tr("Choose file to save"), prevShapeDir, kJsonFileFilter);
-  image.saveToFile(filename);
+      this, tr("Choose file to save"), vm->getPrevConfigDir(), kJsonFileFilter);
+  vm->saveToFile(filename);
 }
 
 void MainWindow::on_actionLoad_triggered() {
   QString filename = QFileDialog::getOpenFileName(
-      this, tr("Choose file to save"), prevShapeDir, kJsonFileFilter);
-  image.loadFromFile(filename);
-  loadCanvasProperties();
-  renderPreview();
+      this, tr("Choose file to save"), vm->getPrevConfigDir(), kJsonFileFilter);
+  vm->loadFromFile(filename);
 }
 
 void MainWindow::on_actionRandot_triggered() {
-  auto canvas = imaging::renderRandot(this->image);
   QString filename = QFileDialog::getSaveFileName(
-    this, tr("Choose file to save"), prevShapeDir, kPNSFileFilter
-  );
-  canvas.save(filename, "PNG", 100);
-
+      this, tr("Choose file to save"), vm->getPrevExportDir(), kPNSFileFilter);
+  vm->exportImage(filename, imaging::StereoImageType::Randot);
 }
 
 void MainWindow::on_actionStereo_PNG_triggered() {
-  std::cerr << "on_actionStereo_PNG_triggered" << std::endl;
-  auto canvas = imaging::renderStereo(this->image);
-  std::cerr << "canvas returned" << std::endl;
-
   QString filename = QFileDialog::getSaveFileName(
-    this, tr("Choose file to save"), prevShapeDir, kPNSFileFilter
-  );
-  canvas.save(filename, "PNG", 100);
+      this, tr("Choose file to save"), vm->getPrevExportDir(), kPNSFileFilter);
+  vm->exportImage(filename, imaging::StereoImageType::Regular);
 }
