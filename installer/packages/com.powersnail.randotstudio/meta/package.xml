@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>RandotStudio</DisplayName>
+    <Description>Randot Studio installer</Description>
+    <Version>1.0.1</Version>
+    <ReleaseDate>2019-10-10</ReleaseDate>
+    <Name>com.powersnail.randotstudio</Name>
+    <SortingPriority>123</SortingPriority>
+    <UpdateText>This changed compared to the last release</UpdateText>
+    <ForcedInstallation>false</ForcedInstallation>
+    <Essential>true</Essential>
+    <Default>true</Default>
+    <Replaces>com.powersnail.randotstudioold</Replaces>
+</Package>
