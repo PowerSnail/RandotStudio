@@ -4,7 +4,12 @@
 #include "ui_color_chooser.h"
 
 const QString ColorChooser::kBtnStyleTemplate{
-  "QPushButton {background-color: %1;}"
+  "QPushButton {background-color: %1; "
+  "border-style: solid;"
+  "border-color: %1;"
+  "border-width: 1px;"
+  "border-radius: 2px;"
+  "}"
 };
 
 ColorChooser::ColorChooser(QWidget* parent)

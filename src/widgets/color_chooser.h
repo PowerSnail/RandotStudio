@@ -25,7 +25,7 @@ class ColorChooser : public QWidget {
 
  private:
   Ui::ColorChooser* ui;
-  QColor color = QColor::fromRgb(0, 0, 0);  // Default to black
+  QColor color;
   static const QString kBtnStyleTemplate;
 
  private slots:
