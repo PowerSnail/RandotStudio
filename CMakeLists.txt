@@ -15,6 +15,8 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_executable(RandotStudio
   Resources/RandotStudio.qrc
+  Resources/translations/main_en.ts
+  Resources/translations/main_zh.ts
   src/widgets/color_chooser.cpp
   src/widgets/color_chooser.h
   src/widgets/color_chooser.ui
