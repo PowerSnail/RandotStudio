@@ -69,7 +69,7 @@ QPixmap imaging::renderStereoImage(const Canvas& canvas,
     exit(-1);
   }
 
-  if (type == StereoImageType::Randot && false) {
+  if (type == StereoImageType::Randot) {
     logDebug("Painting Randot");
     QPixmap bg =
         fillRandot(QSize(canvas.width, canvas.height), canvas.grainSize,
@@ -85,7 +85,7 @@ QPixmap imaging::renderStereoImage(const Canvas& canvas,
   int parityDirection = (canvas.crossedParity) ? 1 : -1;
 
   logDebug("target list: ", targetList.size());
-  for (int i = 0; i < targetList.size(); ++i) {
+  for (size_t i = 0; i < targetList.size(); ++i) {
     auto target = targetList[i];
     auto targetImg = targetImgList[i];
 

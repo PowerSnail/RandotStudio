@@ -55,3 +55,4 @@ compile_commands.json
 build/
 .vscode/c_cpp_properties.json
 .vscode/settings.json
+installer/packages/*/data/*.7z

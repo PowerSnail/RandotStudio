@@ -13,11 +13,11 @@
 using namespace logging;
 
 bool MainWindowViewModel::targetIDValid(int id) {
-  return (id >= 0 && id < targetList.size());
+  return (id >= 0 && static_cast<size_t>(id) < targetList.size());
 }
 
 bool MainWindowViewModel::shapeIDValid(int id) {
-  return (id >= 0 && id < shapePathList.size() + kDefaultShapeCount);
+  return (id >= 0 && static_cast<size_t>(id) < shapePathList.size() + kDefaultShapeCount);
 }
 
 MainWindowViewModel::MainWindowViewModel()
@@ -79,7 +79,7 @@ QString MainWindowViewModel::getPrevExportDir() { return prevExportDir; }
 
 const Target& MainWindowViewModel::getTarget(int id) {
   if (targetIDValid(id)) {
-    return targetList[id];
+    return targetList[static_cast<size_t>(id)];
   } else {
     logError("Target out of range: got ", id, ", expected [0, ",
              targetList.size(), ").");
@@ -89,14 +89,14 @@ const Target& MainWindowViewModel::getTarget(int id) {
 
 void MainWindowViewModel::createTarget(Target newTarget) {
   targetList.push_back(newTarget);
-  int id = targetList.size() - 1;
+  int id = static_cast<int>(targetList.size() - 1);
   emit targetCreated(id);
 }
 
 void MainWindowViewModel::updateTarget(int id, Target::Property pname,
                                        Target::PropertyType value) {
   if (targetIDValid(id)) {
-    Target& t = targetList[id];
+    Target& t = targetList[static_cast<size_t>(id)];
     if (t.getProperty(pname) != value) {
       t.setProperty(pname, value);
       emit targetUpdated(id, pname);
@@ -110,7 +110,7 @@ void MainWindowViewModel::updateTarget(int id, Target::Property pname,
 
 Target MainWindowViewModel::removeTarget(int id) {
   if (targetIDValid(id)) {
-    Target removedTarget = targetList[id];
+    Target removedTarget = targetList[static_cast<size_t>(id)];
     targetList.erase(targetList.begin() + id);  // TODO: check remove target
     emit targetRemoved(id);
     return removedTarget;
@@ -124,8 +124,8 @@ Target MainWindowViewModel::removeTarget(int id) {
 const QPixmap& MainWindowViewModel::getShape(int id) {
   if (shapeIDValid(id)) {
     auto path = (id < kDefaultShapeCount)
-                    ? kDefaultShapePathList[id]
-                    : shapePathList[id - kDefaultShapeCount];
+                    ? kDefaultShapePathList[static_cast<size_t>(id)]
+                    : shapePathList[static_cast<size_t>(id - kDefaultShapeCount)];
 
     if (loadedShape.find(path) == loadedShape.end()) {
       QPixmap shape =
@@ -142,7 +142,7 @@ const QPixmap& MainWindowViewModel::getShape(int id) {
 
 void MainWindowViewModel::loadShape(QString filepath) {
   shapePathList.push_back(filepath);
-  emit shapeLoaded(shapePathList.size() + kDefaultShapeCount - 1);
+  emit shapeLoaded(static_cast<int>(shapePathList.size()) + kDefaultShapeCount - 1);
 }
 
 void MainWindowViewModel::removeShape(int id) {
@@ -151,14 +151,14 @@ void MainWindowViewModel::removeShape(int id) {
       logError("Cannot delete this shape.", id);
     }
     id -= kDefaultShapeCount;
-    loadedShape.erase(shapePathList[id]);
+    loadedShape.erase(shapePathList[static_cast<size_t>(id)]);
     shapePathList.erase(shapePathList.begin() + id);
 
-    for (int i = 0; i < targetList.size(); ++i) {
+    for (size_t i = 0; i < targetList.size(); ++i) {
       if (targetList[i].shapeID == id) {
-        updateTarget(i, Target::Property::ShapeID, 0);
+        updateTarget(static_cast<int>(i), Target::Property::ShapeID, 0);
       } else if (targetList[i].shapeID > id) {
-        updateTarget(i, Target::Property::ShapeID, id - 1);
+        updateTarget(static_cast<int>(i), Target::Property::ShapeID, id - 1);
       } else {
         // No need to change
       }
@@ -232,11 +232,11 @@ void MainWindowViewModel::loadFromFile(QString filename) {
   updateCanvas(Canvas::Property::GrainSize, d["grainSize"].toInt());
   updateCanvas(Canvas::Property::CrossedParity, d["crossedParity"].toBool());
 
-  for (int i = 0; i < targetList.size(); ++i) {
+  for (size_t i = 0; i < targetList.size(); ++i) {
     removeTarget(0);
   }
 
-  for (int i = 0; i < shapePathList.size(); ++i) {
+  for (size_t i = 0; i < shapePathList.size(); ++i) {
     removeShape(0);
   }
 

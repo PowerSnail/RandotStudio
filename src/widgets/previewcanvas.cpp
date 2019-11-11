@@ -39,10 +39,10 @@ void PreviewCanvas::setCurrentIndex(int index) {
     child(currentIndex)->setSelected(false);
   }
 
-  if (index == -1) {
+  if (index < 0) {
     return;
   }
-  if (index < 0 || index >= labelList.size()) {
+  if (static_cast<size_t>(index) >= labelList.size()) {
     throw new std::range_error("Index too large.");
   }
   child(index)->setSelected(true);
@@ -122,7 +122,7 @@ void PreviewCanvas::redrawChild(PreviewCanvasItem* child) {
 }
 
 PreviewCanvasItem* PreviewCanvas::child(int index) { 
-  if (index < 0 || index > labelList.size()) {
+  if (index < 0 || static_cast<size_t>(index) > labelList.size()) {
     logError("Index out of range: ", index, ", expecting [0, ", labelList.size(), ")");
     throw new std::out_of_range("PreviewCanvas::child out of range");
   }

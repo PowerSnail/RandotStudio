@@ -104,7 +104,12 @@ void MainWindow::loadTargetProperties() {
     default:
       throw "Unexpected angle for rotation";
   }
-
+  auto &shape = vm->getShape(target.shapeID);
+  ui->labelRealSize->setText(
+              QString("(%1 x %2)")
+              .arg(target.scale * shape.width())
+              .arg(target.scale * shape.height())
+  );
   ui->colorChooserTarget->setColor(target.color);
   ui->listWidgetShape->setCurrentRow(target.shapeID);
 }
@@ -180,13 +185,11 @@ void MainWindow::on_lineEditGrainSize_editingFinished() {
 }
 
 void MainWindow::on_colorChooserForeground_colorChanged(const QColor& color) {
-  vm->updateCanvas(Canvas::Property::Foreground,
-                   ui->colorChooserForeground->getColor());
+  vm->updateCanvas(Canvas::Property::Foreground, color);
 }
 
 void MainWindow::on_colorChooserBackground_colorChanged(const QColor& color) {
-  vm->updateCanvas(Canvas::Property::Background,
-                   ui->colorChooserBackground->getColor());
+  vm->updateCanvas(Canvas::Property::Background, color);
 }
 
 void MainWindow::on_checkBoxCrossed_stateChanged(int state) {
@@ -241,7 +244,9 @@ void MainWindow::on_vm_currentTargetIDChanged(int oldID, int newID) {
   }
 }
 
-void MainWindow::on_vm_currentShapeIDChanged(int oldID, int newID) {
+void MainWindow::on_vm_currentShapeIDChanged(
+        int ,   // Ignore oldID
+        int newID) {
   if (vm->getCurrentTargetID() == -1) {
     return;
   }
@@ -279,10 +284,7 @@ void MainWindow::on_vm_targetUpdated(int targetID, Target::Property pname) {
     case Target::Property::Parity:
       logDebug("Parity does not affect list nor preview.");
       break;
-    default:
-      logError("Exhaustive Match should not reach here.");
-      exit(-1);
-  };
+  }
 }
 
 void MainWindow::on_vm_targetRemoved(int targetID) {
@@ -319,9 +321,6 @@ void MainWindow::on_vm_canvasUpdated(Canvas::Property pname) {
     case Canvas::Property::GrainSize:
       // Not affecting preview
       break;
-    default:
-      logError("Exhaustive Match should not reach here. ");
-      exit(-1);
   }
 }
 
