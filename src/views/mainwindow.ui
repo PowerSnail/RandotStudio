@@ -13,7 +13,16 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../Resources/RandotStudio.qrc">
+    <normaloff>:/randot_studio/icons/icon.ico</normaloff>:/randot_studio/icons/icon.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+	border-radius: 2px;
+};</string>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QWidget" name="widgetSettingPanel" native="true">
@@ -69,6 +78,9 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
             <property name="buddy">
              <cstring>lineEditWidth</cstring>
             </property>
@@ -92,6 +104,9 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
             <property name="buddy">
              <cstring>lineEditHeight</cstring>
             </property>
@@ -105,6 +120,9 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
             <property name="buddy">
              <cstring>lineEditGrainSize</cstring>
             </property>
@@ -117,6 +135,9 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
             </property>
             <property name="buddy">
              <cstring>checkBoxCrossed</cstring>
@@ -137,6 +158,9 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
             </property>
             <property name="buddy">
              <cstring>colorChooserForeground</cstring>
@@ -160,6 +184,9 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
             </property>
             <property name="buddy">
              <cstring>colorChooserBackground</cstring>
@@ -258,10 +285,16 @@
     <item>
      <widget class="QWidget" name="targetSettingPanel" native="true">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>0</height>
+       </size>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="1" column="1">
@@ -281,6 +314,9 @@
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
+         <property name="margin">
+          <number>2</number>
+         </property>
          <property name="buddy">
           <cstring>lineEditScale</cstring>
          </property>
@@ -299,6 +335,9 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="margin">
+          <number>2</number>
          </property>
          <property name="buddy">
           <cstring>comboBoxRotate</cstring>
@@ -322,6 +361,9 @@
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
+         <property name="margin">
+          <number>2</number>
+         </property>
          <property name="buddy">
           <cstring>lineEditX</cstring>
          </property>
@@ -344,6 +386,9 @@
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
+         <property name="margin">
+          <number>2</number>
+         </property>
          <property name="buddy">
           <cstring>lineEditParity</cstring>
          </property>
@@ -356,6 +401,9 @@
         <widget class="QLabel" name="label_12">
          <property name="text">
           <string>Color</string>
+         </property>
+         <property name="margin">
+          <number>2</number>
          </property>
         </widget>
        </item>
@@ -385,6 +433,12 @@
        </item>
        <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="label_11">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <pointsize>12</pointsize>
@@ -476,6 +530,9 @@
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
+         <property name="margin">
+          <number>2</number>
+         </property>
          <property name="buddy">
           <cstring>lineEditY</cstring>
          </property>
@@ -485,7 +542,7 @@
         <widget class="QLabel" name="label_2">
          <property name="font">
           <font>
-           <pointsize>10</pointsize>
+           <pointsize>11</pointsize>
            <weight>50</weight>
            <bold>false</bold>
           </font>
@@ -493,9 +550,12 @@
          <property name="text">
           <string>Shape</string>
          </property>
+         <property name="margin">
+          <number>2</number>
+         </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="labelRealSize">
          <property name="font">
           <font>
@@ -504,6 +564,12 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+         </property>
+         <property name="indent">
+          <number>2</number>
          </property>
         </widget>
        </item>

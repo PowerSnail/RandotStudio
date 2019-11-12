@@ -13,8 +13,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
+IF(WIN32)
+SET(GUI_TYPE WIN32)
+ENDIF(WIN32)
+
 add_executable(RandotStudio
+  ${GUI_TYPE}
   Resources/RandotStudio.qrc
+  Resources/RandotStudio.rc
   Resources/translations/main_en.ts
   Resources/translations/main_zh.ts
   src/widgets/color_chooser.cpp

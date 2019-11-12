@@ -5,5 +5,7 @@
         <file>default_shapes/e.png</file>
         <file>default_shapes/c.png</file>
         <file>icons/information.svg</file>
+        <file>icons/RandotStudio_plain.svg</file>
+        <file>icons/icon.ico</file>
     </qresource>
 </RCC>

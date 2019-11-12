@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>StartMenu</DisplayName>
+    <Description>Randot Studio Shortcut</Description>
+    <Version>1.0.1</Version>
+    <ReleaseDate>2019-10-10</ReleaseDate>
+    <Name>com.powersnail.randotstudiostartmenu</Name>
+    <Essential>true</Essential>
+    <Default>true</Default>
+    <Script>installscript.qs</Script>        
+</Package>
