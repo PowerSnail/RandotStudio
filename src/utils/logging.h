@@ -1,7 +1,7 @@
 #pragma once
 
-#include <iostream>
 #include <QString>
+#include <iostream>
 
 namespace logging {
 
@@ -16,7 +16,7 @@ void printList(T arg) {
   std::cerr << arg;
 }
 
-template <typename T, typename... Types> 
+template <typename T, typename... Types>
 void printList(T firstArg, Types... args) {
   std::cerr << firstArg << " ";
   printList(args...);
@@ -24,16 +24,16 @@ void printList(T firstArg, Types... args) {
 
 template <typename... Types>
 void logError(Types... args) {
-    std::cerr << "ERROR: ";
-    printList(args...);
-    std::cerr << std::endl;
+  std::cerr << "ERROR: ";
+  printList(args...);
+  std::cerr << std::endl;
 }
 
 template <typename... Types>
 void logDebug(Types... args) {
-    std::cerr << "DEBUG: ";
-    printList(args...);
-    std::cerr << std::endl;
+  std::cerr << "DEBUG: ";
+  printList(args...);
+  std::cerr << std::endl;
 }
 
-}
+}  // namespace logging

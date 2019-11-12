@@ -5,9 +5,9 @@
 
 #include <QComboBox>
 #include <QIcon>
-#include <QSize>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QSize>
 #include <QString>
 #include <iostream>
 
@@ -17,7 +17,9 @@ void operator<<(QLineEdit& edit, int val) {
   edit.setText(QString::number(val));
 }
 
-int editGetInt(QLineEdit& edit) { return edit.text().toInt(); }
+int editGetInt(QLineEdit& edit) {
+  return edit.text().toInt();
+}
 
 void setImageToItem(QListWidgetItem& item, QPixmap image) {
   item.setIcon(QIcon(image.scaled(15, 15, Qt::AspectRatioMode::KeepAspectRatio)));

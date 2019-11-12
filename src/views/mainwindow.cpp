@@ -18,8 +18,7 @@ using std::optional;
 using namespace logging;
 using namespace widget_helper;
 
-const QString kImageFileFilter(
-    "Images (*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG)");
+const QString kImageFileFilter("Images (*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG)");
 
 const QString kJsonFileFilter("JSON File (*.json)");
 const QString kPNSFileFilter("Stereo Image File (*.PNS)");
@@ -35,7 +34,7 @@ const QString kPNSFileFilter("Stereo Image File (*.PNS)");
  * @param img the data object for this canvas
  * @param parent
  */
-MainWindow::MainWindow(MainWindowViewModel* vm, QWidget* parent)
+MainWindow::MainWindow(MainWindowViewModel *vm, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), vm(vm) {
   ui->setupUi(this);
   ui->targetSettingPanel->setVisible(false);
@@ -45,25 +44,23 @@ MainWindow::MainWindow(MainWindowViewModel* vm, QWidget* parent)
           &MainWindow::on_vm_currentTargetIDChanged);
   connect(vm, &MainWindowViewModel::currentShapeIDChanged, this,
           &MainWindow::on_vm_currentShapeIDChanged);
-  connect(vm, &MainWindowViewModel::targetCreated, this,
-          &MainWindow::on_vm_targetCreated);
-  connect(vm, &MainWindowViewModel::targetUpdated, this,
-          &MainWindow::on_vm_targetUpdated);
-  connect(vm, &MainWindowViewModel::targetRemoved, this,
-          &MainWindow::on_vm_targetRemoved);
-  connect(vm, &MainWindowViewModel::shapeLoaded, this,
-          &MainWindow::on_vm_shapeLoaded);
-  connect(vm, &MainWindowViewModel::shapeRemoved, this,
-          &MainWindow::on_vm_shapeRemoved);
-  connect(vm, &MainWindowViewModel::canvasUpdated, this,
-          &MainWindow::on_vm_canvasUpdated);
+  connect(vm, &MainWindowViewModel::targetCreated, this, &MainWindow::on_vm_targetCreated);
+  connect(vm, &MainWindowViewModel::targetUpdated, this, &MainWindow::on_vm_targetUpdated);
+  connect(vm, &MainWindowViewModel::targetRemoved, this, &MainWindow::on_vm_targetRemoved);
+  connect(vm, &MainWindowViewModel::shapeLoaded, this, &MainWindow::on_vm_shapeLoaded);
+  connect(vm, &MainWindowViewModel::shapeRemoved, this, &MainWindow::on_vm_shapeRemoved);
+  connect(vm, &MainWindowViewModel::canvasUpdated, this, &MainWindow::on_vm_canvasUpdated);
 
   for (int i = 0; i < MainWindowViewModel::kDefaultShapeCount; ++i) {
     on_vm_shapeLoaded(i);
   }
+
+  ui->retranslateUi(this);
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+  delete ui;
+}
 
 void MainWindow::loadCanvasProperties() {
   *ui->lineEditWidth << vm->getCanvas().width;
@@ -72,8 +69,7 @@ void MainWindow::loadCanvasProperties() {
   ui->colorChooserForeground->setColor(vm->getCanvas().foreground);
   ui->colorChooserBackground->setColor(vm->getCanvas().background);
   ui->checkBoxCrossed->setChecked(vm->getCanvas().crossedParity);
-  ui->previewCanvas->setCanvasSize(vm->getCanvas().width,
-                                   vm->getCanvas().height);
+  ui->previewCanvas->setCanvasSize(vm->getCanvas().width, vm->getCanvas().height);
   ui->previewCanvas->setBackground(vm->getCanvas().background);
 }
 
@@ -82,7 +78,7 @@ void MainWindow::loadTargetProperties() {
   if (targetID == -1) {
     return;
   }
-  const Target& target = vm->getTarget(targetID);
+  const Target &target = vm->getTarget(targetID);
   *ui->lineEditX << target.x;
   *ui->lineEditY << target.y;
   *ui->lineEditScale << target.scale;
@@ -106,15 +102,12 @@ void MainWindow::loadTargetProperties() {
   }
   auto &shape = vm->getShape(target.shapeID);
   ui->labelRealSize->setText(
-              QString("(%1 x %2)")
-              .arg(target.scale * shape.width())
-              .arg(target.scale * shape.height())
-  );
+      QString("(%1 x %2)").arg(target.scale * shape.width()).arg(target.scale * shape.height()));
   ui->colorChooserTarget->setColor(target.color);
   ui->listWidgetShape->setCurrentRow(target.shapeID);
 }
 
-QPixmap MainWindow::getTargetPreview(const Target& target) {
+QPixmap MainWindow::getTargetPreview(const Target &target) {
   auto mask = imaging::targetMask(vm->getShape(target.shapeID), target);
   QPixmap targetview(mask.size());
   targetview.fill(target.color);
@@ -147,13 +140,13 @@ void MainWindow::on_listWidgetShape_currentRowChanged(int currentRow) {
 }
 
 void MainWindow::on_btnAddShape_clicked() {
-  QStringList fileList = QFileDialog::getOpenFileNames(
-      this, tr("Choose shape images"), vm->getPrevShapeDir(), kImageFileFilter);
+  QStringList fileList = QFileDialog::getOpenFileNames(this, tr("Choose shape images"),
+                                                       vm->getPrevShapeDir(), kImageFileFilter);
   if (fileList.empty()) {
     return;
   }
   vm->setPrevShapeDir(QFileInfo(fileList[0]).dir().path());
-  for (auto& filename : fileList) {
+  for (auto &filename : fileList) {
     vm->loadShape(filename);
   }
 }
@@ -180,21 +173,19 @@ void MainWindow::on_lineEditHeight_editingFinished() {
 }
 
 void MainWindow::on_lineEditGrainSize_editingFinished() {
-  vm->updateCanvas(Canvas::Property::GrainSize,
-                   editGetInt(*ui->lineEditGrainSize));
+  vm->updateCanvas(Canvas::Property::GrainSize, editGetInt(*ui->lineEditGrainSize));
 }
 
-void MainWindow::on_colorChooserForeground_colorChanged(const QColor& color) {
+void MainWindow::on_colorChooserForeground_colorChanged(const QColor &color) {
   vm->updateCanvas(Canvas::Property::Foreground, color);
 }
 
-void MainWindow::on_colorChooserBackground_colorChanged(const QColor& color) {
+void MainWindow::on_colorChooserBackground_colorChanged(const QColor &color) {
   vm->updateCanvas(Canvas::Property::Background, color);
 }
 
 void MainWindow::on_checkBoxCrossed_stateChanged(int state) {
-  vm->updateCanvas(Canvas::Property::CrossedParity,
-                   state == Qt::CheckState::Checked);
+  vm->updateCanvas(Canvas::Property::CrossedParity, state == Qt::CheckState::Checked);
 }
 
 // Slots for target properties
@@ -223,7 +214,7 @@ void MainWindow::on_comboBoxRotate_currentIndexChanged(int index) {
   vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Rotate, value);
 }
 
-void MainWindow::on_colorChooserTarget_colorChanged(const QColor& color) {
+void MainWindow::on_colorChooserTarget_colorChanged(const QColor &color) {
   vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Color, color);
 }
 
@@ -244,9 +235,8 @@ void MainWindow::on_vm_currentTargetIDChanged(int oldID, int newID) {
   }
 }
 
-void MainWindow::on_vm_currentShapeIDChanged(
-        int ,   // Ignore oldID
-        int newID) {
+void MainWindow::on_vm_currentShapeIDChanged(int,  // Ignore oldID
+                                             int newID) {
   if (vm->getCurrentTargetID() == -1) {
     return;
   }
@@ -310,8 +300,7 @@ void MainWindow::on_vm_canvasUpdated(Canvas::Property pname) {
   switch (pname) {
     case Canvas::Property::Width:
     case Canvas::Property::Height:
-      ui->previewCanvas->setCanvasSize(vm->getCanvas().width,
-                                       vm->getCanvas().height);
+      ui->previewCanvas->setCanvasSize(vm->getCanvas().width, vm->getCanvas().height);
       break;
     case Canvas::Property::Background:
       ui->previewCanvas->setBackground(vm->getCanvas().background);
@@ -330,25 +319,31 @@ void MainWindow::on_actionAbout_triggered() {
 }
 
 void MainWindow::on_actionSave_triggered() {
-  QString filename = QFileDialog::getSaveFileName(
-      this, tr("Choose file to save"), vm->getPrevConfigDir(), kJsonFileFilter);
+  QString filename = QFileDialog::getSaveFileName(this, tr("Choose file to save"),
+                                                  vm->getPrevConfigDir(), kJsonFileFilter);
+  if (filename.isNull()) {
+    return;
+  }
   vm->saveToFile(filename);
 }
 
 void MainWindow::on_actionLoad_triggered() {
-  QString filename = QFileDialog::getOpenFileName(
-      this, tr("Choose file to save"), vm->getPrevConfigDir(), kJsonFileFilter);
+  QString filename = QFileDialog::getOpenFileName(this, tr("Choose file to save"),
+                                                  vm->getPrevConfigDir(), kJsonFileFilter);
+  if (filename.isNull()) {
+    return;
+  }
   vm->loadFromFile(filename);
 }
 
 void MainWindow::on_actionRandot_triggered() {
-  QString filename = QFileDialog::getSaveFileName(
-      this, tr("Choose file to save"), vm->getPrevExportDir(), kPNSFileFilter);
+  QString filename = QFileDialog::getSaveFileName(this, tr("Choose file to save"),
+                                                  vm->getPrevExportDir(), kPNSFileFilter);
   vm->exportImage(filename, imaging::StereoImageType::Randot);
 }
 
 void MainWindow::on_actionStereo_PNG_triggered() {
-  QString filename = QFileDialog::getSaveFileName(
-      this, tr("Choose file to save"), vm->getPrevExportDir(), kPNSFileFilter);
+  QString filename = QFileDialog::getSaveFileName(this, tr("Choose file to save"),
+                                                  vm->getPrevExportDir(), kPNSFileFilter);
   vm->exportImage(filename, imaging::StereoImageType::Regular);
 }

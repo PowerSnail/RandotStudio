@@ -2,12 +2,11 @@
 
 #include <QColor>
 #include <QLabel>
-#include <deque>
 #include <QPixmap>
 #include <QWidget>
+#include <deque>
 
 #include "previewcanvasitem.h"
-
 
 class PreviewCanvas : public QWidget {
   Q_OBJECT
@@ -22,7 +21,7 @@ class PreviewCanvas : public QWidget {
   int currentIndex = -1;
 
  public:
-  explicit PreviewCanvas(QWidget *parent = nullptr);
+  explicit PreviewCanvas(QWidget* parent = nullptr);
 
   void setCanvasSize(int w, int h);
   void setBackground(QColor color);
@@ -34,13 +33,12 @@ class PreviewCanvas : public QWidget {
   void removePixmap(int id);
   QSize previewSize();
 
-
  private:  // Methods
-  void resizeEvent(QResizeEvent *event);
+  void resizeEvent(QResizeEvent* event);
   int find(PreviewCanvasItem* child);
   void redrawChild(PreviewCanvasItem* child);
   PreviewCanvasItem* child(int index);
- 
+
  private slots:
   void on_child_clicked(PreviewCanvasItem* sender);
 

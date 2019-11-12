@@ -16,9 +16,8 @@ class MainWindowViewModel : public QObject {
 
  public:  // Static Consts
   constexpr static int kDefaultShapeCount = 2;
-  constexpr static std::array<const char*, kDefaultShapeCount>
-      kDefaultShapePathList{":randot_studio/default_shapes/e.png",
-                            ":randot_studio/default_shapes/c.png"};
+  constexpr static std::array<const char*, kDefaultShapeCount> kDefaultShapePathList{
+      ":randot_studio/default_shapes/e.png", ":randot_studio/default_shapes/c.png"};
 
  private:
   // VM Fields
@@ -40,7 +39,7 @@ class MainWindowViewModel : public QObject {
 
  public:
   MainWindowViewModel();
-  
+
   MainWindowViewModel(QString configuration);
 
   int getCurrentTargetID();

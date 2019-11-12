@@ -21,8 +21,7 @@ struct Target {
   QColor color;
 
   // Constructor
-  Target(int x, int y, int scale, int rotate, int parity, int symbol_id,
-         QColor color);
+  Target(int x, int y, int scale, int rotate, int parity, int symbol_id, QColor color);
 
   void setProperty(Property pname, PropertyType value);
   PropertyType getProperty(Property pname);

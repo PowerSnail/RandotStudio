@@ -9,14 +9,7 @@
 using std::vector;
 
 struct Canvas {
-  enum class Property {
-    Width,
-    Height,
-    Foreground,
-    Background,
-    GrainSize,
-    CrossedParity
-  };
+  enum class Property { Width, Height, Foreground, Background, GrainSize, CrossedParity };
 
   using PropertyType = std::variant<int, bool, QColor>;
 

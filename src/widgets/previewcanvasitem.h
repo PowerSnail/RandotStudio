@@ -6,8 +6,9 @@
 class PreviewCanvasItem : public QLabel {
   Q_OBJECT
  private:
-  constexpr static const char* kStyleSheetSelected = "background: rgba(0, 0, 255, 50); border: 1px solid blue;";
-  constexpr static const char* kStyleSheetUnselected = "background: transparent; border: none;";
+  constexpr static const char *kStyleSheetSelected =
+      "background: rgba(0, 0, 255, 50); border: 1px solid blue;";
+  constexpr static const char *kStyleSheetUnselected = "background: transparent; border: none;";
 
   bool selected = false;
   int posX = 0;

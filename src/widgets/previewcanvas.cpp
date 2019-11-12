@@ -28,7 +28,9 @@ void PreviewCanvas::setBackground(QColor color) {
   bgLabel->show();
 }
 
-int PreviewCanvas::getCurrentIndex() { return currentIndex; }
+int PreviewCanvas::getCurrentIndex() {
+  return currentIndex;
+}
 void PreviewCanvas::setCurrentIndex(int index) {
   logDebug("PreviewCanvas::setCurrentIndex ", currentIndex, "->", index);
   if (index == currentIndex) {
@@ -73,12 +75,10 @@ void PreviewCanvas::movePixmap(int id, int x, int y) {
 void PreviewCanvas::removePixmap(int id) {
   PreviewCanvasItem* label = child(id);
   labelList.erase(labelList.begin() + id);
-  logDebug("PreviewCanvas::removePixmap before remove has ",
-           this->children().size(), " children.");
+  logDebug("PreviewCanvas::removePixmap before remove has ", this->children().size(), " children.");
   label->setParent(nullptr);
   delete label;
-  logDebug("PreviewCanvas::removePixmap after remove has ",
-           this->children().size(), " children.");
+  logDebug("PreviewCanvas::removePixmap after remove has ", this->children().size(), " children.");
 }
 
 QSize PreviewCanvas::previewSize() {
@@ -94,14 +94,12 @@ QSize PreviewCanvas::previewSize() {
 
 void PreviewCanvas::resizeEvent(QResizeEvent* event) {
   QSize contraint = this->size();
-  QSizeF renderSize = QSizeF(canvasWidth, canvasHeight)
-    .scaled(QSizeF(contraint) * 4 / 5, Qt::KeepAspectRatio);
+  QSizeF renderSize =
+      QSizeF(canvasWidth, canvasHeight).scaled(QSizeF(contraint) * 4 / 5, Qt::KeepAspectRatio);
 
   bgLabel->resize(int(renderSize.width()), int(renderSize.height()));
-  bgLabel->move(
-    int((contraint.width() - renderSize.width()) / 2), 
-    int((contraint.height() - renderSize.height()) / 2)
-  );
+  bgLabel->move(int((contraint.width() - renderSize.width()) / 2),
+                int((contraint.height() - renderSize.height()) / 2));
 
   QWidget::resizeEvent(event);
   for (auto label : labelList) {
@@ -121,12 +119,13 @@ void PreviewCanvas::redrawChild(PreviewCanvasItem* child) {
   child->show();
 }
 
-PreviewCanvasItem* PreviewCanvas::child(int index) { 
+PreviewCanvasItem* PreviewCanvas::child(int index) {
   if (index < 0 || static_cast<size_t>(index) > labelList.size()) {
     logError("Index out of range: ", index, ", expecting [0, ", labelList.size(), ")");
     throw new std::out_of_range("PreviewCanvas::child out of range");
   }
-  return labelList[index]; }
+  return labelList[index];
+}
 
 void PreviewCanvas::on_child_clicked(PreviewCanvasItem* sender) {
   int index = find(sender);

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QMainWindow>
 #include <QLabel>
+#include <QMainWindow>
 #include <map>
 #include "../viewmodels/mainwindowvm.h"
 
@@ -26,7 +26,7 @@ class MainWindow : public QMainWindow {
 
   void loadCanvasProperties();
   void loadTargetProperties();
-  
+
   Target& getTarget(int id);
   QPixmap getTargetPreview(const Target&);
 

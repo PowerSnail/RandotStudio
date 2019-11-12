@@ -30,12 +30,11 @@ QPixmap renderShapePreview(const QPixmap& shape, const QColor& foreground);
 QPixmap targetMask(const QPixmap& shape, const Target& target);
 QPixmap fillRandot(QSize size, int grainSize, QColor background, QColor foreground);
 
-QPixmap renderStereoImage(const Canvas& canvas,
-                          const std::deque<Target>& targetList,
-                          const std::deque<QPixmap>& targetImgList,
-                          StereoImageType type);
+QPixmap renderStereoImage(const Canvas& canvas, const std::deque<Target>& targetList,
+                          const std::deque<QPixmap>& targetImgList, StereoImageType type);
 
-QPixmap renderTarget(const Canvas& canvas, const Target& target, const QPixmap& shape, StereoImageType type);
+QPixmap renderTarget(const Canvas& canvas, const Target& target, const QPixmap& shape,
+                     StereoImageType type);
 
 }  // namespace imaging
 
