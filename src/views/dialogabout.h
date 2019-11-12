@@ -1,7 +1,7 @@
-#pragma once
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
-#ifndef DIALOGABOUT_H
-#define DIALOGABOUT_H
+#pragma once
 
 #include <QDialog>
 
@@ -19,5 +19,3 @@ class DialogAbout : public QDialog {
  private:
   Ui::DialogAbout *ui;
 };
-
-#endif  // DIALOGABOUT_H

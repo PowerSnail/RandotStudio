@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #include "dialogabout.h"
 #include "ui_dialogabout.h"
 

@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #pragma once
 
 #include <QObject>
@@ -40,7 +43,7 @@ class MainWindowViewModel : public QObject {
  public:
   MainWindowViewModel();
 
-  MainWindowViewModel(QString configuration);
+  explicit MainWindowViewModel(QString configuration);
 
   int getCurrentTargetID();
   void setCurrentTargetID(int value);

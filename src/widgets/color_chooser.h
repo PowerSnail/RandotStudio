@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #pragma once
 
 #ifndef COLOR_CHOOSER_H

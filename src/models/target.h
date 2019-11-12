@@ -1,7 +1,7 @@
-#pragma once
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
-#ifndef TARGET_H
-#define TARGET_H
+#pragma once
 
 #include <QColor>
 #include <variant>
@@ -26,5 +26,3 @@ struct Target {
   void setProperty(Property pname, PropertyType value);
   PropertyType getProperty(Property pname);
 };
-
-#endif  // TARGET_H

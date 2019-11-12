@@ -1,7 +1,7 @@
-#pragma once
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
-#ifndef WIDGET_HELPER_H
-#define WIDGET_HELPER_H
+#pragma once
 
 #include <QComboBox>
 #include <QIcon>
@@ -10,6 +10,8 @@
 #include <QSize>
 #include <QString>
 #include <iostream>
+#include <string>
+#include <utility>
 
 namespace widget_helper {
 
@@ -52,7 +54,7 @@ int getRotateAngle(int id) {
       return 270;
     default:
       throw "Unexpected selected ID for rotate combobox";
-  };
+  }
 }
 
 std::istream& operator>>(std::istream& in, QColor& color) {
@@ -62,5 +64,3 @@ std::istream& operator>>(std::istream& in, QColor& color) {
   return in;
 }
 }  // namespace widget_helper
-
-#endif  // WIDGET_HELPER_H

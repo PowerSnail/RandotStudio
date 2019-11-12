@@ -1,10 +1,11 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #include "previewcanvas.h"
 
 #include <QGraphicsDropShadowEffect>
-
-#include "../utils/logging.h"
-
-using namespace logging;
+#include <QtDebug>
+#include <QMessageLogger>
 
 PreviewCanvas::PreviewCanvas(QWidget* parent)
     : QWidget(parent), bgLabel(new QLabel(this)), labelList() {
@@ -32,7 +33,7 @@ int PreviewCanvas::getCurrentIndex() {
   return currentIndex;
 }
 void PreviewCanvas::setCurrentIndex(int index) {
-  logDebug("PreviewCanvas::setCurrentIndex ", currentIndex, "->", index);
+  qDebug() << "PreviewCanvas::setCurrentIndex " << currentIndex << "->" << index;
   if (index == currentIndex) {
     return;
   }
@@ -75,10 +76,8 @@ void PreviewCanvas::movePixmap(int id, int x, int y) {
 void PreviewCanvas::removePixmap(int id) {
   PreviewCanvasItem* label = child(id);
   labelList.erase(labelList.begin() + id);
-  logDebug("PreviewCanvas::removePixmap before remove has ", this->children().size(), " children.");
   label->setParent(nullptr);
   delete label;
-  logDebug("PreviewCanvas::removePixmap after remove has ", this->children().size(), " children.");
 }
 
 QSize PreviewCanvas::previewSize() {
@@ -97,9 +96,9 @@ void PreviewCanvas::resizeEvent(QResizeEvent* event) {
   QSizeF renderSize =
       QSizeF(canvasWidth, canvasHeight).scaled(QSizeF(contraint) * 4 / 5, Qt::KeepAspectRatio);
 
-  bgLabel->resize(int(renderSize.width()), int(renderSize.height()));
-  bgLabel->move(int((contraint.width() - renderSize.width()) / 2),
-                int((contraint.height() - renderSize.height()) / 2));
+  bgLabel->resize(static_cast<int>(renderSize.width()), static_cast<int>(renderSize.height()));
+  bgLabel->move(static_cast<int>((contraint.width() - renderSize.width()) / 2),
+                static_cast<int>((contraint.height() - renderSize.height()) / 2));
 
   QWidget::resizeEvent(event);
   for (auto label : labelList) {
@@ -113,7 +112,7 @@ int PreviewCanvas::find(PreviewCanvasItem* child) {
 }
 
 void PreviewCanvas::redrawChild(PreviewCanvasItem* child) {
-  double scale = (double)(previewSize().width()) / canvasWidth;
+  double scale = static_cast<double>(previewSize().width()) / canvasWidth;
   child->move(QPoint(child->getX(), child->getY()) * scale);
   child->resize(child->pixmap()->size() * scale);
   child->show();
@@ -121,7 +120,7 @@ void PreviewCanvas::redrawChild(PreviewCanvasItem* child) {
 
 PreviewCanvasItem* PreviewCanvas::child(int index) {
   if (index < 0 || static_cast<size_t>(index) > labelList.size()) {
-    logError("Index out of range: ", index, ", expecting [0, ", labelList.size(), ")");
+    qCritical() << "Index out of range: " << index << ", expecting [0, " << labelList.size() << ")";
     throw new std::out_of_range("PreviewCanvas::child out of range");
   }
   return labelList[index];

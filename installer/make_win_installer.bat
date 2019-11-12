@@ -42,7 +42,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 CD %CURRENT_DIR%
-binarycreator.exe  --offline-only -p %INSTALLER_CONFIG_DIR%\packages -c %INSTALLER_CONFIG_DIR%\config\config.xml %INSTALLER_OUTPUT_DIR%\installer.exe
+binarycreator.exe  --offline-only -p %INSTALLER_CONFIG_DIR%\packages -c %INSTALLER_CONFIG_DIR%\config\config.xml %INSTALLER_OUTPUT_DIR%\RandotStudioInstaller.exe
 if %ERRORLEVEL% NEQ 0 (
     echo "ERROR in binarycreator.exe: " %ERRORLEVEL%
     GOTO error

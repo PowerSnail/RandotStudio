@@ -2,7 +2,7 @@
 <Package>
     <DisplayName>RandotStudio</DisplayName>
     <Description>Randot Studio</Description>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <ReleaseDate>2019-10-10</ReleaseDate>
     <Name>com.powersnail.randotstudio</Name>
     <Essential>true</Essential>

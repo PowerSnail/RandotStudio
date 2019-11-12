@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #pragma once
 
 #include <QLabel>
@@ -5,6 +8,7 @@
 
 class PreviewCanvasItem : public QLabel {
   Q_OBJECT
+
  private:
   constexpr static const char *kStyleSheetSelected =
       "background: rgba(0, 0, 255, 50); border: 1px solid blue;";

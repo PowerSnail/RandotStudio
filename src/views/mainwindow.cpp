@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #include "mainwindow.h"
 
 #include <QBitmap>
@@ -5,17 +8,16 @@
 #include <QGraphicsDropShadowEffect>
 #include <QPainter>
 #include <QPixmap>
+#include <QtDebug>
+#include <fstream>
 #include <optional>
 
 #include "../imaging/imaging.h"
-#include "../utils/logging.h"
 #include "../utils/widget_helper.h"
 #include "dialogabout.h"
-#include "fstream"
 #include "ui_mainwindow.h"
 
 using std::optional;
-using namespace logging;
 using namespace widget_helper;
 
 const QString kImageFileFilter("Images (*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG)");
@@ -224,7 +226,7 @@ void MainWindow::on_previewCanvas_currentIndexChanged(int index) {
 
 // VM signals
 void MainWindow::on_vm_currentTargetIDChanged(int oldID, int newID) {
-  logDebug("on_vm_currentTargetIDChanged ", oldID, ", ", newID);
+  qDebug() << "on_vm_currentTargetIDChanged " << oldID << "," << newID;
   ui->listWidgetTarget->setCurrentRow(newID);
   ui->previewCanvas->setCurrentIndex(newID);
   if (newID == -1) {
@@ -272,13 +274,13 @@ void MainWindow::on_vm_targetUpdated(int targetID, Target::Property pname) {
       ui->previewCanvas->replacePixmap(targetID, preview);
       break;
     case Target::Property::Parity:
-      logDebug("Parity does not affect list nor preview.");
+      qDebug() << "Parity does not affect list nor preview.";
       break;
   }
 }
 
 void MainWindow::on_vm_targetRemoved(int targetID) {
-  logDebug("on_vm_targetRemoved", targetID);
+  qDebug() << "on_vm_targetRemoved" << targetID;
 
   ui->listWidgetTarget->removeItemWidget(ui->listWidgetTarget->item(targetID));
   delete ui->listWidgetTarget->takeItem(targetID);

@@ -1,7 +1,9 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #include "canvas.h"
 
-Canvas::Canvas(int width, int height) : width(width), height(height) {
-}
+Canvas::Canvas(int width, int height) : width(width), height(height) {}
 
 void Canvas::setProperty(Property pname, PropertyType value) {
   switch (pname) {

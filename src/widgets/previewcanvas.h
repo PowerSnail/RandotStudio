@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #pragma once
 
 #include <QColor>
@@ -7,6 +10,7 @@
 #include <deque>
 
 #include "previewcanvasitem.h"
+
 
 class PreviewCanvas : public QWidget {
   Q_OBJECT

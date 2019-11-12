@@ -1,44 +1,38 @@
-#include "views/mainwindow.h"
-#include "viewmodels/mainwindowvm.h"
-#include "utils/logging.h"
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
-#include <iostream>
 #include <QApplication>
 #include <QTranslator>
+#include <QtDebug>
 #include <QtGlobal>
-
-using namespace logging;
+#include <iostream>
+#include "viewmodels/mainwindowvm.h"
+#include "views/mainwindow.h"
 
 void loadTranslator(QApplication& app) {
   QTranslator* translator = new QTranslator(&app);
 
-  bool success = translator->load(
-    QLocale::system(), "", "", app.applicationDirPath()
-  );
+  bool success = translator->load(QLocale::system(), "", "", app.applicationDirPath());
   if (!success) {
-    logError("Failed to load translation: ", QLocale::system().name());
+    qWarning() << "Failed to load translation: " << QLocale::system().name();
     delete translator;
     return;
   }
-  
+
   app.installTranslator(translator);
-  logDebug("Loaded translator: ", QLocale::system().name());
+  qDebug() << "Loaded translator: " << QLocale::system().name();
 
+#ifdef Q_OS_WINDOWS
+  if (QLocale::system().language() == QLocale::Chinese) {
+    qDebug() << "Running in Windows with Chinese, set default font.";
+    QFont font;
+    font.setFamily("微软雅黑");
+    app.setFont(font);
+  }
+#endif  // ifdef Q_OS_WINDOWS
+}
 
-  #ifdef Q_OS_WINDOWS
-    if (QLocale::system().language() == QLocale::Chinese) {
-      logDebug("Running in Windows with Chinese, set default font.");
-      QFont font;
-      font.setFamily("微软雅黑");
-      app.setFont(font);
-    }
-  #endif  // ifdef Q_OS_WINDOWS
-
-
-};
-
-
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
   QApplication a(argc, argv);

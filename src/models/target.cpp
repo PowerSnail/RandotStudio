@@ -1,8 +1,10 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #include "target.h"
 
 Target::Target(int x, int y, int scale, int rotate, int parity, int shapeID, QColor color)
-    : x(x), y(y), scale(scale), rotate(rotate), parity(parity), shapeID(shapeID), color(color) {
-}
+    : x(x), y(y), scale(scale), rotate(rotate), parity(parity), shapeID(shapeID), color(color) {}
 
 void Target::setProperty(Property pname, PropertyType value) {
   switch (pname) {
@@ -31,6 +33,7 @@ void Target::setProperty(Property pname, PropertyType value) {
       exit(-1);
   }
 }
+
 Target::PropertyType Target::getProperty(Property pname) {
   switch (pname) {
     case Property::X:

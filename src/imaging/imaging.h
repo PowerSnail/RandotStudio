@@ -1,6 +1,7 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #pragma once
-#ifndef IMAGING_H
-#define IMAGING_H
 
 #include <QColor>
 #include <QIcon>
@@ -37,5 +38,3 @@ QPixmap renderTarget(const Canvas& canvas, const Target& target, const QPixmap& 
                      StereoImageType type);
 
 }  // namespace imaging
-
-#endif  // IMAGING_H

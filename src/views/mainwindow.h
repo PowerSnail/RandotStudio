@@ -1,3 +1,6 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #pragma once
 
 #include <QLabel>
@@ -15,7 +18,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
-  MainWindow(MainWindowViewModel* vm, QWidget* parent = nullptr);
+  explicit MainWindow(MainWindowViewModel* vm, QWidget* parent = nullptr);
   ~MainWindow();
 
  private:

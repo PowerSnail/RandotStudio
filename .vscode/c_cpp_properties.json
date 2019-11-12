@@ -19,10 +19,10 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**",
+                "${workspaceFolder}",
                 "${workspaceFolder}/build/debug/RandotStudio_autogen/include" ,
-                "${workspaceFolder}/build/debug/RandotStudio_autogen/include/**" ,
-                "C:/Qt/5.13.2/msvc2017_64/include/**"
+                "C:/Qt/5.13.2/msvc2017_64/include/**",
+                "C:/Qt/5.13.2/msvc2017_64/include"
             ],
             "defines": [],
             "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/HostX64/x64/cl.exe",

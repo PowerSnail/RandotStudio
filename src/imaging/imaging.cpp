@@ -1,12 +1,12 @@
+// Copyright (c) 2019 Han Jin
+// Licensed under the MIT License <http://opensource.org/licenses/MIT>
+
 #include "imaging.h"
 
 #include <QBitmap>
 #include <QPainter>
 #include <QPixmap>
-
-#include "../utils/logging.h"
-
-using namespace logging;
+#include <QtDebug>
 
 std::random_device imaging::kRandomDevice{};
 
@@ -39,7 +39,7 @@ QPixmap imaging::fillRandot(QSize size, int grainSize, QColor background, QColor
   image.fill(background);
   QPainter painter;
   if (!painter.begin(&image)) {
-    logError("Failed to initialize painter in fillRandot");
+    qCritical() << "Failed to initialize painter in fillRandot";
     throw new std::runtime_error(
         "QPainter Initialization Error. Failed to initialize painter in fillRandot");
   }
@@ -59,24 +59,23 @@ QPixmap imaging::renderStereoImage(const Canvas& canvas, const std::deque<Target
   QPixmap image(canvas.width * 2, canvas.height);
   QPainter painter;
   if (!painter.begin(&image)) {
-    logError("failed to initialize painter in renderStereoImage");
-    exit(-1);
+    qFatal("failed to initialize painter in renderStereoImage");
   }
 
   if (type == StereoImageType::Randot) {
-    logDebug("Painting Randot");
+    qDebug() << "Painting Randot";
     QPixmap bg = fillRandot(QSize(canvas.width, canvas.height), canvas.grainSize, canvas.background,
                             canvas.foreground);
     painter.drawPixmap(QRect(0, 0, canvas.width, canvas.height), bg);
     painter.drawPixmap(QRect(canvas.width, 0, canvas.width, canvas.height), bg);
   } else {
-    logDebug("Painting Regular");
+    qDebug() << "Painting Regular";
     painter.fillRect(QRect(0, 0, image.width(), image.height()), canvas.background);
   }
 
   int parityDirection = (canvas.crossedParity) ? 1 : -1;
 
-  logDebug("target list: ", targetList.size());
+  qDebug() << "target list: ", targetList.size();
   for (size_t i = 0; i < targetList.size(); ++i) {
     auto target = targetList[i];
     auto targetImg = targetImgList[i];
