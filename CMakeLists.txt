@@ -11,18 +11,22 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
 
 IF(WIN32)
 SET(GUI_TYPE WIN32)
 ENDIF(WIN32)
 
+QT5_ADD_TRANSLATION(
+  QMFILES
+  Translation/en_US.ts
+  Translation/zh_CN.ts
+)
+
 add_executable(RandotStudio
   ${GUI_TYPE}
   Resources/RandotStudio.qrc
   Resources/RandotStudio.rc
-  Resources/translations/main_en.ts
-  Resources/translations/main_zh.ts
   src/widgets/color_chooser.cpp
   src/widgets/color_chooser.h
   src/widgets/color_chooser.ui
@@ -48,6 +52,7 @@ add_executable(RandotStudio
   src/utils/logging.cpp
   src/utils/widget_helper.h
   src/main.cpp
+  ${QMFILES}
 )
 
 target_link_libraries(RandotStudio PRIVATE Qt5::Widgets)

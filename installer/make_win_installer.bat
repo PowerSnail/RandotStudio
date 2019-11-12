@@ -6,15 +6,22 @@
 @echo off
 SET CURRENT_DIR=%CD%
 SET RELEASE_DIR=%CURRENT_DIR%\build\release
+SET INSTALLER_CONFIG_DIR=%CURRENT_DIR%\Installer
 SET BUILD_INSTALLER_DIR=%CURRENT_DIR%\build\installer\randotstudio
-SET INSTALLER_DESTINATION=%CURRENT_DIR%\installer\packages\com.powersnail.randotstudio\data
+SET INSTALLER_DESTINATION=%INSTALLER_CONFIG_DIR%\packages\com.powersnail.randotstudio\data
 SET INSTALLER_OUTPUT_DIR=%CURRENT_DIR%\build\installer
 
-mkdir %BUILD_INSTALLER_DIR%
+IF EXIST "%BUILD_INSTALLER_DIR%" (
+    DEL /S /Q %BUILD_INSTALLER_DIR%/*
+) else (
+    MKDIR %BUILD_INSTALLER_DIR%
+)
+
 CD %BUILD_INSTALLER_DIR%
 
 COPY /Y %RELEASE_DIR%\RandotStudio.exe .\
 COPY /Y %RELEASE_DIR%\RandotStudio.exe.manifest .\
+COPY /Y %RELEASE_DIR%\*.qm .\
 if %ERRORLEVEL% NEQ 0 (
     echo "ERROR in copying: " %ERRORLEVEL%
     GOTO error
@@ -26,6 +33,8 @@ if %ERRORLEVEL% NEQ 0 (
     GOTO error
 )
 
+IF EXIST %INSTALLER_DESTINATION%\randotstudio.7z DEL /Q %INSTALLER_DESTINATION%\randotstudio.7z
+
 archivegen.exe %INSTALLER_DESTINATION%\randotstudio.7z .
 if %ERRORLEVEL% NEQ 0 (
     echo "ERROR in archivegen.exe: " %ERRORLEVEL%
@@ -33,7 +42,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 CD %CURRENT_DIR%
-binarycreator.exe  --offline-only -p .\installer\packages -c .\installer\config\config.xml %INSTALLER_OUTPUT_DIR%\installer.exe
+binarycreator.exe  --offline-only -p %INSTALLER_CONFIG_DIR%\packages -c %INSTALLER_CONFIG_DIR%\config\config.xml %INSTALLER_OUTPUT_DIR%\installer.exe
 if %ERRORLEVEL% NEQ 0 (
     echo "ERROR in binarycreator.exe: " %ERRORLEVEL%
     GOTO error
