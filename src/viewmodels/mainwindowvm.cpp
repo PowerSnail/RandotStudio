@@ -1,7 +1,7 @@
 // Copyright (c) 2019 Han Jin
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
-#include "mainwindowvm.h"
+#include "src/viewmodels/mainwindowvm.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <sstream>
 #include <string>
+
+#include "src/utils/errors.h"
 
 bool MainWindowViewModel::targetIDValid(int id) {
   return (id >= 0 && static_cast<size_t>(id) < targetList.size());
@@ -90,9 +92,7 @@ const Target& MainWindowViewModel::getTarget(int id) {
   if (targetIDValid(id)) {
     return targetList[static_cast<size_t>(id)];
   } else {
-    qCritical() << "Target out of range: got " << id << ", expected [0, " << targetList.size()
-                << ").";
-    throw std::range_error("Target range error. See log for details.");
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
   }
 }
 
@@ -110,21 +110,18 @@ void MainWindowViewModel::updateTarget(int id, Target::Property pname, Target::P
       emit targetUpdated(id, pname);
     }
   } else {
-    qCritical() << "Target out of range: got " << id << ", expected [0, " << targetList.size()
-                << ").";
-    throw std::range_error("Target range error. See log for details.");
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
   }
 }
 
 Target MainWindowViewModel::removeTarget(int id) {
   if (targetIDValid(id)) {
     Target removedTarget = targetList[static_cast<size_t>(id)];
-    targetList.erase(targetList.begin() + id);  // TODO: check remove target
+    targetList.erase(targetList.begin() + id);
     emit targetRemoved(id);
     return removedTarget;
   } else {
-    qCritical() << "Target out of range: got " << id << ", expected [0, " << targetList.size() << ").";
-    throw std::range_error("Target range error. See log for details.");
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
   }
 }
 
@@ -140,9 +137,7 @@ const QPixmap& MainWindowViewModel::getShape(int id) {
     }
     return loadedShape[path];
   } else {
-    qCritical() << "Shape out of range: got " << id << ", expected [0, " << shapePathList.size()
-                << ").";
-    throw std::range_error("Target range error. See log for details.");
+    throw errors::RangeError("Shape ID out of range.", id, 0, targetList.size());
   }
 }
 
@@ -172,9 +167,7 @@ void MainWindowViewModel::removeShape(int id) {
 
     emit shapeRemoved(id);
   } else {
-    qCritical() << "Shape out of range: got " << id << ", expected [0, " << shapePathList.size()
-                << ").";
-    throw std::range_error("Target range error. See log for details.");
+    throw errors::RangeError("Shape ID out of range.", id, 0, targetList.size());
   }
 }
 

@@ -1,7 +1,7 @@
 // Copyright (c) 2019 Han Jin
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
-#include "mainwindow.h"
+#include "src/views/mainwindow.h"
 
 #include <QBitmap>
 #include <QFileDialog>
@@ -65,14 +65,15 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::loadCanvasProperties() {
-  *ui->lineEditWidth << vm->getCanvas().width;
-  *ui->lineEditHeight << vm->getCanvas().height;
-  *ui->lineEditGrainSize << vm->getCanvas().grainSize;
-  ui->colorChooserForeground->setColor(vm->getCanvas().foreground);
-  ui->colorChooserBackground->setColor(vm->getCanvas().background);
-  ui->checkBoxCrossed->setChecked(vm->getCanvas().crossedParity);
-  ui->previewCanvas->setCanvasSize(vm->getCanvas().width, vm->getCanvas().height);
-  ui->previewCanvas->setBackground(vm->getCanvas().background);
+  auto& canvas = vm->getCanvas();
+  *ui->lineEditWidth << canvas.width;
+  *ui->lineEditHeight << canvas.height;
+  *ui->lineEditGrainSize << canvas.grainSize;
+  ui->colorChooserForeground->setColor(canvas.foreground);
+  ui->colorChooserBackground->setColor(canvas.background);
+  ui->checkBoxCrossed->setChecked(canvas.crossedParity);
+  ui->previewCanvas->setCanvasSize(canvas.width, canvas.height);
+  ui->previewCanvas->setBackground(canvas.background);
 }
 
 void MainWindow::loadTargetProperties() {

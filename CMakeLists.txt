@@ -49,6 +49,8 @@ add_executable(RandotStudio
   src/imaging/imaging.h
   src/imaging/imaging.cpp
   src/utils/widget_helper.h
+  src/utils/errors.cpp
+  src/utils/errors.h
   src/main.cpp
   ${QMFILES}
 )

@@ -93,5 +93,4 @@ class MainWindowViewModel : public QObject {
 
   // Canvas
   void canvasUpdated(Canvas::Property pname);
-
 };  // class MainWindowViewModel

@@ -39,7 +39,6 @@ QPixmap imaging::fillRandot(QSize size, int grainSize, QColor background, QColor
   image.fill(background);
   QPainter painter;
   if (!painter.begin(&image)) {
-    qCritical() << "Failed to initialize painter in fillRandot";
     throw new std::runtime_error(
         "QPainter Initialization Error. Failed to initialize painter in fillRandot");
   }
