@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>790</width>
+    <height>929</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,13 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_11">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <pointsize>12</pointsize>
@@ -43,60 +49,14 @@
           </font>
          </property>
          <property name="text">
-          <string>Image Properties</string>
+          <string>Image Property</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QWidget" name="canvasSettingPanel" native="true">
          <layout class="QGridLayout" name="gridLayout">
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEditHeight">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEditWidth">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Width</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="margin">
-             <number>2</number>
-            </property>
-            <property name="buddy">
-             <cstring>lineEditWidth</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEditGrainSize">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
+          <item row="1" column="2">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>Height</string>
@@ -112,10 +72,10 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_7">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Grain Size</string>
+             <string>Width</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -124,34 +84,11 @@
              <number>2</number>
             </property>
             <property name="buddy">
-             <cstring>lineEditGrainSize</cstring>
+             <cstring>lineEditWidth</cstring>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Crossed</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="margin">
-             <number>2</number>
-            </property>
-            <property name="buddy">
-             <cstring>checkBoxCrossed</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QCheckBox" name="checkBoxCrossed">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
+          <item row="5" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Foreground</string>
@@ -167,7 +104,76 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="3" column="2">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Crossed</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <property name="buddy">
+             <cstring>checkBoxCrossed</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEditWidth">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Dot Size</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <property name="buddy">
+             <cstring>lineEditGrainSize</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEditGrainSize">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QCheckBox" name="checkBoxCrossed">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="lineEditHeight">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
            <widget class="ColorChooser" name="colorChooserForeground" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -177,7 +183,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item row="5" column="2">
            <widget class="QLabel" name="label_9">
             <property name="text">
              <string>Background</string>
@@ -193,7 +199,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
+          <item row="5" column="3">
            <widget class="ColorChooser" name="colorChooserBackground" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -207,16 +213,27 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
+        <widget class="QWidget" name="widget_2" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="text">
-          <string>Targets</string>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>1000</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 50);</string>
          </property>
         </widget>
        </item>
@@ -225,13 +242,30 @@
          <property name="spacing">
           <number>0</number>
          </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
          <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
+          <widget class="QLabel" name="label_3">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Target List</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QListWidget" name="listWidgetTarget">
            <property name="viewMode">
-            <enum>QListView::IconMode</enum>
+            <enum>QListView::ListMode</enum>
            </property>
           </widget>
          </item>
@@ -243,7 +277,7 @@
            <item>
             <widget class="QPushButton" name="btnAddTarget">
              <property name="text">
-              <string/>
+              <string>New Target</string>
              </property>
              <property name="icon">
               <iconset resource="../../Resources/RandotStudio.qrc">
@@ -254,7 +288,7 @@
            <item>
             <widget class="QPushButton" name="btnRemoveTarget">
              <property name="text">
-              <string/>
+              <string>Remove Target</string>
              </property>
              <property name="icon">
               <iconset resource="../../Resources/RandotStudio.qrc">
@@ -279,298 +313,311 @@
          </item>
         </layout>
        </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QWidget" name="targetSettingPanel" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>1</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>0</height>
-       </size>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEditX"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_15">
+       <item>
+        <widget class="QWidget" name="targetSettingPanel" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
+           <horstretch>1</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text">
-          <string>Scale</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="margin">
-          <number>2</number>
-         </property>
-         <property name="buddy">
-          <cstring>lineEditScale</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_13">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Rotate</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="margin">
-          <number>2</number>
-         </property>
-         <property name="buddy">
-          <cstring>comboBoxRotate</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="lineEditParity"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_10">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>x</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="margin">
-          <number>2</number>
-         </property>
-         <property name="buddy">
-          <cstring>lineEditX</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="lineEditScale"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_14">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Parity</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="margin">
-          <number>2</number>
-         </property>
-         <property name="buddy">
-          <cstring>lineEditParity</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="ColorChooser" name="colorChooserTarget" native="true"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>Color</string>
-         </property>
-         <property name="margin">
-          <number>2</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QComboBox" name="comboBoxRotate">
-         <item>
-          <property name="text">
-           <string>0</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>90</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>180</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>270</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="label_11">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>150</width>
            <height>0</height>
           </size>
          </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Target</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEditY"/>
-       </item>
-       <item row="9" column="0" colspan="5">
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QListWidget" name="listWidgetShape">
-           <property name="viewMode">
-            <enum>QListView::IconMode</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="btnAddShape">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../Resources/RandotStudio.qrc">
-               <normaloff>:/randot_studio/icons/add.svg</normaloff>:/randot_studio/icons/add.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btnRemoveShape">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../../Resources/RandotStudio.qrc">
-               <normaloff>:/randot_studio/icons/minus.svg</normaloff>:/randot_studio/icons/minus.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_16">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>y</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="margin">
-          <number>2</number>
-         </property>
-         <property name="buddy">
-          <cstring>lineEditY</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="4">
-        <widget class="QLabel" name="label_2">
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Shape</string>
-         </property>
-         <property name="margin">
-          <number>2</number>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QLabel" name="labelRealSize">
-         <property name="font">
-          <font>
-           <italic>true</italic>
-          </font>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-         </property>
-         <property name="indent">
-          <number>2</number>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="7" column="0" colspan="4">
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Shape</string>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lineEditParity"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Rotate</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0" colspan="4">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QListWidget" name="listWidgetShape">
+              <property name="viewMode">
+               <enum>QListView::IconMode</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="btnAddShape">
+                <property name="text">
+                 <string>Load Shape</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="../../Resources/RandotStudio.qrc">
+                  <normaloff>:/randot_studio/icons/add.svg</normaloff>:/randot_studio/icons/add.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnRemoveShape">
+                <property name="text">
+                 <string>Remove Shape</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="../../Resources/RandotStudio.qrc">
+                  <normaloff>:/randot_studio/icons/minus.svg</normaloff>:/randot_studio/icons/minus.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>x</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <property name="buddy">
+             <cstring>lineEditX</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEditScale"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEditX"/>
+          </item>
+          <item row="5" column="2">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Color</string>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" colspan="2">
+           <widget class="QLabel" name="labelRealSize">
+            <property name="font">
+             <font>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="indent">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1" colspan="3">
+           <widget class="QWidget" name="widget" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QRadioButton" name="radioButtonRotate0">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../Resources/RandotStudio.qrc">
+                 <normaloff>:/randot_studio/icons/deg0.svg</normaloff>:/randot_studio/icons/deg0.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButtonRotate90">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../Resources/RandotStudio.qrc">
+                 <normaloff>:/randot_studio/icons/deg90.svg</normaloff>:/randot_studio/icons/deg90.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButtonRotate180">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../Resources/RandotStudio.qrc">
+                 <normaloff>:/randot_studio/icons/deg180.svg</normaloff>:/randot_studio/icons/deg180.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButtonRotate270">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../Resources/RandotStudio.qrc">
+                 <normaloff>:/randot_studio/icons/deg270.svg</normaloff>:/randot_studio/icons/deg270.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="5" column="3">
+           <widget class="ColorChooser" name="colorChooserTarget" native="true"/>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Parity</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <property name="buddy">
+             <cstring>lineEditParity</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="lineEditY"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Scale</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <property name="buddy">
+             <cstring>lineEditScale</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_16">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>y</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <property name="buddy">
+             <cstring>lineEditY</cstring>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -593,8 +640,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>17</height>
+     <width>790</width>
+     <height>27</height>
     </rect>
    </property>
   </widget>
@@ -634,12 +681,12 @@
   </widget>
   <action name="actionRandot">
    <property name="text">
-    <string>Randot</string>
+    <string>Export As Randot</string>
    </property>
   </action>
   <action name="actionStereo_PNG">
    <property name="text">
-    <string>Stereo PNG</string>
+    <string>Export as PNS</string>
    </property>
   </action>
   <action name="actionSave">
@@ -678,17 +725,12 @@
  </customwidgets>
  <tabstops>
   <tabstop>lineEditWidth</tabstop>
-  <tabstop>lineEditHeight</tabstop>
   <tabstop>lineEditGrainSize</tabstop>
-  <tabstop>checkBoxCrossed</tabstop>
-  <tabstop>listWidgetTarget</tabstop>
   <tabstop>btnAddTarget</tabstop>
   <tabstop>btnRemoveTarget</tabstop>
   <tabstop>lineEditX</tabstop>
-  <tabstop>lineEditY</tabstop>
   <tabstop>lineEditScale</tabstop>
   <tabstop>lineEditParity</tabstop>
-  <tabstop>comboBoxRotate</tabstop>
   <tabstop>listWidgetShape</tabstop>
   <tabstop>btnAddShape</tabstop>
   <tabstop>btnRemoveShape</tabstop>

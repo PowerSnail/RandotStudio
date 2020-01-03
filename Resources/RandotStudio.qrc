@@ -7,5 +7,9 @@
         <file>icons/information.svg</file>
         <file>icons/RandotStudio_plain.svg</file>
         <file>icons/icon.ico</file>
+        <file>icons/deg0.svg</file>
+        <file>icons/deg90.svg</file>
+        <file>icons/deg270.svg</file>
+        <file>icons/deg180.svg</file>
     </qresource>
 </RCC>

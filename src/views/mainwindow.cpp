@@ -39,7 +39,7 @@ const QString kPNSFileFilter("Stereo Image File (*.PNS)");
 MainWindow::MainWindow(MainWindowViewModel *vm, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), vm(vm) {
   ui->setupUi(this);
-  ui->targetSettingPanel->setVisible(false);
+  ui->targetSettingPanel->setEnabled(false);
   loadCanvasProperties();
 
   connect(vm, &MainWindowViewModel::currentTargetIDChanged, this,
@@ -89,23 +89,23 @@ void MainWindow::loadTargetProperties() {
 
   switch (target.rotate) {
     case 0:
-      ui->comboBoxRotate->setCurrentIndex(0);
+      ui->radioButtonRotate0->setChecked(true);
       break;
     case 90:
-      ui->comboBoxRotate->setCurrentIndex(1);
+      ui->radioButtonRotate90->setChecked(true);
       break;
     case 180:
-      ui->comboBoxRotate->setCurrentIndex(2);
+      ui->radioButtonRotate180->setChecked(true);
       break;
     case 270:
-      ui->comboBoxRotate->setCurrentIndex(4);
+      ui->radioButtonRotate270->setChecked(true);
       break;
     default:
       throw "Unexpected angle for rotation";
   }
   auto &shape = vm->getShape(target.shapeID);
   ui->labelRealSize->setText(
-      QString("(%1 x %2)").arg(target.scale * shape.width()).arg(target.scale * shape.height()));
+      QString("Size = (%1 x %2)").arg(target.scale * shape.width()).arg(target.scale * shape.height()));
   ui->colorChooserTarget->setColor(target.color);
   ui->listWidgetShape->setCurrentRow(target.shapeID);
 }
@@ -127,7 +127,7 @@ void MainWindow::on_listWidgetTarget_currentRowChanged(int currentRow) {
 }
 
 void MainWindow::on_btnAddTarget_clicked() {
-  vm->createTarget(Target(0, 0, 1, 0, 0, 0, vm->getCanvas().foreground));
+  vm->createTarget(Target(0, 0, 10, 0, 0, 0, vm->getCanvas().foreground));
 }
 
 void MainWindow::on_btnRemoveTarget_clicked() {
@@ -212,14 +212,38 @@ void MainWindow::on_lineEditParity_editingFinished() {
   vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Parity, value);
 }
 
-void MainWindow::on_comboBoxRotate_currentIndexChanged(int index) {
-  int value = getRotateAngle(index);
-  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Rotate, value);
-}
-
 void MainWindow::on_colorChooserTarget_colorChanged(const QColor &color) {
   vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Color, color);
 }
+
+void MainWindow::on_radioButtonRotate0_toggled(bool checked) {
+  if (!checked) {
+    return;
+  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Rotate, 0);
+}
+
+void MainWindow::on_radioButtonRotate90_toggled(bool checked) {
+  if (!checked) {
+    return;
+  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Rotate, 90);
+}
+
+void MainWindow::on_radioButtonRotate180_toggled(bool checked) {
+  if (!checked) {
+    return;
+  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Rotate, 180);
+}
+
+void MainWindow::on_radioButtonRotate270_toggled(bool checked) {
+  if (!checked) {
+    return;
+  }
+  vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Rotate, 270);
+}
+
 
 void MainWindow::on_previewCanvas_currentIndexChanged(int index) {
   vm->setCurrentTargetID(index);
@@ -230,11 +254,11 @@ void MainWindow::on_vm_currentTargetIDChanged(int oldID, int newID) {
   qDebug() << "on_vm_currentTargetIDChanged " << oldID << "," << newID;
   ui->listWidgetTarget->setCurrentRow(newID);
   ui->previewCanvas->setCurrentIndex(newID);
-  if (newID == -1) {
-    ui->targetSettingPanel->setVisible(false);
-  } else {
-    ui->targetSettingPanel->setVisible(true);
+  if (newID != -1) {
+    ui->targetSettingPanel->setEnabled(true);
     loadTargetProperties();
+  } else {
+    ui->targetSettingPanel->setEnabled(false);
   }
 }
 
@@ -250,6 +274,7 @@ void MainWindow::on_vm_targetCreated(int targetID) {
   auto target = vm->getTarget(targetID);
   auto targetIcon = getTargetPreview(target);
   insertIconItem(*ui->listWidgetTarget, targetIcon, targetID);
+  ui->listWidgetTarget->item(targetID)->setText(QString(" %1x%2").arg(target.x).arg(target.y));
 
   ui->previewCanvas->insertPixmap(targetID, target.x, target.y, targetIcon);
   vm->setCurrentTargetID(targetID);
@@ -265,6 +290,7 @@ void MainWindow::on_vm_targetUpdated(int targetID, Target::Property pname) {
     case Target::Property::X:
     case Target::Property::Y:
       ui->previewCanvas->movePixmap(targetID, target.x, target.y);
+      ui->listWidgetTarget->item(targetID)->setText(QString(" %1x%2").arg(target.x).arg(target.y));
       break;
     case Target::Property::Color:
     case Target::Property::Scale:

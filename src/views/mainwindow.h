@@ -59,8 +59,12 @@ class MainWindow : public QMainWindow {
   void on_lineEditY_editingFinished();
   void on_lineEditScale_editingFinished();
   void on_lineEditParity_editingFinished();
-  void on_comboBoxRotate_currentIndexChanged(int index);
+  // void on_comboBoxRotate_currentIndexChanged(int index);
   void on_colorChooserTarget_colorChanged(const QColor& color);
+  void on_radioButtonRotate0_toggled(bool checked);
+  void on_radioButtonRotate90_toggled(bool checked);
+  void on_radioButtonRotate180_toggled(bool checked);
+  void on_radioButtonRotate270_toggled(bool checked);
 
   void on_previewCanvas_currentIndexChanged(int index);
 
