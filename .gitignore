@@ -53,6 +53,5 @@ compile_commands.json
 
 # build folder
 build/
-.vscode/c_cpp_properties.json
-.vscode/settings.json
+.vscode/
 installer/packages/*/data/*.7z
