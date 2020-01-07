@@ -5,7 +5,7 @@
 
 @echo off
 SET CURRENT_DIR=%CD%
-SET RELEASE_DIR=%CURRENT_DIR%\build\release
+SET RELEASE_DIR=%CURRENT_DIR%\build\Release-MinSize
 SET INSTALLER_CONFIG_DIR=%CURRENT_DIR%\Installer
 SET BUILD_INSTALLER_DIR=%CURRENT_DIR%\build\installer\randotstudio
 SET INSTALLER_DESTINATION=%INSTALLER_CONFIG_DIR%\packages\com.powersnail.randotstudio\data
