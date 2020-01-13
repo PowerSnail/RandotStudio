@@ -20,7 +20,7 @@
 using std::optional;
 using namespace widget_helper;
 
-const QString kImageFileFilter("Images (*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG)");
+const QString kImageFileFilter("Images (*.bmp *.png *.jpg *.jpeg *.PNG *.BMP *.JPG *.JPEG)");
 
 const QString kJsonFileFilter("JSON File (*.json)");
 const QString kPNSFileFilter("Stereo Image File (*.PNS *.pns)");
