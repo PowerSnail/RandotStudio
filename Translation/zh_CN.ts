@@ -53,7 +53,7 @@
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="110"/>
+        <location filename="../src/views/mainwindow.ui" line="192"/>
         <source>Crossed</source>
         <translation>是否交叉</translation>
     </message>
@@ -68,120 +68,125 @@
         <translation>图片属性</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="136"/>
+        <location filename="../src/views/mainwindow.ui" line="120"/>
         <source>Dot Size</source>
         <translation>随机点大小</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="189"/>
+        <location filename="../src/views/mainwindow.ui" line="166"/>
         <source>Background</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="441"/>
+        <location filename="../src/views/mainwindow.ui" line="454"/>
         <source>x</source>
         <translation>x</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="360"/>
+        <location filename="../src/views/mainwindow.ui" line="373"/>
         <source>Rotate</source>
-        <translation type="unfinished">旋转</translation>
+        <translation>旋转</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="585"/>
+        <location filename="../src/views/mainwindow.ui" line="598"/>
         <source>Scale</source>
         <translation>放大倍数</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="607"/>
+        <location filename="../src/views/mainwindow.ui" line="620"/>
         <source>y</source>
         <translation>y</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="341"/>
+        <location filename="../src/views/mainwindow.ui" line="354"/>
         <source>Shape</source>
         <translation>形状</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="261"/>
+        <location filename="../src/views/mainwindow.ui" line="215"/>
+        <source>Dot Ratio</source>
+        <translation>随机点比例</translation>
+    </message>
+    <message>
+        <location filename="../src/views/mainwindow.ui" line="274"/>
         <source>Target List</source>
         <translation>视标列表</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="280"/>
+        <location filename="../src/views/mainwindow.ui" line="293"/>
         <source>New Target</source>
         <translation>创建视标</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="291"/>
+        <location filename="../src/views/mainwindow.ui" line="304"/>
         <source>Remove Target</source>
         <translation>删除视标</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="396"/>
+        <location filename="../src/views/mainwindow.ui" line="409"/>
         <source>Load Shape</source>
         <translation>导入形状</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="407"/>
+        <location filename="../src/views/mainwindow.ui" line="420"/>
         <source>Remove Shape</source>
         <translation>删除形状</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="560"/>
+        <location filename="../src/views/mainwindow.ui" line="573"/>
         <source>Parity</source>
         <translation>间距</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="684"/>
+        <location filename="../src/views/mainwindow.ui" line="697"/>
         <source>Export As Randot</source>
         <translation>导出为随机点图</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="689"/>
+        <location filename="../src/views/mainwindow.ui" line="702"/>
         <source>Export as PNS</source>
         <translation>导出为立体图</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="463"/>
+        <location filename="../src/views/mainwindow.ui" line="476"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="651"/>
+        <location filename="../src/views/mainwindow.ui" line="664"/>
         <source>toolBar</source>
         <translation>工具栏</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="694"/>
+        <location filename="../src/views/mainwindow.ui" line="707"/>
         <source>Save</source>
         <translation>保存配置</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="699"/>
+        <location filename="../src/views/mainwindow.ui" line="712"/>
         <source>Load</source>
         <translation>读取配置</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.ui" line="708"/>
+        <location filename="../src/views/mainwindow.ui" line="721"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.cpp" line="146"/>
+        <location filename="../src/views/mainwindow.cpp" line="148"/>
         <source>Choose shape images</source>
         <translation>选择图片</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.cpp" line="163"/>
+        <location filename="../src/views/mainwindow.cpp" line="165"/>
         <source>Cannot delete E and C shapes.</source>
         <translation>不能删除 C 和 E.</translation>
     </message>
     <message>
-        <location filename="../src/views/mainwindow.cpp" line="351"/>
-        <location filename="../src/views/mainwindow.cpp" line="360"/>
-        <location filename="../src/views/mainwindow.cpp" line="369"/>
-        <location filename="../src/views/mainwindow.cpp" line="375"/>
+        <location filename="../src/views/mainwindow.cpp" line="361"/>
+        <location filename="../src/views/mainwindow.cpp" line="373"/>
+        <location filename="../src/views/mainwindow.cpp" line="382"/>
+        <location filename="../src/views/mainwindow.cpp" line="394"/>
         <source>Choose file to save</source>
         <translation>保存文件</translation>
     </message>
