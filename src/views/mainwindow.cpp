@@ -23,7 +23,7 @@ using namespace widget_helper;
 const QString kImageFileFilter("Images (*.png *.jpg *.jpeg *.PNG *.JPG *.JPEG)");
 
 const QString kJsonFileFilter("JSON File (*.json)");
-const QString kPNSFileFilter("Stereo Image File (*.PNS)");
+const QString kPNSFileFilter("Stereo Image File (*.PNS *.pns)");
 
 /*
  * MainWindow Implementation
@@ -65,10 +65,11 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::loadCanvasProperties() {
-  auto& canvas = vm->getCanvas();
-  *ui->lineEditWidth << canvas.width;
-  *ui->lineEditHeight << canvas.height;
-  *ui->lineEditGrainSize << canvas.grainSize;
+  auto &canvas = vm->getCanvas();
+  ui->lineEditWidth->setText(QString::number(canvas.width));
+  ui->lineEditHeight->setText(QString::number(canvas.height));
+  ui->lineEditGrainSize->setText(QString::number(canvas.grainSize));
+  ui->lineEditGrainRatio->setText(QString::number(canvas.grainRatio));
   ui->colorChooserForeground->setColor(canvas.foreground);
   ui->colorChooserBackground->setColor(canvas.background);
   ui->checkBoxCrossed->setChecked(canvas.crossedParity);
@@ -104,8 +105,9 @@ void MainWindow::loadTargetProperties() {
       throw "Unexpected angle for rotation";
   }
   auto &shape = vm->getShape(target.shapeID);
-  ui->labelRealSize->setText(
-      QString("Size = (%1 x %2)").arg(target.scale * shape.width()).arg(target.scale * shape.height()));
+  ui->labelRealSize->setText(QString("Size = (%1 x %2)")
+                                 .arg(target.scale * shape.width())
+                                 .arg(target.scale * shape.height()));
   ui->colorChooserTarget->setColor(target.color);
   ui->listWidgetShape->setCurrentRow(target.shapeID);
 }
@@ -179,6 +181,14 @@ void MainWindow::on_lineEditGrainSize_editingFinished() {
   vm->updateCanvas(Canvas::Property::GrainSize, editGetInt(*ui->lineEditGrainSize));
 }
 
+void MainWindow::on_lineEditGrainRatio_editingFinished() {
+  qDebug() << "on_lineEditGrainRatio_editingFinished called";
+  double value = ui->lineEditGrainRatio->text().toDouble();
+  qDebug() << "on_lineEditGrainRatio_editingFinished got " << value;
+  vm->updateCanvas(Canvas::Property::GrainRatio, value);
+  qDebug() << "on_lineEditGrainRatio_editingFinished updated";
+}
+
 void MainWindow::on_colorChooserForeground_colorChanged(const QColor &color) {
   vm->updateCanvas(Canvas::Property::Foreground, color);
 }
@@ -243,7 +253,6 @@ void MainWindow::on_radioButtonRotate270_toggled(bool checked) {
   }
   vm->updateTarget(vm->getCurrentTargetID(), Target::Property::Rotate, 270);
 }
-
 
 void MainWindow::on_previewCanvas_currentIndexChanged(int index) {
   vm->setCurrentTargetID(index);
@@ -337,6 +346,7 @@ void MainWindow::on_vm_canvasUpdated(Canvas::Property pname) {
     case Canvas::Property::Foreground:
     case Canvas::Property::CrossedParity:
     case Canvas::Property::GrainSize:
+    case Canvas::Property::GrainRatio:
       // Not affecting preview
       break;
   }
@@ -353,6 +363,9 @@ void MainWindow::on_actionSave_triggered() {
   if (filename.isNull()) {
     return;
   }
+  if (!filename.endsWith(".json")) {
+    filename.append(".json");
+  }
   vm->saveToFile(filename);
 }
 
@@ -368,11 +381,23 @@ void MainWindow::on_actionLoad_triggered() {
 void MainWindow::on_actionRandot_triggered() {
   QString filename = QFileDialog::getSaveFileName(this, tr("Choose file to save"),
                                                   vm->getPrevExportDir(), kPNSFileFilter);
+  if (filename.isNull()) {
+    return;
+  }  
+  if (!filename.endsWith(".pns")) {
+    filename.append(".png");
+  }
   vm->exportImage(filename, imaging::StereoImageType::Randot);
 }
 
 void MainWindow::on_actionStereo_PNG_triggered() {
   QString filename = QFileDialog::getSaveFileName(this, tr("Choose file to save"),
                                                   vm->getPrevExportDir(), kPNSFileFilter);
+  if (filename.isNull()) {
+    return;
+  }
+  if (!filename.endsWith(".pns")) {
+    filename.append(".png");
+  }
   vm->exportImage(filename, imaging::StereoImageType::Regular);
 }

@@ -42,21 +42,6 @@ int listWidgetRemoveCurrentRow(QListWidget& listWidget) {
   return id;
 }
 
-int getRotateAngle(int id) {
-  switch (id) {
-    case 0:
-      return 0;
-    case 1:
-      return 90;
-    case 2:
-      return 180;
-    case 3:
-      return 270;
-    default:
-      throw "Unexpected selected ID for rotate combobox";
-  }
-}
-
 std::istream& operator>>(std::istream& in, QColor& color) {
   std::string s;
   in >> s;

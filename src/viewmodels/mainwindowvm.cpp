@@ -210,6 +210,7 @@ void MainWindowViewModel::saveToFile(QString filename) {
   jsonMain.insert("foreground", QJsonValue(canvas.foreground.name()));
   jsonMain.insert("background", QJsonValue(canvas.background.name()));
   jsonMain.insert("grainSize", QJsonValue(canvas.grainSize));
+  jsonMain.insert("grainRatio", QJsonValue(canvas.grainRatio));
   jsonMain.insert("crossedParity", QJsonValue(canvas.crossedParity));
   jsonMain.insert("targetList", QJsonValue(jsonTargetList));
   jsonMain.insert("shapeList", QJsonValue(jsonShapeList));
@@ -228,6 +229,7 @@ void MainWindowViewModel::loadFromFile(QString filename) {
   updateCanvas(Canvas::Property::Foreground, QColor(d["foreground"].toString()));
   updateCanvas(Canvas::Property::Background, QColor(d["background"].toString()));
   updateCanvas(Canvas::Property::GrainSize, d["grainSize"].toInt());
+  updateCanvas(Canvas::Property::GrainRatio, d["grainRatio"].toDouble());
   updateCanvas(Canvas::Property::CrossedParity, d["crossedParity"].toBool());
 
   for (size_t i = 0; i < targetList.size(); ++i) {

@@ -50,6 +50,7 @@ class MainWindow : public QMainWindow {
   void on_lineEditWidth_editingFinished();
   void on_lineEditHeight_editingFinished();
   void on_lineEditGrainSize_editingFinished();
+  void on_lineEditGrainRatio_editingFinished();
   void on_colorChooserForeground_colorChanged(const QColor& color);
   void on_colorChooserBackground_colorChanged(const QColor& color);
   void on_checkBoxCrossed_stateChanged(int state);
@@ -59,7 +60,6 @@ class MainWindow : public QMainWindow {
   void on_lineEditY_editingFinished();
   void on_lineEditScale_editingFinished();
   void on_lineEditParity_editingFinished();
-  // void on_comboBoxRotate_currentIndexChanged(int index);
   void on_colorChooserTarget_colorChanged(const QColor& color);
   void on_radioButtonRotate0_toggled(bool checked);
   void on_radioButtonRotate90_toggled(bool checked);

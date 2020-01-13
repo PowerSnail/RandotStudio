@@ -12,9 +12,17 @@
 using std::vector;
 
 struct Canvas {
-  enum class Property { Width, Height, Foreground, Background, GrainSize, CrossedParity };
+  enum class Property {
+    Width,
+    Height,
+    Foreground,
+    Background,
+    GrainSize,
+    CrossedParity,
+    GrainRatio
+  };
 
-  using PropertyType = std::variant<int, bool, QColor>;
+  using PropertyType = std::variant<int, bool, QColor, double>;
 
  public:
   int width, height;
@@ -22,6 +30,7 @@ struct Canvas {
   QColor background = QColor(255, 255, 255);
   int grainSize = 1;
   bool crossedParity = true;
+  double grainRatio = 0.5;
 
   Canvas(int width, int height);
   void setProperty(Property pname, PropertyType value);

@@ -10,13 +10,7 @@
 
 std::random_device imaging::kRandomDevice{};
 
-TRng imaging::kRandomNumberGenerator(imaging::kRandomDevice());
-
-std::bernoulli_distribution imaging::kBernoulliDistribution(0.5);
-
-bool imaging::getRandomBool() {
-  return kBernoulliDistribution(kRandomNumberGenerator);
-}
+TRng imaging::kRNG(imaging::kRandomDevice());
 
 QPixmap imaging::renderShapePreview(const QPixmap& shape, const QColor& foreground) {
   auto mask = shape.createMaskFromColor(QColor(0, 0, 0), Qt::MaskMode::MaskOutColor);
@@ -34,7 +28,10 @@ QPixmap imaging::targetMask(const QPixmap& shape, const Target& target) {
   return mask;
 }
 
-QPixmap imaging::fillRandot(QSize size, int grainSize, QColor background, QColor foreground) {
+QPixmap imaging::fillRandot(QSize size, int grainSize, double grainRatio, QColor background,
+                            QColor foreground) {
+
+  qDebug() << "fillRandot GrainRatio = " << grainRatio;
   QPixmap image(size);
   image.fill(background);
   QPainter painter;
@@ -42,9 +39,11 @@ QPixmap imaging::fillRandot(QSize size, int grainSize, QColor background, QColor
     throw new std::runtime_error(
         "QPainter Initialization Error. Failed to initialize painter in fillRandot");
   }
+
+  TBernoulli bernoulli(grainRatio);
   for (int y = 0; y < size.height(); y += grainSize) {
     for (int x = 0; x < size.width(); x += grainSize) {
-      if (getRandomBool()) {
+      if (bernoulli(kRNG)) {
         painter.fillRect(x, y, grainSize, grainSize, foreground);
       }
     }
@@ -63,8 +62,8 @@ QPixmap imaging::renderStereoImage(const Canvas& canvas, const std::deque<Target
 
   if (type == StereoImageType::Randot) {
     qDebug() << "Painting Randot";
-    QPixmap bg = fillRandot(QSize(canvas.width, canvas.height), canvas.grainSize, canvas.background,
-                            canvas.foreground);
+    QPixmap bg = fillRandot(QSize(canvas.width, canvas.height), canvas.grainSize, canvas.grainRatio,
+                            canvas.background, canvas.foreground);
     painter.drawPixmap(QRect(0, 0, canvas.width, canvas.height), bg);
     painter.drawPixmap(QRect(canvas.width, 0, canvas.width, canvas.height), bg);
   } else {
@@ -98,7 +97,8 @@ QPixmap imaging::renderTarget(const Canvas& canvas, const Target& target, const 
     targetImg = QPixmap(mask.size());
     targetImg.fill(target.color);
   } else {
-    targetImg = fillRandot(mask.size(), canvas.grainSize, canvas.background, canvas.foreground);
+    targetImg = fillRandot(mask.size(), canvas.grainSize, canvas.grainRatio, canvas.background,
+                           canvas.foreground);
   }
   assert(mask.size() == targetImg.size());
   targetImg.setMask(mask);

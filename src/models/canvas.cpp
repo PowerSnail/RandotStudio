@@ -2,6 +2,7 @@
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
 #include "src/models/canvas.h"
+#include <QDebug>
 
 Canvas::Canvas(int width, int height) : width(width), height(height) {}
 
@@ -25,6 +26,9 @@ void Canvas::setProperty(Property pname, PropertyType value) {
     case Property::CrossedParity:
       this->grainSize = std::get<bool>(value);
       break;
+    case Property::GrainRatio:
+      this->grainRatio = std::get<double>(value);
+      break;
     default:
       exit(-1);
   }
@@ -43,7 +47,9 @@ Canvas::PropertyType Canvas::getProperty(Property pname) {
     case Property::GrainSize:
       return this->grainSize;
     case Property::CrossedParity:
-      return this->grainSize;
+      return this->crossedParity;
+    case Property::GrainRatio:
+      return this->grainRatio;
     default:
       exit(-1);
   }
