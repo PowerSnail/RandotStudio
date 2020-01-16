@@ -13,7 +13,13 @@
 #include <sstream>
 #include <string>
 
-#include "src/utils/errors.h"
+namespace {
+static std::range_error* RangeError(const char* msg, int index, int lower, int higher) {
+  std::stringstream ss;
+  ss << msg << " Expected [" << lower << "," << higher << "), got " << index;
+  return new std::range_error(ss.str());
+}
+}  // namespace
 
 bool MainWindowViewModel::TargetIDValid(int id) {
   return (id >= 0 && static_cast<size_t>(id) < targetList.size());
@@ -49,6 +55,7 @@ void MainWindowViewModel::SetCurrentTargetID(int value) {
 int MainWindowViewModel::CurrentShapeID() {
   return currentShapeID;
 }
+
 void MainWindowViewModel::SetCurrentShapeID(int value) {
   if (currentShapeID != value) {
     int oldValue = currentShapeID;
@@ -95,7 +102,7 @@ const Target& MainWindowViewModel::GetTarget(int id) {
   if (TargetIDValid(id)) {
     return targetList[static_cast<size_t>(id)];
   } else {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
 }
 
@@ -107,7 +114,7 @@ void MainWindowViewModel::CreateTarget(Target newTarget) {
 
 void MainWindowViewModel::SetTargetX(int id, int value) {
   if (!TargetIDValid(id)) {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
   if (targetList[id].x != value) {
     targetList[id].x = value;
@@ -117,7 +124,7 @@ void MainWindowViewModel::SetTargetX(int id, int value) {
 
 void MainWindowViewModel::SetTargetY(int id, int value) {
   if (!TargetIDValid(id)) {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
   if (targetList[id].y != value) {
     targetList[id].y = value;
@@ -127,7 +134,7 @@ void MainWindowViewModel::SetTargetY(int id, int value) {
 
 void MainWindowViewModel::SetTargetScale(int id, int value) {
   if (!TargetIDValid(id)) {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
   if (targetList[id].scale != value) {
     targetList[id].scale = value;
@@ -137,7 +144,7 @@ void MainWindowViewModel::SetTargetScale(int id, int value) {
 
 void MainWindowViewModel::SetTargetRotate(int id, int value) {
   if (!TargetIDValid(id)) {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
   if (targetList[id].rotate != value) {
     targetList[id].rotate = value;
@@ -147,7 +154,7 @@ void MainWindowViewModel::SetTargetRotate(int id, int value) {
 
 void MainWindowViewModel::SetTargetParity(int id, int value) {
   if (!TargetIDValid(id)) {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
   if (targetList[id].parity != value) {
     targetList[id].parity = value;
@@ -157,7 +164,7 @@ void MainWindowViewModel::SetTargetParity(int id, int value) {
 
 void MainWindowViewModel::SetTargetShapeID(int id, int value) {
   if (!TargetIDValid(id)) {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
   if (targetList[id].shapeID != value) {
     targetList[id].shapeID = value;
@@ -167,7 +174,7 @@ void MainWindowViewModel::SetTargetShapeID(int id, int value) {
 
 void MainWindowViewModel::SetTargetColor(int id, QColor value) {
   if (!TargetIDValid(id)) {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
   if (targetList[id].color != value) {
     targetList[id].color = value;
@@ -182,7 +189,7 @@ Target MainWindowViewModel::RemoveTarget(int id) {
     emit targetRemoved(id);
     return removedTarget;
   } else {
-    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+    throw RangeError("Target out of range.", id, 0, targetList.size());
   }
 }
 
@@ -199,7 +206,7 @@ const QPixmap& MainWindowViewModel::getShape(int id) {
     }
     return loadedShape[path];
   } else {
-    throw errors::RangeError("Shape ID out of range.", id, 0, targetList.size());
+    throw RangeError("Shape ID out of range.", id, 0, targetList.size());
   }
 }
 
@@ -229,7 +236,7 @@ void MainWindowViewModel::RemoveShape(int id) {
 
     emit shapeRemoved(id);
   } else {
-    throw errors::RangeError("Shape ID out of range.", id, 0, targetList.size());
+    throw RangeError("Shape ID out of range.", id, 0, targetList.size());
   }
 }
 
