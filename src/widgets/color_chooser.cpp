@@ -4,7 +4,6 @@
 #include "color_chooser.h"
 #include <QColorDialog>
 #include <QStyle>
-#include "ui_color_chooser.h"
 
 static const QString kBtnStyleTemplate{
     "QPushButton {background-color: %1; "
@@ -14,14 +13,11 @@ static const QString kBtnStyleTemplate{
     "border-radius: 2px;"
     "}"};
 
-ColorChooser::ColorChooser(QWidget* parent)
-    : QWidget(parent), ui(new Ui::ColorChooser) {
-  ui->setupUi(this);
+ColorChooser::ColorChooser(QWidget* parent) : QPushButton(parent) {
   SetColor(QColor(0, 0, 0));
-}
-
-ColorChooser::~ColorChooser() {
-  delete ui;
+  connect(this, &ColorChooser::clicked, this, [=]() {
+    this->SetColor(QColorDialog::getColor(this->color, this, tr("Choose a color")));
+  });
 }
 
 QColor ColorChooser::Color() {
@@ -33,12 +29,6 @@ void ColorChooser::SetColor(QColor color) {
     return;
   }
   this->color = color;
-  this->ui->btnChoose->setStyleSheet(kBtnStyleTemplate.arg(color.name()));
-  emit colorChanged(this->color);
-}
-
-void ColorChooser::on_btnChoose_clicked() {
-  QColor color = QColorDialog::getColor(this->color, this, tr("Choose a color"));
-  this->SetColor(color);
-  ui->btnChoose->clearFocus();
+  this->setStyleSheet(kBtnStyleTemplate.arg(color.name()));
+  emit colorChanged(color);
 }

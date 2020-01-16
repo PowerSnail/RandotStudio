@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Copyright (c) 2020 Han Jin
-Licensed under the MIT License <http://opensource.org/licenses/MIT>
--->
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
@@ -10,8 +6,8 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>891</width>
-    <height>1282</height>
+    <width>1723</width>
+    <height>1286</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -103,9 +99,6 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
             <property name="margin">
              <number>2</number>
             </property>
-            <property name="buddy">
-             <cstring>colorChooserForeground</cstring>
-            </property>
            </widget>
           </item>
           <item row="1" column="1">
@@ -154,16 +147,6 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
-           <widget class="ColorChooser" name="colorChooserForeground" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
           <item row="5" column="2">
            <widget class="QLabel" name="label_9">
             <property name="text">
@@ -174,19 +157,6 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
             </property>
             <property name="margin">
              <number>2</number>
-            </property>
-            <property name="buddy">
-             <cstring>colorChooserBackground</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="3">
-           <widget class="ColorChooser" name="colorChooserBackground" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
             </property>
            </widget>
           </item>
@@ -238,6 +208,20 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
           </item>
           <item row="4" column="3">
            <widget class="QComboBox" name="cbDotShape"/>
+          </item>
+          <item row="5" column="3">
+           <widget class="ColorChooser" name="colorChooserBackground">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="ColorChooser" name="colorChooserForeground">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -575,9 +559,6 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
             </layout>
            </widget>
           </item>
-          <item row="5" column="3">
-           <widget class="ColorChooser" name="colorChooserTarget" native="true"/>
-          </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_14">
             <property name="sizePolicy">
@@ -647,6 +628,13 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
             </property>
            </widget>
           </item>
+          <item row="5" column="3">
+           <widget class="ColorChooser" name="colorChooserTarget">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -670,7 +658,7 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>891</width>
+     <width>1723</width>
      <height>39</height>
     </rect>
    </property>
@@ -741,26 +729,38 @@ Licensed under the MIT License <http://opensource.org/licenses/MIT>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ColorChooser</class>
-   <extends>QWidget</extends>
-   <header>src/widgets/color_chooser.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PreviewCanvas</class>
    <extends>QWidget</extends>
    <header>src/widgets/previewcanvas.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>ColorChooser</class>
+   <extends>QPushButton</extends>
+   <header>src/widgets/color_chooser.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>lineEditWidth</tabstop>
+  <tabstop>lineEditHeight</tabstop>
   <tabstop>lineEditGrainSize</tabstop>
+  <tabstop>lineEditGrainRatio</tabstop>
+  <tabstop>checkBoxCrossed</tabstop>
+  <tabstop>cbDotShape</tabstop>
+  <tabstop>colorChooserForeground</tabstop>
+  <tabstop>colorChooserBackground</tabstop>
+  <tabstop>listWidgetTarget</tabstop>
   <tabstop>btnAddTarget</tabstop>
   <tabstop>btnRemoveTarget</tabstop>
   <tabstop>lineEditX</tabstop>
+  <tabstop>lineEditY</tabstop>
   <tabstop>lineEditScale</tabstop>
   <tabstop>lineEditParity</tabstop>
+  <tabstop>colorChooserTarget</tabstop>
+  <tabstop>radioButtonRotate0</tabstop>
+  <tabstop>radioButtonRotate90</tabstop>
+  <tabstop>radioButtonRotate180</tabstop>
+  <tabstop>radioButtonRotate270</tabstop>
   <tabstop>listWidgetShape</tabstop>
   <tabstop>btnAddShape</tabstop>
   <tabstop>btnRemoveShape</tabstop>
