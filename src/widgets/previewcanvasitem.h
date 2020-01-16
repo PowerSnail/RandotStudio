@@ -12,7 +12,8 @@ class PreviewCanvasItem : public QLabel {
  private:
   constexpr static const char *kStyleSheetSelected =
       "background: rgba(0, 0, 255, 50); border: 1px solid blue;";
-  constexpr static const char *kStyleSheetUnselected = "background: transparent; border: none;";
+  constexpr static const char *kStyleSheetUnselected =
+      "background: transparent; border: none;";
 
   bool selected = false;
   int posX = 0;
@@ -23,13 +24,13 @@ class PreviewCanvasItem : public QLabel {
 
  public:
   explicit PreviewCanvasItem(QWidget *parent = nullptr);
-  void setSelected(bool selected);
+  void SetSelected(bool selected);
 
-  int getX();
-  void setX(int value);
+  int X();
+  void SetX(int value);
 
-  int getY();
-  void setY(int value);
+  int Y();
+  void SetY(int value);
 
  signals:
   void clicked(PreviewCanvasItem *sender);

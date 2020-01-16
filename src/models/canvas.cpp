@@ -6,51 +6,58 @@
 
 Canvas::Canvas(int width, int height) : width(width), height(height) {}
 
-void Canvas::setProperty(Property pname, PropertyType value) {
-  switch (pname) {
-    case Property::Width:
-      this->width = std::get<int>(value);
-      break;
-    case Property::Height:
-      this->height = std::get<int>(value);
-      break;
-    case Property::Foreground:
-      this->foreground = std::get<QColor>(value);
-      break;
-    case Property::Background:
-      this->background = std::get<QColor>(value);
-      break;
-    case Property::GrainSize:
-      this->grainSize = std::get<int>(value);
-      break;
-    case Property::CrossedParity:
-      this->grainSize = std::get<bool>(value);
-      break;
-    case Property::GrainRatio:
-      this->grainRatio = std::get<double>(value);
-      break;
-    default:
-      exit(-1);
-  }
+int Canvas::Width() {
+  return width;
 }
 
-Canvas::PropertyType Canvas::getProperty(Property pname) {
-  switch (pname) {
-    case Property::Width:
-      return this->width;
-    case Property::Height:
-      return this->height;
-    case Property::Foreground:
-      return this->foreground;
-    case Property::Background:
-      return this->background;
-    case Property::GrainSize:
-      return this->grainSize;
-    case Property::CrossedParity:
-      return this->crossedParity;
-    case Property::GrainRatio:
-      return this->grainRatio;
-    default:
-      exit(-1);
-  }
+int Canvas::Height() {
+  return height;
+}
+
+QColor Canvas::Foreground() {
+  return foreground;
+}
+
+QColor Canvas::Background() {
+  return background;
+}
+
+int Canvas::GrainSize() {
+  return grainSize;
+}
+
+bool Canvas::CrossedParity() {
+  return crossedParity;
+}
+
+double Canvas::GrainRatio() {
+  return grainRatio;
+}
+
+void Canvas::SetWidth(int value) {
+  width = value;
+}
+
+void Canvas::SetHeight(int value) {
+  height = value;
+}
+
+void Canvas::SetForeground(QColor value) {
+  foreground = value;
+}
+
+void Canvas::SetBackground(QColor value) {
+  background = value;
+}
+
+void Canvas::SetGrainSize(int value) {
+  grainSize = value;
+}
+
+void Canvas::SetCrossedParity(bool value) {
+  crossedParity = value;
+}
+
+void Canvas::SetGrainRatio(double value) {
+  grainRatio = value;
 }

@@ -8,8 +8,7 @@
 
 struct Target {
  public:
-  enum Property { X, Y, Scale, Rotate, Parity, ShapeID, Color };
-  using PropertyType = std::variant<int, QColor>;
+  enum class Property { X, Y, Scale, Rotate, Parity, ShapeID, Color };
 
   // Fields
   int x;
@@ -23,6 +22,19 @@ struct Target {
   // Constructor
   Target(int x, int y, int scale, int rotate, int parity, int symbol_id, QColor color);
 
-  void setProperty(Property pname, PropertyType value);
-  PropertyType getProperty(Property pname);
+  int X();
+  int Y();
+  int Scale();
+  int Rotate();
+  int Parity();
+  int ShapeID();
+  QColor Color();
+
+  void SetX(int value);
+  void SetY(int value);
+  void SetScale(int value);
+  void SetRotate(int value);
+  void SetParity(int value);
+  void SetShapeID(int value);
+  void SetColor(QColor value);
 };

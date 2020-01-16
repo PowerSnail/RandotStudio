@@ -20,8 +20,8 @@ class ColorChooser : public QWidget {
   explicit ColorChooser(QWidget* parent = nullptr);
   ~ColorChooser();
 
-  QColor getColor();
-  void setColor(QColor color);
+  QColor Color();
+  void SetColor(QColor color);
 
  signals:
   void colorChanged(const QColor& color);

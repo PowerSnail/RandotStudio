@@ -14,20 +14,21 @@ const QString ColorChooser::kBtnStyleTemplate{
     "border-radius: 2px;"
     "}"};
 
-ColorChooser::ColorChooser(QWidget* parent) : QWidget(parent), ui(new Ui::ColorChooser) {
+ColorChooser::ColorChooser(QWidget* parent)
+    : QWidget(parent), ui(new Ui::ColorChooser) {
   ui->setupUi(this);
-  setColor(QColor(0, 0, 0));
+  SetColor(QColor(0, 0, 0));
 }
 
 ColorChooser::~ColorChooser() {
   delete ui;
 }
 
-QColor ColorChooser::getColor() {
+QColor ColorChooser::Color() {
   return this->color;
 }
 
-void ColorChooser::setColor(QColor color) {
+void ColorChooser::SetColor(QColor color) {
   if (color == this->color) {
     return;
   }
@@ -38,6 +39,6 @@ void ColorChooser::setColor(QColor color) {
 
 void ColorChooser::on_btnChoose_clicked() {
   QColor color = QColorDialog::getColor(this->color, this, tr("Choose a color"));
-  this->setColor(color);
+  this->SetColor(color);
   ui->btnChoose->clearFocus();
 }

@@ -15,107 +15,168 @@
 
 #include "src/utils/errors.h"
 
-bool MainWindowViewModel::targetIDValid(int id) {
+bool MainWindowViewModel::TargetIDValid(int id) {
   return (id >= 0 && static_cast<size_t>(id) < targetList.size());
 }
 
-bool MainWindowViewModel::shapeIDValid(int id) {
-  return (id >= 0 && static_cast<size_t>(id) < shapePathList.size() + kDefaultShapeCount);
+bool MainWindowViewModel::ShapeIDValid(int id) {
+  return (id >= 0 &&
+          static_cast<size_t>(id) < shapePathList.size() + kDefaultShapeCount);
 }
 
-MainWindowViewModel::MainWindowViewModel() : canvas(1920, 1080), targetList(), shapePathList() {
+MainWindowViewModel::MainWindowViewModel()
+    : canvas(1920, 1080), targetList(), shapePathList() {
   setObjectName("vm");
 }
 
-MainWindowViewModel::MainWindowViewModel(QString configurationPath) : MainWindowViewModel() {
-  loadFromFile(configurationPath);
+MainWindowViewModel::MainWindowViewModel(QString configurationPath)
+    : MainWindowViewModel() {
+  LoadFromFile(configurationPath);
 }
 
-int MainWindowViewModel::getCurrentTargetID() {
+int MainWindowViewModel::CurrentTargetID() {
   return currentTargetID;
 }
 
-void MainWindowViewModel::setCurrentTargetID(int value) {
-  if ((targetIDValid(value) || value == -1) && currentTargetID != value) {
+void MainWindowViewModel::SetCurrentTargetID(int value) {
+  if ((TargetIDValid(value) || value == -1) && currentTargetID != value) {
     int oldValue = currentTargetID;
     currentTargetID = value;
     emit currentTargetIDChanged(oldValue, value);
   }
 }
 
-int MainWindowViewModel::getCurrentShapeID() {
+int MainWindowViewModel::CurrentShapeID() {
   return currentShapeID;
 }
-void MainWindowViewModel::setCurrentShapeID(int value) {
+void MainWindowViewModel::SetCurrentShapeID(int value) {
   if (currentShapeID != value) {
     int oldValue = currentShapeID;
     currentShapeID = value;
     emit currentShapeIDChanged(oldValue, value);
 
     if (currentTargetID != -1) {
-      updateTarget(currentTargetID, Target::Property::ShapeID, value);
+      SetTargetShapeID(currentTargetID, value);
     }
   }
 }
 
-void MainWindowViewModel::setPrevShapeDir(QString&& value) {
+void MainWindowViewModel::SetPrevShapeDir(QString&& value) {
   if (value != prevShapeDir) {
     prevShapeDir = value;
   }
 }
 
-QString MainWindowViewModel::getPrevShapeDir() {
+QString MainWindowViewModel::PrevShapeDir() {
   return prevShapeDir;
 }
 
-void MainWindowViewModel::setPrevConfigDir(QString&& value) {
+void MainWindowViewModel::SetPrevConfigDir(QString&& value) {
   if (value != prevConfigDir) {
     prevConfigDir = value;
   }
 }
 
-QString MainWindowViewModel::getPrevConfigDir() {
+QString MainWindowViewModel::PrevConfigDir() {
   return prevConfigDir;
 }
 
-void MainWindowViewModel::setPrevExportDir(QString&& value) {
+void MainWindowViewModel::SetPrevExportDir(QString&& value) {
   if (value != prevExportDir) {
     prevExportDir = value;
   }
 }
 
-QString MainWindowViewModel::getPrevExportDir() {
+QString MainWindowViewModel::PrevExportDir() {
   return prevExportDir;
 }
 
-const Target& MainWindowViewModel::getTarget(int id) {
-  if (targetIDValid(id)) {
+const Target& MainWindowViewModel::GetTarget(int id) {
+  if (TargetIDValid(id)) {
     return targetList[static_cast<size_t>(id)];
   } else {
     throw errors::RangeError("Target out of range.", id, 0, targetList.size());
   }
 }
 
-void MainWindowViewModel::createTarget(Target newTarget) {
+void MainWindowViewModel::CreateTarget(Target newTarget) {
   targetList.push_back(newTarget);
   int id = static_cast<int>(targetList.size() - 1);
   emit targetCreated(id);
 }
 
-void MainWindowViewModel::updateTarget(int id, Target::Property pname, Target::PropertyType value) {
-  if (targetIDValid(id)) {
-    Target& t = targetList[static_cast<size_t>(id)];
-    if (t.getProperty(pname) != value) {
-      t.setProperty(pname, value);
-      emit targetUpdated(id, pname);
-    }
-  } else {
+void MainWindowViewModel::SetTargetX(int id, int value) {
+  if (!TargetIDValid(id)) {
     throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+  }
+  if (targetList[id].x != value) {
+    targetList[id].x = value;
+    emit targetUpdated(id, Target::Property::X);
   }
 }
 
-Target MainWindowViewModel::removeTarget(int id) {
-  if (targetIDValid(id)) {
+void MainWindowViewModel::SetTargetY(int id, int value) {
+  if (!TargetIDValid(id)) {
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+  }
+  if (targetList[id].y != value) {
+    targetList[id].y = value;
+    emit targetUpdated(id, Target::Property::Y);
+  }
+}
+
+void MainWindowViewModel::SetTargetScale(int id, int value) {
+  if (!TargetIDValid(id)) {
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+  }
+  if (targetList[id].scale != value) {
+    targetList[id].scale = value;
+    emit targetUpdated(id, Target::Property::Scale);
+  }
+}
+
+void MainWindowViewModel::SetTargetRotate(int id, int value) {
+  if (!TargetIDValid(id)) {
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+  }
+  if (targetList[id].rotate != value) {
+    targetList[id].rotate = value;
+    emit targetUpdated(id, Target::Property::Rotate);
+  }
+}
+
+void MainWindowViewModel::SetTargetParity(int id, int value) {
+  if (!TargetIDValid(id)) {
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+  }
+  if (targetList[id].parity != value) {
+    targetList[id].parity = value;
+    emit targetUpdated(id, Target::Property::Parity);
+  }
+}
+
+void MainWindowViewModel::SetTargetShapeID(int id, int value) {
+  if (!TargetIDValid(id)) {
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+  }
+  if (targetList[id].shapeID != value) {
+    targetList[id].shapeID = value;
+    emit targetUpdated(id, Target::Property::ShapeID);
+  }
+}
+
+void MainWindowViewModel::SetTargetColor(int id, QColor value) {
+  if (!TargetIDValid(id)) {
+    throw errors::RangeError("Target out of range.", id, 0, targetList.size());
+  }
+  if (targetList[id].color != value) {
+    targetList[id].color = value;
+    emit targetUpdated(id, Target::Property::Color);
+  }
+}
+
+Target MainWindowViewModel::RemoveTarget(int id) {
+  if (TargetIDValid(id)) {
     Target removedTarget = targetList[static_cast<size_t>(id)];
     targetList.erase(targetList.begin() + id);
     emit targetRemoved(id);
@@ -126,13 +187,14 @@ Target MainWindowViewModel::removeTarget(int id) {
 }
 
 const QPixmap& MainWindowViewModel::getShape(int id) {
-  if (shapeIDValid(id)) {
+  if (ShapeIDValid(id)) {
     auto path = (id < kDefaultShapeCount)
                     ? kDefaultShapePathList[static_cast<size_t>(id)]
                     : shapePathList[static_cast<size_t>(id - kDefaultShapeCount)];
 
     if (loadedShape.find(path) == loadedShape.end()) {
-      QPixmap shape = QPixmap::fromImage(QImage(path).convertToFormat(QImage::Format_Mono));
+      QPixmap shape =
+          QPixmap::fromImage(QImage(path).convertToFormat(QImage::Format_Mono));
       loadedShape[path] = shape;
     }
     return loadedShape[path];
@@ -141,13 +203,13 @@ const QPixmap& MainWindowViewModel::getShape(int id) {
   }
 }
 
-void MainWindowViewModel::loadShape(QString filepath) {
+void MainWindowViewModel::LoadShape(QString filepath) {
   shapePathList.push_back(filepath);
   emit shapeLoaded(static_cast<int>(shapePathList.size()) + kDefaultShapeCount - 1);
 }
 
-void MainWindowViewModel::removeShape(int id) {
-  if (shapeIDValid(id)) {
+void MainWindowViewModel::RemoveShape(int id) {
+  if (ShapeIDValid(id)) {
     if (id < kDefaultShapeCount) {
       qCritical() << "Cannot delete this shape." << id;
     }
@@ -157,9 +219,9 @@ void MainWindowViewModel::removeShape(int id) {
 
     for (size_t i = 0; i < targetList.size(); ++i) {
       if (targetList[i].shapeID == id) {
-        updateTarget(static_cast<int>(i), Target::Property::ShapeID, 0);
+        SetTargetShapeID(i, 0);
       } else if (targetList[i].shapeID > id) {
-        updateTarget(static_cast<int>(i), Target::Property::ShapeID, id - 1);
+        SetTargetShapeID(i, id - 1);
       } else {
         // No need to change
       }
@@ -175,14 +237,56 @@ const Canvas& MainWindowViewModel::getCanvas() {
   return canvas;
 }
 
-void MainWindowViewModel::updateCanvas(Canvas::Property pname, Canvas::PropertyType value) {
-  if (canvas.getProperty(pname) != value) {
-    canvas.setProperty(pname, value);
-    emit canvasUpdated(pname);
+void MainWindowViewModel::SetCanvasWidth(int value) {
+  if (canvas.Width() != value) {
+    canvas.SetWidth(value);
+    emit canvasUpdated(Canvas::Property::Width);
   }
 }
 
-void MainWindowViewModel::saveToFile(QString filename) {
+void MainWindowViewModel::SetCanvasHeight(int value) {
+  if (canvas.Height() != value) {
+    canvas.SetHeight(value);
+    emit canvasUpdated(Canvas::Property::Height);
+  }
+}
+
+void MainWindowViewModel::SetCanvasForeground(QColor value) {
+  if (canvas.Foreground() != value) {
+    canvas.SetForeground(value);
+    emit canvasUpdated(Canvas::Property::Foreground);
+  }
+}
+
+void MainWindowViewModel::SetCanvasBackground(QColor value) {
+  if (canvas.Background() != value) {
+    canvas.SetBackground(value);
+    emit canvasUpdated(Canvas::Property::Background);
+  }
+}
+
+void MainWindowViewModel::SetCanvasGrainSize(int value) {
+  if (canvas.GrainSize() != value) {
+    canvas.SetGrainSize(value);
+    emit canvasUpdated(Canvas::Property::GrainSize);
+  }
+}
+
+void MainWindowViewModel::SetCanvasCrossedParity(bool value) {
+  if (canvas.CrossedParity() != value) {
+    canvas.SetCrossedParity(value);
+    emit canvasUpdated(Canvas::Property::CrossedParity);
+  }
+}
+
+void MainWindowViewModel::SetCanvasGrainRatio(double value) {
+  if (canvas.GrainRatio() != value) {
+    canvas.SetGrainRatio(value);
+    emit canvasUpdated(Canvas::Property::GrainRatio);
+  }
+}
+
+void MainWindowViewModel::SaveToFile(QString filename) {
   QFile file(filename);
   file.open(QFile::WriteOnly);
 
@@ -218,48 +322,49 @@ void MainWindowViewModel::saveToFile(QString filename) {
   file.write(QJsonDocument(jsonMain).toJson());
 }
 
-void MainWindowViewModel::loadFromFile(QString filename) {
+void MainWindowViewModel::LoadFromFile(QString filename) {
   QFile file(filename);
   file.open(QFile::ReadOnly);
 
   QJsonDocument d = QJsonDocument::fromJson(file.readAll());
 
-  updateCanvas(Canvas::Property::Width, d["width"].toInt());
-  updateCanvas(Canvas::Property::Height, d["height"].toInt());
-  updateCanvas(Canvas::Property::Foreground, QColor(d["foreground"].toString()));
-  updateCanvas(Canvas::Property::Background, QColor(d["background"].toString()));
-  updateCanvas(Canvas::Property::GrainSize, d["grainSize"].toInt());
-  updateCanvas(Canvas::Property::GrainRatio, d["grainRatio"].toDouble());
-  updateCanvas(Canvas::Property::CrossedParity, d["crossedParity"].toBool());
+  SetCanvasWidth(d["width"].toInt());
+  SetCanvasHeight(d["height"].toInt());
+  SetCanvasForeground(QColor(d["foreground"].toString()));
+  SetCanvasBackground(QColor(d["background"].toString()));
+  SetCanvasGrainSize(d["grainSize"].toInt());
+  SetCanvasGrainRatio(d["grainRatio"].toDouble());
+  SetCanvasCrossedParity(d["crossedParity"].toBool());
 
   for (size_t i = 0; i < targetList.size(); ++i) {
-    removeTarget(0);
+    RemoveTarget(0);
   }
 
   for (size_t i = 0; i < shapePathList.size(); ++i) {
-    removeShape(0);
+    RemoveShape(0);
   }
 
   for (auto s : d["shapeList"].toArray()) {
-    loadShape(s.toString());
+    LoadShape(s.toString());
   }
 
   for (auto t : d["targetList"].toArray()) {
     QJsonObject targetObj = t.toObject();
-
-    createTarget(Target(targetObj["x"].toInt(), targetObj["y"].toInt(), targetObj["scale"].toInt(),
-                        targetObj["rotate"].toInt(), targetObj["parity"].toInt(),
-                        targetObj["shapeID"].toInt(), QColor(targetObj["color"].toString())));
+    CreateTarget(Target(targetObj["x"].toInt(), targetObj["y"].toInt(),
+                        targetObj["scale"].toInt(), targetObj["rotate"].toInt(),
+                        targetObj["parity"].toInt(), targetObj["shapeID"].toInt(),
+                        QColor(targetObj["color"].toString())));
   }
 }
 
-void MainWindowViewModel::exportImage(QString filename, imaging::StereoImageType type) {
-  std::deque<QPixmap> targetImgList;
-  targetImgList.resize(targetList.size());
-  std::transform(targetList.begin(), targetList.end(), targetImgList.begin(),
-                 [&](const Target& target) {
-                   return imaging::renderTarget(canvas, target, getShape(target.shapeID), type);
-                 });
-  QPixmap img = imaging::renderStereoImage(canvas, targetList, targetImgList, type);
-  img.save(filename, "PNG", 100);
+void MainWindowViewModel::ExportImage(QString filename, imaging::StereoImageType type) {
+  std::deque<const QPixmap*> shapeList;
+  for (auto& target : targetList) {
+    shapeList.push_back(&getShape(target.shapeID));
+  }
+  QPixmap img = imaging::RenderStereoImage(canvas, targetList, shapeList, type);
+  if (!img.save(filename, "PNG", 100)) {
+    qDebug() << "Failed to save file" << filename;
+    return;
+  }
 }

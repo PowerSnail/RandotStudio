@@ -22,18 +22,15 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
  private:
-  Ui::MainWindow* ui;
   MainWindowViewModel* vm;
+  Ui::MainWindow* ui;
 
   constexpr static int kPreviewShadowSize = 20;
 
-  void loadCanvasProperties();
-  void loadTargetProperties();
+  void LoadCanvasProperties();
+  void LoadTargetProperties();
 
-  Target& getTarget(int id);
-  QPixmap getTargetPreview(const Target&);
-
-  void renderPreview();
+  QPixmap GetTargetPreview(const Target&);
 
  private slots:
   // Slots for target list
@@ -71,14 +68,11 @@ class MainWindow : public QMainWindow {
   // VM signals
   void on_vm_currentTargetIDChanged(int oldID, int newID);
   void on_vm_currentShapeIDChanged(int oldID, int newID);
-
   void on_vm_targetCreated(int targetID);
   void on_vm_targetUpdated(int targetID, Target::Property pname);
   void on_vm_targetRemoved(int targetID);
-
   void on_vm_shapeLoaded(int shapeID);
   void on_vm_shapeRemoved(int shapeID);
-
   void on_vm_canvasUpdated(Canvas::Property pname);
 
   // Actions

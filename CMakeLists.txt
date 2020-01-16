@@ -48,11 +48,11 @@ add_executable(RandotStudio
   src/viewmodels/mainwindowvm.h
   src/imaging/imaging.h
   src/imaging/imaging.cpp
-  src/utils/widget_helper.h
   src/utils/errors.cpp
   src/utils/errors.h
   src/main.cpp
   ${QMFILES}
 )
 
+target_compile_options(RandotStudio PRIVATE -Wall -Wextra -pedantic -Werror)
 target_link_libraries(RandotStudio PRIVATE Qt5::Widgets)

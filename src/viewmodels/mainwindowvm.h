@@ -37,45 +37,57 @@ class MainWindowViewModel : public QObject {
   std::map<QString, QPixmap> loadedShape;
 
  private:
-  bool targetIDValid(int id);
-  bool shapeIDValid(int id);
+  bool TargetIDValid(int id);
+  bool ShapeIDValid(int id);
 
  public:
   MainWindowViewModel();
 
   explicit MainWindowViewModel(QString configuration);
 
-  int getCurrentTargetID();
-  void setCurrentTargetID(int value);
+  int CurrentTargetID();
+  void SetCurrentTargetID(int value);
 
-  int getCurrentShapeID();
-  void setCurrentShapeID(int value);
+  int CurrentShapeID();
+  void SetCurrentShapeID(int value);
 
-  void setPrevShapeDir(QString&& value);
-  QString getPrevShapeDir();
+  QString PrevShapeDir();
+  void SetPrevShapeDir(QString&& value);
 
-  void setPrevConfigDir(QString&& value);
-  QString getPrevConfigDir();
+  QString PrevConfigDir();
+  void SetPrevConfigDir(QString&& value);
 
-  void setPrevExportDir(QString&& value);
-  QString getPrevExportDir();
+  QString PrevExportDir();
+  void SetPrevExportDir(QString&& value);
 
-  const Target& getTarget(int id);
-  void createTarget(Target newTarget);
-  void updateTarget(int id, Target::Property pname, Target::PropertyType value);
-  Target removeTarget(int id);
+  const Target& GetTarget(int id);
+  void CreateTarget(Target newTarget);
+  void SetTargetX(int id, int value);
+  void SetTargetY(int id, int value);
+  void SetTargetScale(int id, int value);
+  void SetTargetRotate(int id, int value);
+  void SetTargetParity(int id, int value);
+  void SetTargetShapeID(int id, int value);
+  void SetTargetColor(int id, QColor value);
+  Target RemoveTarget(int id);
 
   const QPixmap& getShape(int id);
-  void loadShape(QString filepath);
-  void removeShape(int id);
+  void LoadShape(QString filepath);
+  void RemoveShape(int id);
 
   const Canvas& getCanvas();
-  void updateCanvas(Canvas::Property pname, Canvas::PropertyType value);
+  void SetCanvasWidth(int value);
+  void SetCanvasHeight(int value);
+  void SetCanvasForeground(QColor value);
+  void SetCanvasBackground(QColor value);
+  void SetCanvasGrainSize(int value);
+  void SetCanvasCrossedParity(bool value);
+  void SetCanvasGrainRatio(double value);
 
-  void saveToFile(QString filename);
-  void loadFromFile(QString filename);
+  void SaveToFile(QString filename);
+  void LoadFromFile(QString filename);
 
-  void exportImage(QString filename, imaging::StereoImageType type);
+  void ExportImage(QString filename, imaging::StereoImageType type);
 
  signals:
   // UI Controls

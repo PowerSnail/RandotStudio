@@ -9,7 +9,7 @@
 #include "viewmodels/mainwindowvm.h"
 #include "views/mainwindow.h"
 
-void loadTranslator(QApplication& app) {
+void LoadTranslator(QApplication& app) {
   QTranslator* translator = new QTranslator(&app);
 
   bool success = translator->load(QLocale::system(), "", "", app.applicationDirPath());
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
   QApplication a(argc, argv);
-  loadTranslator(a);
+  LoadTranslator(a);
 
   MainWindowViewModel vm;
   MainWindow w(&vm);

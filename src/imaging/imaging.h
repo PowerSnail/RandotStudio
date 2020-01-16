@@ -6,34 +6,32 @@
 #include <QColor>
 #include <QIcon>
 #include <QImage>
+#include <QPainter>
 #include <QPixmap>
+
 #include <deque>
 #include <functional>
+#include <memory>
 #include <optional>
-#include <random>
 
 #include "../models/canvas.h"
 #include "../models/target.h"
 
-using TRng = std::mt19937;
-using TBernoulli = std::bernoulli_distribution;
+namespace {
+std::optional<QPixmap> kNullPixmap = std::nullopt;
+}
 
 namespace imaging {
 
-extern std::random_device kRandomDevice;
-extern TRng kRNG;
-
 enum class StereoImageType { Regular, Randot };
 
-QPixmap renderShapePreview(const QPixmap& shape, const QColor& foreground);
-QPixmap targetMask(const QPixmap& shape, const Target& target);
-QPixmap fillRandot(QSize size, int grainSize, double grainRatio, QColor background,
-                   QColor foreground);
+QPixmap RenderShapePreview(const QPixmap& shape, const QColor& foreground);
 
-QPixmap renderStereoImage(const Canvas& canvas, const std::deque<Target>& targetList,
-                          const std::deque<QPixmap>& targetImgList, StereoImageType type);
+QPixmap TargetMask(const QPixmap& shape, const Target& target);
 
-QPixmap renderTarget(const Canvas& canvas, const Target& target, const QPixmap& shape,
-                     StereoImageType type);
+QPixmap RenderStereoImage(const Canvas& canvas, const std::deque<Target>& targetList,
+                          const std::deque<const QPixmap*>& shapeList,
+                          const StereoImageType type,
+                          const std::optional<QPixmap> grainShape = kNullPixmap);
 
 }  // namespace imaging

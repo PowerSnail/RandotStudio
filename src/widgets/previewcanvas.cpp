@@ -4,15 +4,15 @@
 #include "previewcanvas.h"
 
 #include <QGraphicsDropShadowEffect>
-#include <QtDebug>
 #include <QMessageLogger>
+#include <QtDebug>
 
 PreviewCanvas::PreviewCanvas(QWidget* parent)
     : QWidget(parent), bgLabel(new QLabel(this)), labelList() {
   bgLabel->setScaledContents(true);
 }
 
-void PreviewCanvas::setCanvasSize(int w, int h) {
+void PreviewCanvas::SetCanvasSize(int w, int h) {
   canvasWidth = w;
   canvasHeight = h;
 
@@ -22,17 +22,17 @@ void PreviewCanvas::setCanvasSize(int w, int h) {
   }
 }
 
-void PreviewCanvas::setBackground(QColor color) {
+void PreviewCanvas::SetBackground(QColor color) {
   QPixmap pixmap(1, 1);
   pixmap.fill(color);
   bgLabel->setPixmap(pixmap);
   bgLabel->show();
 }
 
-int PreviewCanvas::getCurrentIndex() {
+int PreviewCanvas::CurrentIndex() {
   return currentIndex;
 }
-void PreviewCanvas::setCurrentIndex(int index) {
+void PreviewCanvas::SetCurrentIndex(int index) {
   qDebug() << "PreviewCanvas::setCurrentIndex " << currentIndex << "->" << index;
   if (index == currentIndex) {
     return;
@@ -52,12 +52,12 @@ void PreviewCanvas::setCurrentIndex(int index) {
   currentIndex = index;
 }
 
-void PreviewCanvas::insertPixmap(int id, int x, int y, const QPixmap& img) {
+void PreviewCanvas::InsertPixmap(int id, int x, int y, const QPixmap& img) {
   PreviewCanvasItem* label = new PreviewCanvasItem(bgLabel);
   labelList.insert(labelList.begin() + id, label);
   label->setPixmap(img);
-  label->setX(x);
-  label->setY(y);
+  label->SetX(x);
+  label->SetY(y);
   redrawChild(label);
   connect(label, &PreviewCanvasItem::clicked, this, &PreviewCanvas::on_child_clicked);
 }
@@ -67,20 +67,20 @@ void PreviewCanvas::replacePixmap(int id, const QPixmap& img) {
   redrawChild(child(id));
 }
 
-void PreviewCanvas::movePixmap(int id, int x, int y) {
+void PreviewCanvas::MovePixmap(int id, int x, int y) {
   child(id)->setX(x);
   child(id)->setY(y);
   redrawChild(child(id));
 }
 
-void PreviewCanvas::removePixmap(int id) {
+void PreviewCanvas::RemovePixmap(int id) {
   PreviewCanvasItem* label = child(id);
   labelList.erase(labelList.begin() + id);
   label->setParent(nullptr);
   delete label;
 }
 
-QSize PreviewCanvas::previewSize() {
+QSize PreviewCanvas::PreviewSize() {
   QSize s = bgLabel->size();
   auto effect = bgLabel->graphicsEffect();
   if (effect != nullptr) {
@@ -93,10 +93,11 @@ QSize PreviewCanvas::previewSize() {
 
 void PreviewCanvas::resizeEvent(QResizeEvent* event) {
   QSize contraint = this->size();
-  QSizeF renderSize =
-      QSizeF(canvasWidth, canvasHeight).scaled(QSizeF(contraint) * 4 / 5, Qt::KeepAspectRatio);
+  QSizeF renderSize = QSizeF(canvasWidth, canvasHeight)
+                          .scaled(QSizeF(contraint) * 4 / 5, Qt::KeepAspectRatio);
 
-  bgLabel->resize(static_cast<int>(renderSize.width()), static_cast<int>(renderSize.height()));
+  bgLabel->resize(static_cast<int>(renderSize.width()),
+                  static_cast<int>(renderSize.height()));
   bgLabel->move(static_cast<int>((contraint.width() - renderSize.width()) / 2),
                 static_cast<int>((contraint.height() - renderSize.height()) / 2));
 
@@ -112,15 +113,16 @@ int PreviewCanvas::find(PreviewCanvasItem* child) {
 }
 
 void PreviewCanvas::redrawChild(PreviewCanvasItem* child) {
-  double scale = static_cast<double>(previewSize().width()) / canvasWidth;
-  child->move(QPoint(child->getX(), child->getY()) * scale);
+  double scale = static_cast<double>(PreviewSize().width()) / canvasWidth;
+  child->move(QPoint(child->X(), child->getY * scale);
   child->resize(child->pixmap()->size() * scale);
   child->show();
 }
 
 PreviewCanvasItem* PreviewCanvas::child(int index) {
   if (index < 0 || static_cast<size_t>(index) > labelList.size()) {
-    qCritical() << "Index out of range: " << index << ", expecting [0, " << labelList.size() << ")";
+    qCritical() << "Index out of range: " << index << ", expecting [0, "
+                << labelList.size() << ")";
     throw new std::out_of_range("PreviewCanvas::child out of range");
   }
   return labelList[index];
@@ -128,6 +130,6 @@ PreviewCanvasItem* PreviewCanvas::child(int index) {
 
 void PreviewCanvas::on_child_clicked(PreviewCanvasItem* sender) {
   int index = find(sender);
-  setCurrentIndex(index);
+  SetCurrentIndex(index);
   emit currentIndexChanged(index);
 }

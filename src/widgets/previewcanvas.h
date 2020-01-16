@@ -11,7 +11,6 @@
 
 #include "previewcanvasitem.h"
 
-
 class PreviewCanvas : public QWidget {
   Q_OBJECT
 
@@ -27,15 +26,15 @@ class PreviewCanvas : public QWidget {
  public:
   explicit PreviewCanvas(QWidget* parent = nullptr);
 
-  void setCanvasSize(int w, int h);
-  void setBackground(QColor color);
-  int getCurrentIndex();
-  void setCurrentIndex(int index);
-  void insertPixmap(int id, int x, int y, const QPixmap& img);
+  void SetCanvasSize(int w, int h);
+  void SetBackground(QColor color);
+  int CurrentIndex();
+  void SetCurrentIndex(int index);
+  void InsertPixmap(int id, int x, int y, const QPixmap& img);
   void replacePixmap(int id, const QPixmap& img);
-  void movePixmap(int id, int x, int y);
-  void removePixmap(int id);
-  QSize previewSize();
+  void MovePixmap(int id, int x, int y);
+  void RemovePixmap(int id);
+  QSize PreviewSize();
 
  private:  // Methods
   void resizeEvent(QResizeEvent* event);

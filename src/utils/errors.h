@@ -7,7 +7,6 @@
 
 namespace errors {
 
-std::range_error * RangeError(const char* msg, int index, int lower, int higher);
-
+std::range_error* RangeError(const char* msg, int index, int lower, int higher);
 
 }  // namespace errors

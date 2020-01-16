@@ -7,27 +7,25 @@ PreviewCanvasItem::PreviewCanvasItem(QWidget* parent) : QLabel(parent) {
   this->setScaledContents(true);
 }
 
-void PreviewCanvasItem::setSelected(bool selected) {
-  if (selected == this->selected) return;
-  if (selected) {
-    this->setStyleSheet(kStyleSheetSelected);
-  } else {
-    this->setStyleSheet(kStyleSheetUnselected);
+void PreviewCanvasItem::SetSelected(bool selected) {
+  if (selected == this->selected) {
+    return;
   }
+  this->setStyleSheet((selected) ? kStyleSheetSelected : kStyleSheetUnselected);
   this->selected = selected;
 }
 
-int PreviewCanvasItem::getX() {
+int PreviewCanvasItem::X() {
   return posX;
 }
-void PreviewCanvasItem::setX(int value) {
+void PreviewCanvasItem::SetX(int value) {
   posX = value;
 }
 
-int PreviewCanvasItem::getY() {
+int PreviewCanvasItem::Y() {
   return posY;
 }
-void PreviewCanvasItem::setY(int value) {
+void PreviewCanvasItem::SetY(int value) {
   posY = value;
 }
 

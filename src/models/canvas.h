@@ -22,8 +22,6 @@ struct Canvas {
     GrainRatio
   };
 
-  using PropertyType = std::variant<int, bool, QColor, double>;
-
  public:
   int width, height;
   QColor foreground = QColor(0, 0, 0);
@@ -33,6 +31,20 @@ struct Canvas {
   double grainRatio = 0.5;
 
   Canvas(int width, int height);
-  void setProperty(Property pname, PropertyType value);
-  PropertyType getProperty(Property pname);
+
+  int Width();
+  int Height();
+  QColor Foreground();
+  QColor Background();
+  int GrainSize();
+  bool CrossedParity();
+  double GrainRatio();
+
+  void SetWidth(int value);
+  void SetHeight(int value);
+  void SetForeground(QColor value);
+  void SetBackground(QColor value);
+  void SetGrainSize(int value);
+  void SetCrossedParity(bool value);
+  void SetGrainRatio(double value);
 };
