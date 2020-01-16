@@ -29,7 +29,6 @@ class ColorChooser : public QWidget {
  private:
   Ui::ColorChooser* ui;
   QColor color;
-  static const QString kBtnStyleTemplate;
 
  private slots:
   void on_btnChoose_clicked();

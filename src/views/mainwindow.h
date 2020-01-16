@@ -25,8 +25,6 @@ class MainWindow : public QMainWindow {
   MainWindowViewModel* vm;
   Ui::MainWindow* ui;
 
-  constexpr static int kPreviewShadowSize = 20;
-
   void LoadCanvasProperties();
   void LoadTargetProperties();
 

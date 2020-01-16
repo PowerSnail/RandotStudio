@@ -6,7 +6,7 @@
 #include <QStyle>
 #include "ui_color_chooser.h"
 
-const QString ColorChooser::kBtnStyleTemplate{
+static const QString kBtnStyleTemplate{
     "QPushButton {background-color: %1; "
     "border-style: solid;"
     "border-color: %1;"

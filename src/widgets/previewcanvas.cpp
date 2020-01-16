@@ -7,9 +7,18 @@
 #include <QMessageLogger>
 #include <QtDebug>
 
+constexpr static int BGShadowRadius = 20;
+static QGraphicsEffect* GetBGEffect() {
+  auto shadow = new QGraphicsDropShadowEffect();
+  shadow->setBlurRadius(20);
+  shadow->setOffset(0, 0);
+  return shadow;
+}
+
 PreviewCanvas::PreviewCanvas(QWidget* parent)
     : QWidget(parent), bgLabel(new QLabel(this)), labelList() {
   bgLabel->setScaledContents(true);
+  bgLabel->setGraphicsEffect(GetBGEffect());
 }
 
 void PreviewCanvas::SetCanvasSize(int w, int h) {
@@ -84,8 +93,7 @@ QSize PreviewCanvas::PreviewSize() {
   QSize s = bgLabel->size();
   auto effect = bgLabel->graphicsEffect();
   if (effect != nullptr) {
-    auto rad = static_cast<QGraphicsDropShadowEffect*>(effect)->blurRadius();
-    return s - (QSize(rad, rad) * 2);
+    return s - (QSize(BGShadowRadius, BGShadowRadius) * 2);
   } else {
     return s;
   }

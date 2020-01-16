@@ -15,8 +15,6 @@ class PreviewCanvas : public QWidget {
   Q_OBJECT
 
  private:  // Fields
-  constexpr static int kPreviewShadowSize = 20;
-
   QLabel* bgLabel;
   std::deque<PreviewCanvasItem*> labelList;
   int canvasWidth = 1;
@@ -37,7 +35,7 @@ class PreviewCanvas : public QWidget {
   QSize PreviewSize();
 
  private:  // Methods
-  void resizeEvent(QResizeEvent* event);
+  void resizeEvent(QResizeEvent* event) override;
   int find(PreviewCanvasItem* child);
   void redrawChild(PreviewCanvasItem* child);
   PreviewCanvasItem* child(int index);

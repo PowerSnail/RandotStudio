@@ -5,7 +5,6 @@
 
 #include <QBitmap>
 #include <QFileDialog>
-#include <QGraphicsDropShadowEffect>
 #include <QPainter>
 #include <QPixmap>
 #include <QtDebug>
@@ -20,6 +19,7 @@
 using std::optional;
 
 namespace {
+
 static const QString kImageFileFilter(
     "Images (*.bmp *.png *.jpg *.jpeg *.PNG *.BMP *.JPG *.JPEG)");
 

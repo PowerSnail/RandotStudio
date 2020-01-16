@@ -15,9 +15,8 @@
 
 namespace {
 static std::range_error* RangeError(const char* msg, int index, int lower, int higher) {
-  std::stringstream ss;
-  ss << msg << " Expected [" << lower << "," << higher << "), got " << index;
-  return new std::range_error(ss.str());
+  qFatal("%s Expected [%d, %d], got %d", msg, lower, higher, index);
+  return new std::range_error(msg);
 }
 }  // namespace
 
@@ -26,8 +25,8 @@ bool MainWindowViewModel::TargetIDValid(int id) {
 }
 
 bool MainWindowViewModel::ShapeIDValid(int id) {
-  return (id >= 0 &&
-          static_cast<size_t>(id) < shapePathList.size() + kDefaultShapeCount);
+  int shapeCount = shapePathList.size() + kDefaultShapeCount;
+  return (id >= 0 && id < shapeCount);
 }
 
 MainWindowViewModel::MainWindowViewModel()
@@ -100,7 +99,7 @@ QString MainWindowViewModel::PrevExportDir() {
 
 const Target& MainWindowViewModel::GetTarget(int id) {
   if (TargetIDValid(id)) {
-    return targetList[static_cast<size_t>(id)];
+    return targetList[id];
   } else {
     throw RangeError("Target out of range.", id, 0, targetList.size());
   }
@@ -108,7 +107,7 @@ const Target& MainWindowViewModel::GetTarget(int id) {
 
 void MainWindowViewModel::CreateTarget(Target newTarget) {
   targetList.push_back(newTarget);
-  int id = static_cast<int>(targetList.size() - 1);
+  int id = targetList.size() - 1;
   emit targetCreated(id);
 }
 
@@ -184,7 +183,7 @@ void MainWindowViewModel::SetTargetColor(int id, QColor value) {
 
 Target MainWindowViewModel::RemoveTarget(int id) {
   if (TargetIDValid(id)) {
-    Target removedTarget = targetList[static_cast<size_t>(id)];
+    Target removedTarget = targetList[id];
     targetList.erase(targetList.begin() + id);
     emit targetRemoved(id);
     return removedTarget;
@@ -195,9 +194,8 @@ Target MainWindowViewModel::RemoveTarget(int id) {
 
 const QPixmap& MainWindowViewModel::getShape(int id) {
   if (ShapeIDValid(id)) {
-    auto path = (id < kDefaultShapeCount)
-                    ? kDefaultShapePathList[static_cast<size_t>(id)]
-                    : shapePathList[static_cast<size_t>(id - kDefaultShapeCount)];
+    auto path = (id < kDefaultShapeCount) ? kDefaultShapePathList[id]
+                                          : shapePathList[id - kDefaultShapeCount];
 
     if (loadedShape.find(path) == loadedShape.end()) {
       QPixmap shape =
@@ -212,7 +210,7 @@ const QPixmap& MainWindowViewModel::getShape(int id) {
 
 void MainWindowViewModel::LoadShape(QString filepath) {
   shapePathList.push_back(filepath);
-  emit shapeLoaded(static_cast<int>(shapePathList.size()) + kDefaultShapeCount - 1);
+  emit shapeLoaded(shapePathList.size() + kDefaultShapeCount - 1);
 }
 
 void MainWindowViewModel::RemoveShape(int id) {
@@ -221,7 +219,7 @@ void MainWindowViewModel::RemoveShape(int id) {
       qCritical() << "Cannot delete this shape." << id;
     }
     id -= kDefaultShapeCount;
-    loadedShape.erase(shapePathList[static_cast<size_t>(id)]);
+    loadedShape.erase(shapePathList[id]);
     shapePathList.erase(shapePathList.begin() + id);
 
     for (size_t i = 0; i < targetList.size(); ++i) {

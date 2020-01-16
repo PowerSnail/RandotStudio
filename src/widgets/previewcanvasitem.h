@@ -20,7 +20,7 @@ class PreviewCanvasItem : public QLabel {
   int posY = 0;
 
  private:  // Methods
-  void mousePressEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event) override;
 
  public:
   explicit PreviewCanvasItem(QWidget *parent = nullptr);
