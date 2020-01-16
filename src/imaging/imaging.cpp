@@ -1,12 +1,11 @@
-// Copyright (c) 2019 Han Jin
+// Copyright (c) 2020 Han Jin
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
 #include "imaging.h"
 
-#include <random>
-
 #include <QBitmap>
 #include <QtDebug>
+#include <random>
 
 namespace {
 
@@ -72,6 +71,8 @@ static void DrawPixmap(QPixmap& dest, QRect rect, const QPixmap& imgSrc,
 }  // namespace
 
 namespace imaging {
+
+std::optional<QPixmap> kNullPixmap = std::nullopt;
 
 QPixmap RenderShapePreview(const QPixmap& shape, const QColor& foreground) {
   auto mask = shape.createMaskFromColor(QColor(0, 0, 0), Qt::MaskMode::MaskOutColor);

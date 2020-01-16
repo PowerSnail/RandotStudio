@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Han Jin
+// Copyright (c) 2020 Han Jin
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
 #pragma once
@@ -17,11 +17,9 @@
 #include "../models/canvas.h"
 #include "../models/target.h"
 
-namespace {
-std::optional<QPixmap> kNullPixmap = std::nullopt;
-}
-
 namespace imaging {
+
+extern std::optional<QPixmap> kNullPixmap;
 
 enum class StereoImageType { Regular, Randot };
 

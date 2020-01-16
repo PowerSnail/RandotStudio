@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Han Jin
+// Copyright (c) 2020 Han Jin
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
 #include "previewcanvas.h"
@@ -39,7 +39,7 @@ void PreviewCanvas::SetCurrentIndex(int index) {
   }
 
   if (currentIndex != -1) {
-    child(currentIndex)->setSelected(false);
+    child(currentIndex)->SetSelected(false);
   }
 
   if (index < 0) {
@@ -48,7 +48,7 @@ void PreviewCanvas::SetCurrentIndex(int index) {
   if (static_cast<size_t>(index) >= labelList.size()) {
     throw new std::range_error("Index too large.");
   }
-  child(index)->setSelected(true);
+  child(index)->SetSelected(true);
   currentIndex = index;
 }
 
@@ -68,8 +68,8 @@ void PreviewCanvas::replacePixmap(int id, const QPixmap& img) {
 }
 
 void PreviewCanvas::MovePixmap(int id, int x, int y) {
-  child(id)->setX(x);
-  child(id)->setY(y);
+  child(id)->SetX(x);
+  child(id)->SetY(y);
   redrawChild(child(id));
 }
 
@@ -114,7 +114,7 @@ int PreviewCanvas::find(PreviewCanvasItem* child) {
 
 void PreviewCanvas::redrawChild(PreviewCanvasItem* child) {
   double scale = static_cast<double>(PreviewSize().width()) / canvasWidth;
-  child->move(QPoint(child->X(), child->getY * scale);
+  child->move(QPoint(child->X(), child->Y()) * scale);
   child->resize(child->pixmap()->size() * scale);
   child->show();
 }

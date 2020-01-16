@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Han Jin
+// Copyright (c) 2020 Han Jin
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
 #include "src/viewmodels/mainwindowvm.h"

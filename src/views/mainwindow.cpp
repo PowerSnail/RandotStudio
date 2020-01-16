@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Han Jin
+// Copyright (c) 2020 Han Jin
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>
 
 #include "src/views/mainwindow.h"
@@ -11,6 +11,7 @@
 #include <QtDebug>
 #include <fstream>
 #include <optional>
+#include <utility>
 
 #include "../imaging/imaging.h"
 #include "dialogabout.h"
@@ -63,6 +64,7 @@ MainWindow::MainWindow(MainWindowViewModel *vm, QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
+  vm->setParent(nullptr);
   delete ui;
 }
 
