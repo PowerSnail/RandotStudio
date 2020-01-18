@@ -84,9 +84,11 @@ void PreviewCanvas::MovePixmap(int id, int x, int y) {
 
 void PreviewCanvas::RemovePixmap(int id) {
   PreviewCanvasItem* label = child(id);
+  label->disconnect();
   labelList.erase(labelList.begin() + id);
   label->setParent(nullptr);
   delete label;
+  SetCurrentIndex(-1);
 }
 
 QSize PreviewCanvas::PreviewSize() {
