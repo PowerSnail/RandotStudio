@@ -19,7 +19,12 @@
 
 namespace imaging {
 
-extern std::optional<QPixmap> kNullPixmap;
+struct TargetImg {
+  int x;
+  int y;
+  int width;
+  int height;
+};
 
 enum class StereoImageType { Regular, Randot };
 
@@ -27,9 +32,7 @@ QPixmap RenderShapePreview(const QPixmap& shape, const QColor& foreground);
 
 QPixmap TargetMask(const QPixmap& shape, const Target& target);
 
-QPixmap RenderStereoImage(const Canvas& canvas, const std::deque<Target>& targetList,
-                          const std::deque<const QPixmap*>& shapeList,
-                          const StereoImageType type,
-                          const std::optional<QPixmap> grainShape = kNullPixmap);
-
+QPixmap RenderStereo(const Canvas& canvas, const std::deque<Target>& targetList,
+                          const std::deque<QPixmap>& shapeList, StereoImageType type,
+                          const std::optional<QPixmap> grainShape);
 }  // namespace imaging

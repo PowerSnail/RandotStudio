@@ -27,6 +27,7 @@ class MainWindow : public QMainWindow {
 
   void LoadCanvasProperties();
   void LoadTargetProperties();
+  void SetRotate(int angle);
 
   QPixmap GetTargetPreview(const Target&);
 
@@ -37,7 +38,6 @@ class MainWindow : public QMainWindow {
   void on_btnRemoveTarget_clicked();
 
   // Slots for shape list
-  void on_listWidgetShape_currentRowChanged(int currentRow);
   void on_btnAddShape_clicked();
   void on_btnRemoveShape_clicked();
 
@@ -49,6 +49,7 @@ class MainWindow : public QMainWindow {
   void on_colorChooserForeground_colorChanged(const QColor& color);
   void on_colorChooserBackground_colorChanged(const QColor& color);
   void on_checkBoxCrossed_stateChanged(int state);
+  void on_cbDotShape_currentIndexChanged(int index);
 
   // Slots for target properties
   void on_lineEditX_editingFinished();
@@ -60,12 +61,11 @@ class MainWindow : public QMainWindow {
   void on_radioButtonRotate90_toggled(bool checked);
   void on_radioButtonRotate180_toggled(bool checked);
   void on_radioButtonRotate270_toggled(bool checked);
-
+  void on_cbTargetShape_currentIndexChanged(int index);
   void on_previewCanvas_currentIndexChanged(int index);
 
   // VM signals
   void on_vm_currentTargetIDChanged(int oldID, int newID);
-  void on_vm_currentShapeIDChanged(int oldID, int newID);
   void on_vm_targetCreated(int targetID);
   void on_vm_targetUpdated(int targetID, Target::Property pname);
   void on_vm_targetRemoved(int targetID);

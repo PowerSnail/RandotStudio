@@ -20,21 +20,16 @@ using std::optional;
 
 namespace {
 
-static const QString kImageFileFilter(
-    "Images (*.bmp *.png *.jpg *.jpeg *.PNG *.BMP *.JPG *.JPEG)");
+static const QSize kItemIconSize{15, 15};
+static const QSize kItemSize = kItemIconSize + QSize{5, 5};
 
-static const QString kJsonFileFilter("JSON File (*.json)");
-static const QString kPNSFileFilter("Stereo Image File (*.PNS *.pns)");
+static const QString kImageFileFilter{
+    "Images (*.bmp *.png *.jpg *.jpeg *.PNG *.BMP *.JPG *.JPEG)"};
+static const QString kJsonFileFilter{"JSON File (*.json)"};
+static const QString kPNSFileFilter{"Stereo Image File (*.PNS *.pns)"};
 
-static void SetImageToItem(QListWidgetItem &item, QPixmap image) {
-  item.setIcon(QIcon(image.scaled(15, 15, Qt::AspectRatioMode::KeepAspectRatio)));
-}
-
-static void InsertIconItem(QListWidget &listWidget, QPixmap image, int index) {
-  QListWidgetItem *item = new QListWidgetItem();
-  SetImageToItem(*item, std::move(image));
-  item->setSizeHint(QSize(20, 20));
-  listWidget.insertItem(index, item);
+static const QString SizeToString(const QSize &s) {
+  return QString("%1x%2").arg(s.width()).arg(s.height());
 }
 }  // namespace
 
@@ -56,6 +51,8 @@ MainWindow::MainWindow(MainWindowViewModel *vm, QWidget *parent)
   ui->targetSettingPanel->setEnabled(false);
   LoadCanvasProperties();
 
+  ui->cbDotShape->addItem(QString("None"));
+  qDebug() << ui->cbDotShape->itemText(0);
   for (int i = 0; i < MainWindowViewModel::kDefaultShapeCount; ++i) {
     on_vm_shapeLoaded(i);
   }
@@ -90,9 +87,16 @@ void MainWindow::LoadTargetProperties() {
   ui->lineEditX->setText(QString::number(target.x));
   ui->lineEditY->setText(QString::number(target.y));
   ui->lineEditScale->setText(QString::number(target.scale));
+  ui->labelRealSize->setText(
+      tr("Size = ") + SizeToString(vm->Shape(target.shapeID).size() * target.scale));
   ui->lineEditParity->setText(QString::number(target.parity));
+  SetRotate(target.rotate);
+  ui->colorChooserTarget->SetColor(target.color);
+  ui->cbTargetShape->setCurrentIndex(target.shapeID);
+}
 
-  switch (target.rotate) {
+void MainWindow::SetRotate(int angle) {
+  switch (angle) {
     case 0:
       ui->radioButtonRotate0->setChecked(true);
       break;
@@ -108,16 +112,10 @@ void MainWindow::LoadTargetProperties() {
     default:
       throw "Unexpected angle for rotation";
   }
-  auto &shape = vm->getShape(target.shapeID);
-  ui->labelRealSize->setText(QString("Size = (%1 x %2)")
-                                 .arg(target.scale * shape.width())
-                                 .arg(target.scale * shape.height()));
-  ui->colorChooserTarget->SetColor(target.color);
-  ui->listWidgetShape->setCurrentRow(target.shapeID);
 }
 
 QPixmap MainWindow::GetTargetPreview(const Target &target) {
-  auto mask = imaging::TargetMask(vm->getShape(target.shapeID), target);
+  auto mask = imaging::TargetMask(vm->Shape(target.shapeID), target);
   QPixmap targetview(mask.size());
   targetview.fill(target.color);
   targetview.setMask(mask);
@@ -145,10 +143,6 @@ void MainWindow::on_btnRemoveTarget_clicked() {
 }
 
 // ## Shape List Slots
-void MainWindow::on_listWidgetShape_currentRowChanged(int currentRow) {
-  vm->SetCurrentShapeID(currentRow);
-}
-
 void MainWindow::on_btnAddShape_clicked() {
   QStringList fileList = QFileDialog::getOpenFileNames(
       this, tr("Choose shape images"), vm->PrevShapeDir(), kImageFileFilter);
@@ -162,7 +156,7 @@ void MainWindow::on_btnAddShape_clicked() {
 }
 
 void MainWindow::on_btnRemoveShape_clicked() {
-  int currentID = vm->CurrentShapeID();
+  int currentID = ui->listWidgetShape->currentRow();
   if (currentID == -1) {
     return;
   }
@@ -204,6 +198,10 @@ void MainWindow::on_colorChooserBackground_colorChanged(const QColor &color) {
 
 void MainWindow::on_checkBoxCrossed_stateChanged(int state) {
   vm->SetCanvasCrossedParity(state == Qt::CheckState::Checked);
+}
+
+void MainWindow::on_cbDotShape_currentIndexChanged(int index) {
+  vm->SetCanvasGrainShapeID(index);
 }
 
 // Slots for target properties
@@ -259,13 +257,19 @@ void MainWindow::on_radioButtonRotate270_toggled(bool checked) {
   vm->SetTargetRotate(vm->CurrentTargetID(), 270);
 }
 
+void MainWindow::on_cbTargetShape_currentIndexChanged(int index) {
+  if (vm->CurrentTargetID() < 0) {
+    return;
+  }
+  vm->SetTargetShapeID(vm->CurrentTargetID(), index);
+}
+
 void MainWindow::on_previewCanvas_currentIndexChanged(int index) {
   vm->SetCurrentTargetID(index);
 }
 
 // VM signals
-void MainWindow::on_vm_currentTargetIDChanged(int oldID, int newID) {
-  qDebug() << "on_vm_currentTargetIDChanged " << oldID << "," << newID;
+void MainWindow::on_vm_currentTargetIDChanged(int /*{oldID}*/, int newID) {
   ui->listWidgetTarget->setCurrentRow(newID);
   ui->previewCanvas->SetCurrentIndex(newID);
   if (newID != -1) {
@@ -276,22 +280,17 @@ void MainWindow::on_vm_currentTargetIDChanged(int oldID, int newID) {
   }
 }
 
-void MainWindow::on_vm_currentShapeIDChanged(int,  // Ignore oldID
-                                             int newID) {
-  if (vm->CurrentTargetID() == -1) {
-    return;
-  }
-  ui->listWidgetShape->setCurrentRow(newID);
-}
-
 void MainWindow::on_vm_targetCreated(int targetID) {
   auto target = vm->GetTarget(targetID);
-  auto targetIcon = GetTargetPreview(target);
-  InsertIconItem(*ui->listWidgetTarget, targetIcon, targetID);
-  ui->listWidgetTarget->item(targetID)->setText(
-      QString(" %1x%2").arg(target.x).arg(target.y));
+  auto shapeImage = GetTargetPreview(target);
 
-  ui->previewCanvas->InsertPixmap(targetID, target.x, target.y, targetIcon);
+  QListWidgetItem *item = new QListWidgetItem();
+  item->setIcon(shapeImage.scaled(kItemIconSize, Qt::KeepAspectRatio));
+  item->setSizeHint(kItemSize);
+  item->setText(QString(" %1x%2").arg(target.x).arg(target.y));
+  ui->listWidgetTarget->insertItem(targetID, item);
+
+  ui->previewCanvas->InsertPixmap(targetID, target.x, target.y, shapeImage);
   vm->SetCurrentTargetID(targetID);
 }
 
@@ -300,7 +299,6 @@ void MainWindow::on_vm_targetUpdated(int targetID, Target::Property pname) {
   if (targetID == vm->CurrentTargetID()) {
     LoadTargetProperties();
   }
-  QPixmap preview;
   switch (pname) {
     case Target::Property::X:
     case Target::Property::Y:
@@ -311,11 +309,13 @@ void MainWindow::on_vm_targetUpdated(int targetID, Target::Property pname) {
     case Target::Property::Color:
     case Target::Property::Scale:
     case Target::Property::ShapeID:
-    case Target::Property::Rotate:
-      preview = GetTargetPreview(target);
-      SetImageToItem(*ui->listWidgetTarget->item(targetID), preview);
+    case Target::Property::Rotate: {
+      QPixmap preview = GetTargetPreview(target);
+      ui->listWidgetTarget->item(targetID)->setIcon(
+          preview.scaled(kItemIconSize, Qt::KeepAspectRatio));
       ui->previewCanvas->replacePixmap(targetID, preview);
       break;
+    }
     case Target::Property::Parity:
       qDebug() << "Parity does not affect list nor preview.";
       break;
@@ -323,8 +323,6 @@ void MainWindow::on_vm_targetUpdated(int targetID, Target::Property pname) {
 }
 
 void MainWindow::on_vm_targetRemoved(int targetID) {
-  qDebug() << "on_vm_targetRemoved" << targetID;
-
   ui->listWidgetTarget->removeItemWidget(ui->listWidgetTarget->item(targetID));
   delete ui->listWidgetTarget->takeItem(targetID);
   ui->listWidgetTarget->update();
@@ -332,12 +330,24 @@ void MainWindow::on_vm_targetRemoved(int targetID) {
 }
 
 void MainWindow::on_vm_shapeLoaded(int shapeID) {
-  InsertIconItem(*ui->listWidgetShape, vm->getShape(shapeID), shapeID);
-  vm->SetCurrentShapeID(shapeID);
+  qDebug() << "Shape inserted " << shapeID;
+  QIcon icon(vm->Shape(shapeID).scaled(kItemIconSize, Qt::KeepAspectRatio));
+  ui->cbDotShape->insertItem(shapeID, icon, QString());
+  ui->cbTargetShape->insertItem(shapeID, icon, QString());
+
+  QListWidgetItem *item = new QListWidgetItem();
+  item->setIcon(icon);
+  item->setSizeHint(kItemSize);
+  ui->listWidgetShape->insertItem(shapeID, item);
+  ui->listWidgetShape->setCurrentRow(shapeID);
 }
 
 void MainWindow::on_vm_shapeRemoved(int shapeID) {
-  ui->listWidgetShape->removeItemWidget(ui->listWidgetShape->item(shapeID));
+  ui->cbDotShape->removeItem(shapeID);
+  ui->cbTargetShape->removeItem(shapeID);
+  if (ui->listWidgetShape->takeItem(shapeID) == nullptr) {
+    qWarning() << "Shape ID doesn't exist in listWidgetShape";
+  }
 }
 
 void MainWindow::on_vm_canvasUpdated(Canvas::Property pname) {
@@ -354,6 +364,7 @@ void MainWindow::on_vm_canvasUpdated(Canvas::Property pname) {
     case Canvas::Property::CrossedParity:
     case Canvas::Property::GrainSize:
     case Canvas::Property::GrainRatio:
+    case Canvas::Property::GrainShapeID:
       // Not affecting preview
       break;
   }
@@ -377,7 +388,7 @@ void MainWindow::on_actionSave_triggered() {
 }
 
 void MainWindow::on_actionLoad_triggered() {
-  QString filename = QFileDialog::getOpenFileName(this, tr("Choose file to save"),
+  QString filename = QFileDialog::getOpenFileName(this, tr("Choose file to load"),
                                                   vm->PrevConfigDir(), kJsonFileFilter);
   if (filename.isNull()) {
     return;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1723</width>
-    <height>1286</height>
+    <width>1877</width>
+    <height>1543</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -252,6 +252,20 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Target</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="spacing">
           <number>0</number>
@@ -262,20 +276,6 @@
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Target List</string>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QListWidget" name="listWidgetTarget">
            <property name="viewMode">
@@ -342,25 +342,8 @@
           </size>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="7" column="0" colspan="4">
-           <widget class="QLabel" name="label_2">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Shape</string>
-            </property>
-            <property name="margin">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEditParity"/>
+          <item row="5" column="3">
+           <widget class="QComboBox" name="cbTargetShape"/>
           </item>
           <item row="6" column="0">
            <widget class="QLabel" name="label_13">
@@ -380,68 +363,6 @@
              <number>2</number>
             </property>
            </widget>
-          </item>
-          <item row="8" column="0" colspan="4">
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QListWidget" name="listWidgetShape">
-              <property name="viewMode">
-               <enum>QListView::IconMode</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <property name="spacing">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QPushButton" name="btnAddShape">
-                <property name="text">
-                 <string>Load Shape</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="../../Resources/RandotStudio.qrc">
-                  <normaloff>:/randot_studio/icons/add.svg</normaloff>:/randot_studio/icons/add.svg</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnRemoveShape">
-                <property name="text">
-                 <string>Remove Shape</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="../../Resources/RandotStudio.qrc">
-                  <normaloff>:/randot_studio/icons/minus.svg</normaloff>:/randot_studio/icons/minus.svg</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_10">
@@ -465,40 +386,24 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEditScale"/>
-          </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="lineEditX"/>
-          </item>
-          <item row="5" column="2">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Color</string>
-            </property>
-            <property name="margin">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2" colspan="2">
-           <widget class="QLabel" name="labelRealSize">
-            <property name="font">
-             <font>
-              <italic>true</italic>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="indent">
-             <number>2</number>
-            </property>
-           </widget>
           </item>
           <item row="6" column="1" colspan="3">
            <widget class="QWidget" name="widget" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QRadioButton" name="radioButtonRotate0">
                <property name="text">
@@ -507,6 +412,12 @@
                <property name="icon">
                 <iconset resource="../../Resources/RandotStudio.qrc">
                  <normaloff>:/randot_studio/icons/deg0.svg</normaloff>:/randot_studio/icons/deg0.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -519,6 +430,12 @@
                 <iconset resource="../../Resources/RandotStudio.qrc">
                  <normaloff>:/randot_studio/icons/deg90.svg</normaloff>:/randot_studio/icons/deg90.svg</iconset>
                </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
               </widget>
              </item>
              <item>
@@ -530,6 +447,12 @@
                 <iconset resource="../../Resources/RandotStudio.qrc">
                  <normaloff>:/randot_studio/icons/deg180.svg</normaloff>:/randot_studio/icons/deg180.svg</iconset>
                </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
               </widget>
              </item>
              <item>
@@ -540,6 +463,12 @@
                <property name="icon">
                 <iconset resource="../../Resources/RandotStudio.qrc">
                  <normaloff>:/randot_studio/icons/deg270.svg</normaloff>:/randot_studio/icons/deg270.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -559,52 +488,8 @@
             </layout>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Parity</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="margin">
-             <number>2</number>
-            </property>
-            <property name="buddy">
-             <cstring>lineEditParity</cstring>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="3">
            <widget class="QLineEdit" name="lineEditY"/>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Scale</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="margin">
-             <number>2</number>
-            </property>
-            <property name="buddy">
-             <cstring>lineEditScale</cstring>
-            </property>
-           </widget>
           </item>
           <item row="1" column="2">
            <widget class="QLabel" name="label_16">
@@ -628,15 +513,229 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="3">
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Color</string>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QLineEdit" name="lineEditParity"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QWidget" name="widget_3" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="lineEditScale">
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelRealSize">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>2</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <italic>true</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="indent">
+                <number>2</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Scale</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QLabel" name="label_14">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Parity</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <property name="buddy">
+             <cstring>lineEditParity</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
            <widget class="ColorChooser" name="colorChooserTarget">
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
+          <item row="5" column="2">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>Shape</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_4" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>1000</width>
+           <height>1</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgba(0, 0, 0, 50);</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Shape</string>
+         </property>
+         <property name="margin">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QListWidget" name="listWidgetShape">
+           <property name="viewMode">
+            <enum>QListView::IconMode</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="btnAddShape">
+             <property name="text">
+              <string>Load Shape</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../Resources/RandotStudio.qrc">
+               <normaloff>:/randot_studio/icons/add.svg</normaloff>:/randot_studio/icons/add.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnRemoveShape">
+             <property name="text">
+              <string>Remove Shape</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../Resources/RandotStudio.qrc">
+               <normaloff>:/randot_studio/icons/minus.svg</normaloff>:/randot_studio/icons/minus.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -649,6 +748,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
      </widget>
     </item>
    </layout>
@@ -658,7 +760,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1723</width>
+     <width>1877</width>
      <height>39</height>
     </rect>
    </property>
@@ -757,6 +859,7 @@
   <tabstop>lineEditScale</tabstop>
   <tabstop>lineEditParity</tabstop>
   <tabstop>colorChooserTarget</tabstop>
+  <tabstop>cbTargetShape</tabstop>
   <tabstop>radioButtonRotate0</tabstop>
   <tabstop>radioButtonRotate90</tabstop>
   <tabstop>radioButtonRotate180</tabstop>

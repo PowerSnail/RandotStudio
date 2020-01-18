@@ -20,21 +20,5 @@ struct Target {
   QColor color;
 
   // Constructor
-  Target(int x, int y, int scale, int rotate, int parity, int symbol_id, QColor color);
-
-  int X();
-  int Y();
-  int Scale();
-  int Rotate();
-  int Parity();
-  int ShapeID();
-  QColor Color();
-
-  void SetX(int value);
-  void SetY(int value);
-  void SetScale(int value);
-  void SetRotate(int value);
-  void SetParity(int value);
-  void SetShapeID(int value);
-  void SetColor(QColor value);
+  Target(int x, int y, int scale, int rotate, int parity, int shapeID, QColor color);
 };

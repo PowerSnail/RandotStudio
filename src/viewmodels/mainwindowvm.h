@@ -19,7 +19,7 @@ class MainWindowViewModel : public QObject {
 
  public:  // Static Consts
   constexpr static int kDefaultShapeCount = 2;
-  constexpr static std::array<const char*, kDefaultShapeCount> kDefaultShapePathList{
+  constexpr static const char* kDefaultShapePathList[] = {
       ":randot_studio/default_shapes/e.png", ":randot_studio/default_shapes/c.png"};
 
  private:
@@ -35,6 +35,7 @@ class MainWindowViewModel : public QObject {
   std::deque<Target> targetList;
   std::deque<QString> shapePathList;
   std::map<QString, QPixmap> loadedShape;
+  std::deque<QPixmap> shapeList;
 
  private:
   bool TargetIDValid(int id);
@@ -47,9 +48,6 @@ class MainWindowViewModel : public QObject {
 
   int CurrentTargetID();
   void SetCurrentTargetID(int value);
-
-  int CurrentShapeID();
-  void SetCurrentShapeID(int value);
 
   QString PrevShapeDir();
   void SetPrevShapeDir(QString&& value);
@@ -71,7 +69,7 @@ class MainWindowViewModel : public QObject {
   void SetTargetColor(int id, QColor value);
   Target RemoveTarget(int id);
 
-  const QPixmap& getShape(int id);
+  const QPixmap& Shape(int id);
   void LoadShape(QString filepath);
   void RemoveShape(int id);
 
@@ -83,6 +81,7 @@ class MainWindowViewModel : public QObject {
   void SetCanvasGrainSize(int value);
   void SetCanvasCrossedParity(bool value);
   void SetCanvasGrainRatio(double value);
+  void SetCanvasGrainShapeID(int value);
 
   void SaveToFile(QString filename);
   void LoadFromFile(QString filename);
@@ -92,7 +91,6 @@ class MainWindowViewModel : public QObject {
  signals:
   // UI Controls
   void currentTargetIDChanged(int oldID, int newID);
-  void currentShapeIDChanged(int oldID, int newID);
 
   // Target
   void targetCreated(int targetID);

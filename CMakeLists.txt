@@ -29,7 +29,6 @@ add_executable(RandotStudio
   Resources/RandotStudio.rc
   src/widgets/color_chooser.cpp
   src/widgets/color_chooser.h
-  src/widgets/color_chooser.ui
   src/widgets/previewcanvas.cpp
   src/widgets/previewcanvas.h
   src/widgets/previewcanvasitem.cpp
@@ -52,5 +51,5 @@ add_executable(RandotStudio
   ${QMFILES}
 )
 
-target_compile_options(RandotStudio PRIVATE -Wall -Wextra -pedantic -Werror)
+target_compile_options(RandotStudio PRIVATE -Wall -Wextra -pedantic)
 target_link_libraries(RandotStudio PRIVATE Qt5::Widgets)

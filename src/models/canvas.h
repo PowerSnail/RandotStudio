@@ -19,7 +19,8 @@ struct Canvas {
     Background,
     GrainSize,
     CrossedParity,
-    GrainRatio
+    GrainRatio,
+    GrainShapeID
   };
 
  public:
@@ -29,22 +30,7 @@ struct Canvas {
   int grainSize = 1;
   bool crossedParity = true;
   double grainRatio = 0.5;
+  int grainShapeID = -1;
 
   Canvas(int width, int height);
-
-  int Width();
-  int Height();
-  QColor Foreground();
-  QColor Background();
-  int GrainSize();
-  bool CrossedParity();
-  double GrainRatio();
-
-  void SetWidth(int value);
-  void SetHeight(int value);
-  void SetForeground(QColor value);
-  void SetBackground(QColor value);
-  void SetGrainSize(int value);
-  void SetCrossedParity(bool value);
-  void SetGrainRatio(double value);
 };
