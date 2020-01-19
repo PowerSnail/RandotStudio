@@ -51,5 +51,5 @@ add_executable(RandotStudio
   ${QMFILES}
 )
 
-target_compile_options(RandotStudio PRIVATE -Wall -Wextra -pedantic)
+target_compile_options(RandotStudio PRIVATE -Wall -pedantic)
 target_link_libraries(RandotStudio PRIVATE Qt5::Widgets)

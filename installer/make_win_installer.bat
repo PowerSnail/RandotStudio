@@ -5,7 +5,7 @@
 
 @echo off
 SET CURRENT_DIR=%CD%
-SET RELEASE_DIR=%CURRENT_DIR%\build\Release-MinSize
+SET RELEASE_DIR=%CURRENT_DIR%\build
 SET INSTALLER_CONFIG_DIR=%CURRENT_DIR%\Installer
 SET BUILD_INSTALLER_DIR=%CURRENT_DIR%\build\installer\randotstudio
 SET INSTALLER_DESTINATION=%INSTALLER_CONFIG_DIR%\packages\com.powersnail.randotstudio\data
@@ -19,8 +19,8 @@ IF EXIST "%BUILD_INSTALLER_DIR%" (
 
 CD %BUILD_INSTALLER_DIR%
 
-COPY /Y %RELEASE_DIR%\RandotStudio.exe .\
-COPY /Y %RELEASE_DIR%\RandotStudio.exe.manifest .\
+COPY /Y %RELEASE_DIR%\MinSizeRel\RandotStudio.exe .\
+:: COPY /Y %RELEASE_DIR%\RandotStudio.exe.manifest .\
 COPY /Y %RELEASE_DIR%\*.qm .\
 if %ERRORLEVEL% NEQ 0 (
     echo "ERROR in copying: " %ERRORLEVEL%
