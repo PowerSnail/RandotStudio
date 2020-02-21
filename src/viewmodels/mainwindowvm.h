@@ -44,7 +44,7 @@ class MainWindowViewModel : public QObject {
  public:
   MainWindowViewModel();
 
-  explicit MainWindowViewModel(QString configuration);
+  explicit MainWindowViewModel(const QString& configuration);
 
   int CurrentTargetID();
   void SetCurrentTargetID(int value);
@@ -59,34 +59,34 @@ class MainWindowViewModel : public QObject {
   void SetPrevExportDir(QString&& value);
 
   const Target& GetTarget(int id);
-  void CreateTarget(Target newTarget);
+  void CreateTarget(const Target& newTarget);
   void SetTargetX(int id, int value);
   void SetTargetY(int id, int value);
   void SetTargetScale(int id, int value);
   void SetTargetRotate(int id, int value);
   void SetTargetParity(int id, int value);
   void SetTargetShapeID(int id, int value);
-  void SetTargetColor(int id, QColor value);
+  void SetTargetColor(int id, const QColor& value);
   Target RemoveTarget(int id);
 
   const QPixmap& Shape(int id);
-  void LoadShape(QString filepath);
+  void LoadShape(const QString& filepath);
   void RemoveShape(int id);
 
   const Canvas& getCanvas();
   void SetCanvasWidth(int value);
   void SetCanvasHeight(int value);
-  void SetCanvasForeground(QColor value);
-  void SetCanvasBackground(QColor value);
+  void SetCanvasForeground(const QColor &value);
+  void SetCanvasBackground(const QColor &value);
   void SetCanvasGrainSize(int value);
   void SetCanvasCrossedParity(bool value);
   void SetCanvasGrainRatio(double value);
   void SetCanvasGrainShapeID(int value);
 
-  void SaveToFile(QString filename);
-  void LoadFromFile(QString filename);
+  void SaveToFile(const QString & filename);
+  void LoadFromFile(const QString & filename);
 
-  void ExportImage(QString filename, imaging::StereoImageType type);
+  void ExportImage(const QString & filename, imaging::StereoImageType type);
 
  signals:
   // UI Controls

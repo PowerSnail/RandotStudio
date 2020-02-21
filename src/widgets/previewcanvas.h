@@ -23,9 +23,8 @@ class PreviewCanvas : public QWidget {
 
  public:
   explicit PreviewCanvas(QWidget* parent = nullptr);
-
   void SetCanvasSize(int w, int h);
-  void SetBackground(QColor color);
+  void SetBackground(const QColor & color);
   int CurrentIndex();
   void SetCurrentIndex(int index);
   void InsertPixmap(int id, int x, int y, const QPixmap& img);

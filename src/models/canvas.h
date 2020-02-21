@@ -24,7 +24,8 @@ struct Canvas {
   };
 
  public:
-  int width, height;
+  int width = 1920;
+  int height = 1080;
   QColor foreground = QColor(0, 0, 0);
   QColor background = QColor(255, 255, 255);
   int grainSize = 1;

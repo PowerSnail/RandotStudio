@@ -7,16 +7,18 @@
 #include <QMessageLogger>
 #include <QtDebug>
 
-constexpr static int BGShadowRadius = 20;
+constexpr static int kBGShadowRadius = 20;
+constexpr static float kPreviewSizeRatio = 4.0 / 5.0;
+
 static QGraphicsEffect* GetBGEffect() {
   auto shadow = new QGraphicsDropShadowEffect();
-  shadow->setBlurRadius(20);
+  shadow->setBlurRadius(kBGShadowRadius);
   shadow->setOffset(0, 0);
   return shadow;
 }
 
 PreviewCanvas::PreviewCanvas(QWidget* parent)
-    : QWidget(parent), bgLabel(new QLabel(this)), labelList() {
+    : QWidget(parent), bgLabel(new QLabel(this)) {
   bgLabel->setScaledContents(true);
   bgLabel->setGraphicsEffect(GetBGEffect());
 }
@@ -31,7 +33,7 @@ void PreviewCanvas::SetCanvasSize(int w, int h) {
   }
 }
 
-void PreviewCanvas::SetBackground(QColor color) {
+void PreviewCanvas::SetBackground(const QColor &color) {
   QPixmap pixmap(1, 1);
   pixmap.fill(color);
   bgLabel->setPixmap(pixmap);
@@ -55,14 +57,14 @@ void PreviewCanvas::SetCurrentIndex(int index) {
     return;
   }
   if (static_cast<size_t>(index) >= labelList.size()) {
-    throw new std::range_error("Index too large.");
+    throw std::range_error("Index too large.");
   }
   child(index)->SetSelected(true);
   currentIndex = index;
 }
 
 void PreviewCanvas::InsertPixmap(int id, int x, int y, const QPixmap& img) {
-  PreviewCanvasItem* label = new PreviewCanvasItem(bgLabel);
+  auto label = new PreviewCanvasItem(bgLabel);
   labelList.insert(labelList.begin() + id, label);
   label->setPixmap(img);
   label->SetX(x);
@@ -83,7 +85,7 @@ void PreviewCanvas::MovePixmap(int id, int x, int y) {
 }
 
 void PreviewCanvas::RemovePixmap(int id) {
-  PreviewCanvasItem* label = child(id);
+  auto label = child(id);
   label->disconnect();
   labelList.erase(labelList.begin() + id);
   label->setParent(nullptr);
@@ -95,16 +97,15 @@ QSize PreviewCanvas::PreviewSize() {
   QSize s = bgLabel->size();
   auto effect = bgLabel->graphicsEffect();
   if (effect != nullptr) {
-    return s - (QSize(BGShadowRadius, BGShadowRadius) * 2);
-  } else {
-    return s;
-  }
+    s -= (QSize(kBGShadowRadius, kBGShadowRadius) * 2);
+  } 
+  return s;
 }
 
 void PreviewCanvas::resizeEvent(QResizeEvent* event) {
   QSize contraint = this->size();
   QSizeF renderSize = QSizeF(canvasWidth, canvasHeight)
-                          .scaled(QSizeF(contraint) * 4 / 5, Qt::KeepAspectRatio);
+                          .scaled(QSizeF(contraint) * kPreviewSizeRatio, Qt::KeepAspectRatio);
 
   bgLabel->resize(static_cast<int>(renderSize.width()),
                   static_cast<int>(renderSize.height()));
@@ -118,8 +119,12 @@ void PreviewCanvas::resizeEvent(QResizeEvent* event) {
 }
 
 int PreviewCanvas::find(PreviewCanvasItem* child) {
-  auto it = std::find(labelList.begin(), labelList.end(), child);
-  return (it == labelList.end()) ? -1 : it - labelList.begin();
+  for (int i = 0; i < labelList.size(); ++i) {
+    if (labelList[i] == child) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 void PreviewCanvas::redrawChild(PreviewCanvasItem* child) {
@@ -133,7 +138,7 @@ PreviewCanvasItem* PreviewCanvas::child(int index) {
   if (index < 0 || static_cast<size_t>(index) > labelList.size()) {
     qCritical() << "Index out of range: " << index << ", expecting [0, "
                 << labelList.size() << ")";
-    throw new std::out_of_range("PreviewCanvas::child out of range");
+    throw std::out_of_range("PreviewCanvas::child out of range");
   }
   return labelList[index];
 }

@@ -16,19 +16,24 @@
 #include "dialogabout.h"
 #include "ui_mainwindow.h"
 
-using std::optional;
-
 namespace {
 
-static const QSize kItemIconSize{15, 15};
-static const QSize kItemSize = kItemIconSize + QSize{5, 5};
+const QSize kItemIconSize{15, 15};
+const QSize kItemSize = kItemIconSize + QSize{5, 5};
 
-static const QString kImageFileFilter{
+const QString kImageFileFilter{
     "Images (*.bmp *.png *.jpg *.jpeg *.PNG *.BMP *.JPG *.JPEG)"};
-static const QString kJsonFileFilter{"JSON File (*.json)"};
-static const QString kPNSFileFilter{"Stereo Image File (*.PNS *.pns)"};
+const QString kJsonFileFilter{"JSON File (*.json)"};
+const QString kPNSFileFilter{"Stereo Image File (*.PNS *.pns)"};
 
-static const QString SizeToString(const QSize &s) {
+constexpr int kDefX = 0;
+constexpr int kDefY = 0;
+constexpr int kDefScale = 10;
+constexpr int kDefRotate = 0;
+constexpr int kDefParity = 0;
+constexpr int kDefShapeID = 0;
+
+QString SizeToString(const QSize &s) {
   return QString("%1x%2").arg(s.width()).arg(s.height());
 }
 }  // namespace
@@ -132,7 +137,8 @@ void MainWindow::on_listWidgetTarget_currentRowChanged(int currentRow) {
 }
 
 void MainWindow::on_btnAddTarget_clicked() {
-  vm->CreateTarget(Target(0, 0, 10, 0, 0, 0, vm->getCanvas().foreground));
+  vm->CreateTarget(Target(kDefX, kDefY, kDefScale, kDefRotate, kDefParity, kDefShapeID,
+                          vm->getCanvas().foreground));
 }
 
 void MainWindow::on_btnRemoveTarget_clicked() {
@@ -160,7 +166,7 @@ void MainWindow::on_btnRemoveShape_clicked() {
   if (currentID == -1) {
     return;
   }
-  if (currentID < 2) {
+  if (currentID < MainWindowViewModel::kDefaultShapeCount) {
     ui->statusbar->showMessage(tr("Cannot delete E and C shapes."));
     return;
   }
@@ -284,7 +290,7 @@ void MainWindow::on_vm_targetCreated(int targetID) {
   auto target = vm->GetTarget(targetID);
   auto shapeImage = GetTargetPreview(target);
 
-  QListWidgetItem *item = new QListWidgetItem();
+  auto item = new QListWidgetItem();
   item->setIcon(shapeImage.scaled(kItemIconSize, Qt::KeepAspectRatio));
   item->setSizeHint(kItemSize);
   item->setText(QString(" %1x%2").arg(target.x).arg(target.y));
@@ -335,7 +341,7 @@ void MainWindow::on_vm_shapeLoaded(int shapeID) {
   ui->cbDotShape->insertItem(shapeID, icon, QString());
   ui->cbTargetShape->insertItem(shapeID, icon, QString());
 
-  QListWidgetItem *item = new QListWidgetItem();
+  auto item = new QListWidgetItem();
   item->setIcon(icon);
   item->setSizeHint(kItemSize);
   ui->listWidgetShape->insertItem(shapeID, item);

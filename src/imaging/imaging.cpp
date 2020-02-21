@@ -7,37 +7,41 @@
 #include <QtDebug>
 #include <random>
 
+
+namespace imaging {
+
+
 namespace {
 
-static std::random_device kRandomDevice{};
+std::random_device kRandomDevice{};
 
-static std::mt19937 kRNG(kRandomDevice());
+std::mt19937 kRNG(kRandomDevice());
 
-static QPixmap Square() {
+QPixmap Square() {
   QPixmap img{1, 1};
   img.fill(QColor::fromRgb(0, 0, 0));
   return img;
 }
 
-static std::deque<QPixmap> FourAngleShapes(const QPixmap& shape, int size) {
+std::deque<QPixmap> FourAngleShapes(const QPixmap& shape, int size) {
   auto resizedShape =
       shape.scaled(size, size, Qt::KeepAspectRatio, Qt::FastTransformation);
   return {
-      resizedShape.transformed(QTransform().rotate(0)),
-      resizedShape.transformed(QTransform().rotate(90)),
-      resizedShape.transformed(QTransform().rotate(180)),
-      resizedShape.transformed(QTransform().rotate(270)),
+      resizedShape.transformed(QTransform().rotate(kAngle0)),
+      resizedShape.transformed(QTransform().rotate(kAngle90)),
+      resizedShape.transformed(QTransform().rotate(kAngle180)),
+      resizedShape.transformed(QTransform().rotate(kAngle270)),
   };
 }
 
-QPixmap RandotPixmap(QSize size, QColor background, int grainSize, double grainRatio,
+QPixmap RandotPixmap(QSize size, const QColor &background, int grainSize, double grainRatio,
                      const QPixmap& shape) {
   QPixmap pixmap{size};
   pixmap.fill(background);
 
   QPainter painter;
   if (!painter.begin(&pixmap)) {
-    qFatal("failed to initialize painter in renderStereoImage");
+    qWarning() << "failed to initialize painter in renderStereoImage";
   }
 
   auto shapes = FourAngleShapes(shape, grainSize);
@@ -56,14 +60,13 @@ QPixmap RandotPixmap(QSize size, QColor background, int grainSize, double grainR
   return pixmap;
 }
 
-QPixmap ColoredPixmap(QSize size, QColor bg) {
+QPixmap ColoredPixmap(QSize size, const QColor &bg) {
   QPixmap pixmap{size};
   pixmap.fill(bg);
   return pixmap;
 }
 }  // namespace
 
-namespace imaging {
 
 QPixmap RenderShapePreview(const QPixmap& shape, const QColor& foreground) {
   auto mask = shape.createMaskFromColor(QColor(0, 0, 0), Qt::MaskMode::MaskOutColor);
@@ -81,7 +84,7 @@ QPixmap TargetMask(const QPixmap& shape, const Target& target) {
 
 QPixmap RenderStereo(const Canvas& canvas, const std::deque<Target>& targetList,
                      const std::deque<QPixmap>& shapeList, StereoImageType type,
-                     const std::optional<QPixmap> grainShape) {
+                     const std::optional<QPixmap> &grainShape) {
   auto dot = grainShape.value_or(Square());
   auto bg = (type == StereoImageType::Regular) 
     ? ColoredPixmap({canvas.width, canvas.height}, canvas.background)

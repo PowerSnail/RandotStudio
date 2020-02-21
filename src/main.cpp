@@ -10,16 +10,16 @@
 #include "views/mainwindow.h"
 
 void LoadTranslator(QApplication& app) {
-  QTranslator* translator = new QTranslator(&app);
+  auto translator = new QTranslator(&app);
 
-  bool success = translator->load(QLocale::system(), "", "", app.applicationDirPath());
-  if (!success) {
+  if (!translator->load(QLocale::system(), "", "",
+                        QApplication::applicationDirPath())) {
     qWarning() << "Failed to load translation: " << QLocale::system().name();
     delete translator;
     return;
   }
 
-  app.installTranslator(translator);
+  QApplication::installTranslator(translator);
   qDebug() << "Loaded translator: " << QLocale::system().name();
 
 #ifdef Q_OS_WINDOWS
@@ -42,5 +42,5 @@ int main(int argc, char* argv[]) {
   MainWindow w(&vm);
   w.show();
 
-  return a.exec();
+  return QApplication::exec();
 }

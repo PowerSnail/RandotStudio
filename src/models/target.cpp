@@ -11,4 +11,4 @@ Target::Target(int x, int y, int scale, int rotate, int parity, int shapeID,
       rotate(rotate),
       parity(parity),
       shapeID(shapeID),
-      color(color) {}
+      color(std::move(color)) {}

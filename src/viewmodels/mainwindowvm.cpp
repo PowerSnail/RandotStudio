@@ -14,9 +14,13 @@
 #include <string>
 
 namespace {
-static void RangeError(const char* msg, int index, int lower, int higher) {
-  qWarning("%s Expected [%d, %d], got %d", msg, lower, higher, index);
+void RangeError(const char* msg, int index, int lower, int higher) {
+  qWarning() << msg << " Expected [" << lower << ", " << higher << "], got " << index;
 }
+
+constexpr int kPNGQuality = 100;
+constexpr int kDefaultWidth = 1920;
+constexpr int kDefaultHeight = 1080;
 }  // namespace
 
 bool MainWindowViewModel::TargetIDValid(int id) {
@@ -27,15 +31,14 @@ bool MainWindowViewModel::ShapeIDValid(int id) {
   return (id >= 0 && static_cast<size_t>(id) < shapePathList.size());
 }
 
-MainWindowViewModel::MainWindowViewModel()
-    : canvas(1920, 1080), targetList(), shapePathList(), shapeList() {
+MainWindowViewModel::MainWindowViewModel() : canvas(kDefaultWidth, kDefaultHeight) {
   setObjectName("vm");
   for (auto& path : kDefaultShapePathList) {
     LoadShape(QString(path));
   }
 }
 
-MainWindowViewModel::MainWindowViewModel(QString configurationPath)
+MainWindowViewModel::MainWindowViewModel(const QString &configurationPath)
     : MainWindowViewModel() {
   LoadFromFile(configurationPath);
 }
@@ -83,17 +86,16 @@ QString MainWindowViewModel::PrevExportDir() {
 }
 
 const Target& MainWindowViewModel::GetTarget(int id) {
-  if (TargetIDValid(id)) {
-    return targetList[id];
-  } else {
+  if (!TargetIDValid(id)) {
     RangeError("Target out of range.", id, 0, targetList.size());
     throw std::range_error("Get Target out of range");
   }
+  return targetList[id];
 }
 
-void MainWindowViewModel::CreateTarget(Target newTarget) {
+void MainWindowViewModel::CreateTarget(const Target &newTarget) {
   targetList.push_back(newTarget);
-  int id = targetList.size() - 1;
+  int id = static_cast<int>(targetList.size()) - 1;
   emit targetCreated(id);
 }
 
@@ -157,7 +159,7 @@ void MainWindowViewModel::SetTargetShapeID(int id, int value) {
   }
 }
 
-void MainWindowViewModel::SetTargetColor(int id, QColor value) {
+void MainWindowViewModel::SetTargetColor(int id, const QColor &value) {
   if (!TargetIDValid(id)) {
     RangeError("Target out of range.", id, 0, targetList.size());
   }
@@ -168,31 +170,29 @@ void MainWindowViewModel::SetTargetColor(int id, QColor value) {
 }
 
 Target MainWindowViewModel::RemoveTarget(int id) {
-  if (TargetIDValid(id)) {
-    Target removedTarget = targetList[id];
-    targetList.erase(targetList.begin() + id);
-    emit targetRemoved(id);
-    return removedTarget;
-  } else {
+  if (!TargetIDValid(id)) {
     RangeError("Target out of range.", id, 0, targetList.size());
     throw std::range_error("Target out of range");
   }
+  Target removedTarget = targetList[id];
+  targetList.erase(targetList.begin() + id);
+  emit targetRemoved(id);
+  return removedTarget;
 }
 
 const QPixmap& MainWindowViewModel::Shape(int id) {
-  if (ShapeIDValid(id)) {
-    return shapeList[id];
-  } else {
+  if (!ShapeIDValid(id)) {
     RangeError("Shape ID out of range.", id, 0, shapeList.size());
     throw std::range_error("Shape out of range");
   }
+  return shapeList[id];
 }
 
-void MainWindowViewModel::LoadShape(QString filepath) {
+void MainWindowViewModel::LoadShape(const QString& filepath) {
   shapePathList.push_back(filepath);
   shapeList.push_back(
       QPixmap::fromImage(QImage(filepath).convertToFormat(QImage::Format_Mono)));
-  emit shapeLoaded(shapeList.size() - 1);
+  emit shapeLoaded(static_cast<int>(shapeList.size()) - 1);
 }
 
 void MainWindowViewModel::RemoveShape(int id) {
@@ -233,14 +233,14 @@ void MainWindowViewModel::SetCanvasHeight(int value) {
   }
 }
 
-void MainWindowViewModel::SetCanvasForeground(QColor value) {
+void MainWindowViewModel::SetCanvasForeground(const QColor &value) {
   if (canvas.foreground != value) {
     canvas.foreground = value;
     emit canvasUpdated(Canvas::Property::Foreground);
   }
 }
 
-void MainWindowViewModel::SetCanvasBackground(QColor value) {
+void MainWindowViewModel::SetCanvasBackground(const QColor &value) {
   if (canvas.background != value) {
     canvas.background = value;
     emit canvasUpdated(Canvas::Property::Background);
@@ -276,7 +276,7 @@ void MainWindowViewModel::SetCanvasGrainShapeID(int value) {
   }
 }
 
-void MainWindowViewModel::SaveToFile(QString filename) {
+void MainWindowViewModel::SaveToFile(const QString & filename) {
   QFile file(filename);
   file.open(QFile::WriteOnly);
 
@@ -313,7 +313,7 @@ void MainWindowViewModel::SaveToFile(QString filename) {
   file.write(QJsonDocument(jsonMain).toJson());
 }
 
-void MainWindowViewModel::LoadFromFile(QString filename) {
+void MainWindowViewModel::LoadFromFile(const QString &filename) {
   QFile file(filename);
   file.open(QFile::ReadOnly);
 
@@ -328,11 +328,11 @@ void MainWindowViewModel::LoadFromFile(QString filename) {
   SetCanvasGrainShapeID(d["grainShapeID"].toInt());
   SetCanvasCrossedParity(d["crossedParity"].toBool());
 
-  for (size_t i = targetList.size(); i > 0; --i) {
+  for (int i = static_cast<int>(targetList.size()); i > 0; --i) {
     RemoveTarget(i - 1);
   }
 
-  for (size_t i = shapeList.size(); i > kDefaultShapeCount; --i) {
+  for (int i = static_cast<int>(shapeList.size()); i > kDefaultShapeCount; --i) {
     RemoveShape(i - 1);
   }
 
@@ -350,14 +350,14 @@ void MainWindowViewModel::LoadFromFile(QString filename) {
   }
 }
 
-void MainWindowViewModel::ExportImage(QString filename, imaging::StereoImageType type) {
+void MainWindowViewModel::ExportImage(const QString &filename, imaging::StereoImageType type) {
   auto grainShape = (ShapeIDValid(canvas.grainShapeID))
                         ? std::make_optional(imaging::RenderShapePreview(
                               Shape(canvas.grainShapeID), canvas.foreground))
                         : std::nullopt;
 
   auto img = imaging::RenderStereo(canvas, targetList, shapeList, type, grainShape);
-  if (!img.save(filename, "PNG", 100)) {
+  if (!img.save(filename, "PNG", kPNGQuality)) {
     qDebug() << "Failed to save file" << filename;
     return;
   }

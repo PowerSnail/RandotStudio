@@ -20,11 +20,11 @@ ColorChooser::ColorChooser(QWidget* parent) : QPushButton(parent) {
   });
 }
 
-QColor ColorChooser::Color() {
+QColor ColorChooser::Color()  {
   return this->color;
 }
 
-void ColorChooser::SetColor(QColor color) {
+void ColorChooser::SetColor(const QColor &color) {
   if (color == this->color) {
     return;
   }
