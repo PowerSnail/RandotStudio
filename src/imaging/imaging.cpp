@@ -97,7 +97,7 @@ QPixmap RenderStereo(const Canvas& canvas, const std::deque<Target>& targetList,
   p.drawPixmap(0, 0, bg);
   p.drawPixmap(canvas.width, 0, bg);
 
-  for (auto& target : targetList) {
+  for (const auto& target : targetList) {
     auto mask = TargetMask(shapeList[target.shapeID], target);
     auto shape = (type == StereoImageType::Regular)
                      ? ColoredPixmap(mask.size(), target.color)
